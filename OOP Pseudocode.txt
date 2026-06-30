@@ -1,0 +1,60 @@
+Scenario 1: Hospital
+
+Blue Print: 
+
+CLASS HOSPITAL
+	ATTRIBUTES
+		id: NUMBER
+		name:TEXT
+		address: TEXT
+		patients: LIST OF PATIENTS
+		fullname: TEXT
+		dateOfBirth: TEXT
+		admissionDate: TEXT
+		dischargeDate: TEXT
+		room: NUMBER
+	CONSTRUCTOR(fn:TEXT, dob:TEXT, ad:TEXT, disd:TEXT,r:NUMBER)
+		SET name TO fn
+		SET dateOfBirth TO dob
+		SET admissionDate TO ad
+		SET dischargeDate TO disd
+		SET room TO r
+	END CONTRCUTOR
+	METHOD:
+		ADMITpatient(Inpatient: patients)
+			ADD Inpatient TO LIST patients
+		END METHOD
+		DISCHARGEpatient(Outpatient: patients)
+			ADD Outpatient TO LIST patients
+		END METHOD
+		ADDPROCEDURE()
+			DISPLAY "Please enter procedure you want"
+		END METHOD
+END CLASS
+
+
+Pseudocode:
+START 
+	BEGIN
+		CREATE OBJECT HP OF HOSPITAL
+		SET HP.NAME TO "SQU Hopspital"
+		SET HP.address TO "Muscat"
+		CREATE OBJECT CLIENT1 OF PATIENTS("Jokha","17-Dec-2002", "29-Jun-2026", 07-Jul-2026", 305)
+		CREATE OBJECT CLIENT2 OF PATIENTS("Aisha","302-Sep-1986", "17-May-2026", 01-Jul-2026", 333)
+		CREATE OBJECT CLIENT3 OF PATIENTS("Ahmed","13-Mar-2001", "13-Jun-2025", 15-Aug-2025", 187)
+		SET Inpatient TO LIST <patients>[]
+		ADD CLIENT1 TO LIST Inpatient
+		ADD CLIENT2 TO LIST Inpatient
+		ADD CLIENT3 TO LIST Inpatient
+		ADD CLIENT1 TO LIST Outpatient
+		ADD CLIENT2 TO LIST Outpatient
+		ADD CLIENT3 TO LIST Outpatient
+	END
+STOP
+
+
+
+
+
+
+
