@@ -107,7 +107,8 @@ START
     		SET proc1.doctorName TO "Dr. Salim"
     		SET proc1.notes TO TRUE
 		SET proc1.cost TO 450.00
-END
+	END
+STOP
 ----------------------------------------------------------------------------------------------------------------------------
 Scenario 2: Library
 
@@ -238,8 +239,9 @@ START
 		CHECKOVERDUE("30-Jun-2026")
 		MARKRETURNED("05-Jul-2026")
 		RETURNONECOMPY()
-END
-
+	END
+STOP
+----------------------------------------------------------------------------------------------------------------------------
 Scenario 3: Restaurant Order
 
 Blueprint:
@@ -271,7 +273,7 @@ CLASS ORDER
         END METHOD
 
 END CLASS
-----------------------------------------------------------------------------------------------------------------------------
+
 CLASS ORDERITEM
 
     ATTRIBUTES
@@ -332,7 +334,8 @@ START
 		SET order1.ADDITEM(item2)
 
 		SET item2.CHANGEQUANTITY(2)
-END
+	END
+STOP
 ---------------------------------------------------------------------------------------------------------
 Scenario 4: Airline Flight
 
@@ -464,7 +467,8 @@ START
     		SET booking1.ASSIGNSEAT(seatA1)
     		SET flight1.ADDBOOKING(booking1)
 
-END
+	END
+STOP
 ------------------------------------------------------------------------------------------------------------
 Scenario 5: Online Shop
 
@@ -598,6 +602,4 @@ START
 		SET shipment1.SETDELIVERYDATE("02-July-2026")
                 SET shipment1.UPDATEDELIVERYINFO("02:00 PM")
 	END
-	
-
 STOP
