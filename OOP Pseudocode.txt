@@ -108,7 +108,7 @@ START
     		SET proc1.notes TO TRUE
 		SET proc1.cost TO 450.00
 END
-
+----------------------------------------------------------------------------------------------------------------------------
 Scenario 2: Library
 
 Blueprint:
@@ -238,4 +238,98 @@ START
 		CHECKOVERDUE("30-Jun-2026")
 		MARKRETURNED("05-Jul-2026")
 		RETURNONECOMPY()
+END
+
+Scenario 3: Restaurant Order
+
+Blueprint:
+
+CLASS ORDER
+    ATTRIBUTES
+        id: NUMBER
+        tableNumber: NUMBER
+        openedTime: TEXT
+        isPaid: BOOLEAN
+        items: LIST OF ORDERITEM
+
+    CONSTRUCTOR (i: NUMBER, tNum: NUMBER, oTime: TEXT)
+        SET id TO i
+        SET tableNumber TO tNum
+        SET openedTime TO oTime
+        SET isPaid TO FALSE
+    END CONSTRUCTOR
+
+    METHODS
+        ADDITEM (newItem: ORDERITEM)
+            ADD newItem TO LIST items
+        END METHOD
+        CALCULATETOTAL ()
+            DISPLAY "Adds up the price of every item by do this formula (quantity x dish price)"
+        END METHOD
+        MARKASPAID ()
+            SET isPaid TO TRUE
+        END METHOD
+
+END CLASS
+----------------------------------------------------------------------------------------------------------------------------
+CLASS ORDERITEM
+
+    ATTRIBUTES
+        id: NUMBER
+        quantity: NUMBER
+        specialRequest: TEXT
+        
+    CONSTRUCTOR (oi: NUMBER, qty: NUMBER, request: TEXT)
+        SET id TO oi
+        SET quantity TO qty
+        SET specialRequest TO request
+    END CONSTRUCTOR
+
+    METHODS
+        LINETOTAL ()
+            DISPLAY "Multiplies its quantity by the dish price"
+        END METHOD
+
+        CHANGEQUANTITY (newQty: NUMBER)
+            SET quantity TO newQty
+        END METHOD
+
+END CLASS
+
+CLASS DISH
+
+    ATTRIBUTES
+        id: NUMBER
+        name: TEXT
+        price: NUMBER
+        prepTimeMinutes: NUMBER
+        isAvailable: BOOLEAN
+
+    CONSTRUCTOR (di: NUMBER, n: TEXT, p: NUMBER, prepTime: NUMBER)
+        SET id TO di
+        SET name TO n
+        SET price TO p
+        SET prepTimeMinutes TO prepTime
+        SET isAvailable TO TRUE
+    END CONSTRUCTOR
+
+    METHODS
+        MARKUNAVAILABLE()
+            SET isAvailable TO FALSE
+        END METHOD
+ END CLASS
+
+Pseudocode:
+START
+	BEGIN
+		CREATE OBJECT dish1 OF DISH(301, "Chicken Biryani", 3.500, 20)
+    		CREATE OBJECT dish2 OF DISH(302, "Hummus & Khaboos", 1.200, 5)
+    		CREATE OBJECT dish3 OF DISH(303, "Mango Juice", 0.800, 3)
+	
+		CREATE OBJECT order1 OF ORDER(1001, 5, "19:30")
+
+		CREATE OBJECT item1 OF ORDERITEM(5001, 2, "Extra spicy", dish1)
+		SET order1.ADDITEM(item2)
+
+		SET item2.CHANGEQUANTITY(2)
 END
