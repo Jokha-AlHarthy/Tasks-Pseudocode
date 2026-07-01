@@ -1,60 +1,110 @@
 Scenario 1: Hospital
 
-Blue Print: 
+Blueprint:
 
 CLASS HOSPITAL
 	ATTRIBUTES
 		id: NUMBER
-		name:TEXT
+		name: TEXT
 		address: TEXT
-		patients: LIST OF PATIENTS
-		fullname: TEXT
-		dateOfBirth: TEXT
-		admissionDate: TEXT
-		dischargeDate: TEXT
-		room: NUMBER
-	CONSTRUCTOR(fn:TEXT, dob:TEXT, ad:TEXT, disd:TEXT,r:NUMBER)
-		SET name TO fn
-		SET dateOfBirth TO dob
-		SET admissionDate TO ad
-		SET dischargeDate TO disd
-		SET room TO r
-	END CONTRCUTOR
-	METHOD:
-		ADMITpatient(Inpatient: patients)
-			ADD Inpatient TO LIST patients
+		patients: LIST OF PATIENT
+
+	CONTRUCTOR (i: NUMBER, n: TEXT, a: TEXT)
+		SET id TO i
+		SET name TO n
+		SET address TO a
+	END CONTUCTOR
+
+	METHODS
+		ADDPATIENT (client: PATIENT)
 		END METHOD
-		DISCHARGEpatient(Outpatient: patients)
-			ADD Outpatient TO LIST patients
-		END METHOD
-		ADDPROCEDURE()
-			DISPLAY "Please enter procedure you want"
+
+		DISCHARGEPATIENT (client: PATIENT, dischargeDate: TEXT)
 		END METHOD
 END CLASS
 
 
+CLASS PATIENT
+	ATTRIBUTES
+		id: NUMBER
+		fullName: TEXT
+		dateOfBirth: TEXT
+		admissionDate:TEXT
+		dischargeDate: TEXT
+		isAdmitted : BOOLEAN
+		room: NUMBER
+		procedures: LIST OF PROCEDURE
+
+	CONTRUCTOR (pi : NUMBER, fn: TEXT, dob: TEXT)
+		SET id TO pi
+		SET fullName TO fn
+		SET dateOfBirth TO dob
+	END CONSTRUCTOR
+
+	METHODS
+		ADDPROCEDURE (pro : PROCEDURE)
+			ADD pro TO LIST PROCEDURE
+		END METHOD
+	
+		MOVETOROOM ()
+			DISPLAY SIZE OF room
+		END METHOD
+
+		TOTALCOSTCARE()
+		END METHOD
+END CLASS
+
+
+CLASS PROCEDURE
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		performedDate: TEXT
+		admissionDate:TEXT
+		doctorName: TEXT
+		notes: BOOLEAN
+		cost: NUMBER
+
+	METHODS
+		DISCRIBEITSELF()
+			DISPLAY "Enter a short summary about procedsure"
+		END METHOD
+	
+END CLASS
+
+CLASS ROOM
+	ATTRIBUTES
+		id: NUMBER
+		roomNumber : TEXT
+		wardType: TEXT
+		floor: NUMBER
+		bedCount: NUMBER
+
+	METHODS
+		DISPLAYROOM()
+			DISPLAY roomNumber
+			DISPLAY wardType
+		END METHOD
+END CLASS
+
+
+
+
 Pseudocode:
-START 
+
+START
 	BEGIN
-		CREATE OBJECT HP OF HOSPITAL
-		SET HP.NAME TO "SQU Hopspital"
-		SET HP.address TO "Muscat"
-		CREATE OBJECT CLIENT1 OF PATIENTS("Jokha","17-Dec-2002", "29-Jun-2026", 07-Jul-2026", 305)
-		CREATE OBJECT CLIENT2 OF PATIENTS("Aisha","302-Sep-1986", "17-May-2026", 01-Jul-2026", 333)
-		CREATE OBJECT CLIENT3 OF PATIENTS("Ahmed","13-Mar-2001", "13-Jun-2025", 15-Aug-2025", 187)
-		SET Inpatient TO LIST <patients>[]
-		ADD CLIENT1 TO LIST Inpatient
-		ADD CLIENT2 TO LIST Inpatient
-		ADD CLIENT3 TO LIST Inpatient
-		ADD CLIENT1 TO LIST Outpatient
-		ADD CLIENT2 TO LIST Outpatient
-		ADD CLIENT3 TO LIST Outpatient
-	END
-STOP
+		CREATE OBJECT HP1 OF HOSPITAL(1, "SQU Hospital", "Muscat")
 
-
-
-
-
-
-
+		CREATE OBJECT patient1 OF PATIENT(11229930, "Aisha Rashid", "30-July-1968")
+		CREATE OBJECT patient2 OF PATIENT(1132442, "Khalfan Hamed", "07-July-2000")
+		patient1.ADMIT()
+		patient1.MOVEROOM(201)
+		CREATE OBJECT pro1 OF PROCEDURE()
+		SET pro1.id TO 5001
+		SET pro1.name TO "Appendctomey"
+		SET proc1.performedDate TO "01-July-2026"
+    		SET proc1.doctorName TO "Dr. Salim"
+    		SET proc1.notes TO TRUE
+		SET proc1.cost TO 450.00
+END
