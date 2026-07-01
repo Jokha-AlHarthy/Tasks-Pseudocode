@@ -108,3 +108,134 @@ START
     		SET proc1.notes TO TRUE
 		SET proc1.cost TO 450.00
 END
+
+Scenario 2: Library
+
+Blueprint:
+
+CLASS LIBRARY
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		branchAddress: TEXT
+		members: LIST OF MEMBER
+		books: LIST OF BOOK
+
+	CONSTRCUTOR (i: NUMBER, n: TEXT, a: TEXT)
+		SET id TO i
+		SET name TO n
+		SET branchAddress TO a
+	END CONSTROCUTOR
+
+	METHODS
+		RESGISGTERMEMBER (newMember: MEMBER)
+			ADD newMember TO LIST members
+		END METHOD
+
+		ADDBOOK (newBook: BOOK)
+			ADD newBook TO LIST books
+		END METHOD
+	
+
+		FINDMEMBER ()
+			DISPLAY "Search for the member in library"
+		END METHOD
+END CLASS
+
+CLASS MEMBER
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		joinDate: TEXT
+		isActive: BOOLEAN
+		loans: LIST OF LOAN
+
+	CONSTRCUTOR (i: NUMBER, n: TEXT, jd: TEXT)
+		SET id TO i
+		SET name TO n
+		SET joinDate TO jd
+		SET isActive TO TRUE
+	END CONSTROCUTOR
+
+	METHODS
+		BORROWBOOK()
+		END METHOD
+
+		CONUTACTIVELOANS()
+			DISPLAY "Counting active loans"
+		END METHOD
+	
+END CLASS
+
+CLASS LOAN
+	ATTRIBUTES
+		id: NUMBER
+		loanDate: TEXT
+		dueDate: TEXT
+		returnDate: TEXT
+		isRetruned: BOOLEAN
+
+	CONSTRCUTOR (li: NUMBER, ldate: TEXT, ddate: TEXT)
+		SET id TO li
+		SET loanDate TO ldate
+		SET dueDate TO ddate
+		SET isReturned TO FLASE
+	END CONSTROCUTOR
+
+	METHODS
+		MARKRETURNED(rDate: TEXT)
+			SET isReturned TO TRUE
+			SET returnDate TO rDate
+		END METHOD
+
+		CHECKOVERDUE()
+			DISPLAY "Checking if overdue date" - today
+		END METHOD
+	
+END CLASS
+
+CLASS BOOK
+	ATTRIBUTES
+		id: NUMBER
+		title: TEXT
+		author: TEXT
+		category: TEXT
+		compiesAavilable: NUMBER
+
+
+	CONSTRCUTOR (bi: NUMBER, t: TEXT, aut: TEXT, cat: TEXT, cop:NUMBER)
+		SET id TO bi
+		SET title TO t
+		SET author TO aut
+		SET category TO cat
+		SET compiesAavilable TO cop
+	END CONSTROCUTOR
+
+	METHODS
+		TAKEONECOPY()
+			SET compiesAavilable to compiesAavilable - 1
+		END METHOD
+
+		RETURNONECOPY()
+			SET compiesAavilable to compiesAavilable + 1				
+		END METHOD
+END CLASS
+
+
+Pseudocode:
+	
+START
+	BEGIN
+		CREATE OBJECT lib1 OF LIBRARY(1, "SQU Main Libaray", "Muscat")
+	
+		CREATE OBJECT book1 OF BOOK(901, "Introduction to OOP", "Dr.Ben", "123-ABC", "Educational", 5)
+		CREATE OBJECT book1 OF BOOK(901, "Data Strcutures", "Prof.Ahmed", "453-XYZ", "Educational", 3)
+
+		CREATE OBJECT member1 OF MEMBER(202578, "Aisha Rashid", "30-Jun-2026")
+		SET lib1.FINDMEMBER("Aisha Rashid")
+
+		CREATE OBJECT loan1 OF LOAN(5501, "30-Jun-2026", "14-Jul-2026", book1)
+		CHECKOVERDUE("30-Jun-2026")
+		MARKRETURNED("05-Jul-2026")
+		RETURNONECOMPY()
+END
