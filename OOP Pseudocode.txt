@@ -465,3 +465,139 @@ START
     		SET flight1.ADDBOOKING(booking1)
 
 END
+------------------------------------------------------------------------------------------------------------
+Scenario 5: Online Shop
+
+Blueprint:
+
+CLASS PRODUCT
+    ATTRIBUTES
+        id: NUMBER
+        productName: TEXT
+        productCode: TEXT
+        productType: TEXT
+	isAvailble: BOOLEAN
+
+    CONSTRUCTOR (pName: TEXT, pCode: TEXT, pType: TEXT)
+        SET productName TO pName
+        SET productCode TO pCode
+        SET productType TO pType
+    END CONSTRUCTOR
+
+    METHODS
+        DISPLAYPRODUCT ()
+            DISPLAY "These are the avaible products" + productName
+        END METHOD
+
+        ADDPRODUCT ()
+            DISPLAY "Enter a new product"
+        END METHOD
+
+        CHECKAVAILABILITY ()
+            SET isAvailable TO TRUE
+        END METHOD
+
+        DELETEPRODUCT ()
+            SET isAvailable TO FALSE
+        END METHOD
+END CLASS
+
+CLASS PURCHASE
+    ATTRIBUTES
+        custId: NUMBER
+        purchaseDate: TEXT
+        totalAmount: TEXT
+        items: LIST OF LINEITEM
+
+    CONSTRUCTOR (pDate: TEXT, total: TEXT)
+        SET purchaseDate TO pDate
+        SET totalAmount TO total
+    END CONSTRUCTOR
+
+    METHODS
+        DISPLAYPURCHASES()
+            DISPLAY "Display all purchased items in this transaction"
+        END METHOD
+
+        CHECKDATE()
+            RETURN purchaseDate
+        END METHOD
+
+        CALCULATETOTAL()
+            DISPLAY "Adds up the price of every item purchased"
+        END METHOD
+
+END CLASS
+
+CLASS LINEITEM
+    ATTRIBUTES
+        custId: NUMBER
+        lineItemId: TEXT
+        lineItemName: TEXT
+        Quantity: NUMBER
+        unitPrice: DOUBLE
+
+    CONSTRUCTOR (lId: TEXT, lName: TEXT, qty: NUMBER, price: DOUBLE)
+        SET lineItemId TO lId
+        SET lineItemName TO lName
+        SET Quantity TO qty
+        SET unitPrice TO price
+    END CONSTRUCTOR
+
+    METHODS
+        DISPLAYLINEITEM()
+            DISPLAY lineItemName + " x " + Quantity
+        END METHOD
+
+        CALCULATETOTAL ()
+            DISPLAY "Calculating subtotal by quantity * unitPrice"
+        END METHOD
+
+END CLASS
+
+CLASS DELIVERY
+    ATTRIBUTES
+        custId: NUMBER
+        DeliveryId: NUMBER
+        DeliveryName: TEXT
+        DeliveryDay: TEXT
+        DeliveryDate: TEXT
+        DeliveryTime: TEXT
+        isDelivered: BOOLEAN
+
+    CONSTRUCTOR (dName: TEXT, dDay: TEXT, dTime: TEXT)
+        SET DeliveryName TO dName
+        SET DeliveryDay TO dDay
+        SET DeliveryTime TO dTime
+        SET isDelivered TO FALSE
+    END CONSTRUCTOR
+
+    METHODS
+        SETDELIVERYDATE (dDate: TEXT)
+            SET DeliveryDate TO dDate
+        END METHOD
+
+        MARKASDELIVERED ()
+            SET isDelivered TO TRUE
+        END METHOD
+
+        UPDATEDELIVERYINFO (newTime: TEXT)
+            SET DeliveryTime TO newTime
+        END METHOD
+
+    END CLASS
+
+Pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT prod1 OF PRODUCT("Wireless Mouse", "M-102", "Electronics")
+   		CREATE OBJECT prod2 OF PRODUCT("Mechanical Keyboard", "K-551", "Electronics")
+		CREATE OBJECT purchase1 OF PURCHASE(88021, "30-June-2026", "0.00")
+		CREATE OBJECT shipment1 OF DELIVERY(88021, 99001, "Aisha Rashid", "Thursday", "10:00 AM")
+		SET shipment1.SETDELIVERYDATE("02-July-2026")
+                SET shipment1.UPDATEDELIVERYINFO("02:00 PM")
+	END
+	
+
+STOP
