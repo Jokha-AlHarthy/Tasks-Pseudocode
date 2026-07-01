@@ -1,5 +1,12 @@
 Task 279: Movie Theater
 
+- A film has many showtimes.
+- A showtime belongs to one film.
+- A showtime is assigned to one screen.
+- A screen can have many showtimes.
+- A showtime has many tickets.
+- A ticket belongs to one showtime.
+
 Blueprint:
 
 CLASS FILM
@@ -143,12 +150,14 @@ END CLASS
 CLASS TICKET
 	ATTRIBUTES
 		id: NUMBER
-        	custName: TEXT
+        custName: TEXT
 		seatNumber: NUMBER
+		showtime: SHOWTIME
 
-	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER)
+	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER, showtime: SHOWTIME)
         	SET THIS.custName TO custName
         	SET THIS.seatNumber TO seatNumber
+			SET THIS.showtime TO showtime
     	END CONSTRUCTOR
 
 	METHODS
@@ -189,7 +198,7 @@ pseudocode:
 
 START
 	BEGIN
-		CREATE OBJECT film1 OF FILM (1, "Avater", 180, "Action")
+		CREATE OBJECT film1 OF FILM (1, "Avater", 180, show1)
 		CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)
 		CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)
 		CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)
@@ -206,6 +215,13 @@ STOP
 
 ---------------------------------------------------------------------------------------
 Task 280: Warehouse Inventory
+
+- A product belongs to one vendor.
+- A vendor supplies many products.
+- A product has many storage bins.
+- A product has many stock movements.
+- A stock movement belongs to one product.
+
 Blueprint:
 
 CLASS PRODUCT
@@ -378,5 +394,164 @@ START
 
         	vendor1.GET_rating()
 	
+	END
+STOP
+-------------------------------------------------------------------------------------------
+Task 281: School Classroom
+
+- A classroom has one teacher.
+- A classroom has many students.
+- A student can't be enrolled in two classes at the same scheduled time.
+- A student has many grades.
+
+Blueprint:
+
+CLASS CLASSROOM
+	ATTRIBUTES
+		id: NUMBER
+		className : TEXT
+		subject: TEXT
+		schedule : TEXT
+		maxSize: NUMBER
+		teacher: TEACHER
+		students: LIST OF STUDENT
+	
+	CONTRACTOR(className: TEXT, subject: TEXT, schedule : TEXT, maxSize: NUMBER, teacher: TEACHER)
+		SET THIS.className TO className
+		SET THIS.subject TO subject
+		SET THIS.schedule TO schedule
+		SET THIS.maxSize TO maxSize
+		SET THIS.teacher TO teacher
+	END CONSTRCTOR
+	
+	METHODS
+		ADDSTUDENT(newStudent: STUDENT)
+			IF SIZE OF students LESS THAN maxSize THEN
+				IF student.schedule NOT EQUAL TO schedule THEN
+					ADD student TO students
+				ELSE 
+					DISPLAY "Student already has class at same time"
+				END IF
+			ELSE
+				DISPLAY "Classroos is full"
+			END IF
+		END METHOD
+		
+		GET_id()
+            		DISPLAY id
+        	END METHOD
+
+		GET_className()
+            		DISPLAY className
+        	END METHOD
+
+		GET_subject()
+            		DISPLAY subject
+       		END METHOD
+		
+	
+END CLASS
+
+CLASS STUDENT
+	ATTRIBUTES
+		id: NUMBER
+		fullName: TEXT
+		schedule : TEXT
+		grade: LIST OF GRADE
+
+	CONSTRUCTOR(fullName : TEXT, schedule : TEXT)
+		SET THIS.fullName TO fullName
+        	SET THIS.schedule TO schedule
+    	END CONSTRUCTOR
+
+	METHODS
+		ADDGRADE(grade : GRADE)
+            		ADD grade TO grades
+        	END METHOD
+
+		GETAVERAGE()
+			SET total TO 0
+            		SET totalWeight TO 0
+			REPEAT FROM I EQUALS 1 TO SIZE OF grades
+                		SET total TO total + (grades[I].mark * grades[i].weight)
+                		SET totalWeight TO totalWeight + grades[I].weight
+
+            		END REPEAT
+			DISPLAY total / totalWeight
+
+        	END METHOD
+		
+		GET_fullName()
+            		DISPLAY fullName
+        	END METHOD
+	
+END CLASS
+
+CLASS TEACHER
+	ATTRIBUTES
+		id: NUMBER
+		fullName: TEXT
+		specialization: TEXT
+
+	CONSTRUCTOR(fullName : TEXT, specialization : TEXT)
+        	SET THIS.fullName TO fullName
+        	SET THIS.specialization TO specialization
+   	END CONSTRUCTOR
+	
+	METHODS
+		GET_fullName()
+           		DISPLAY fullName
+        	END METHOD
+
+		GET_specialization()
+            		DISPLAY specialization
+        	END METHOD
+
+END CLASS
+
+CLASS GRADE
+	ATTRIBUTES
+		assessment: TEXT
+		mark: NUMBER
+		weight: NUMBER
+
+	CONSTRUCTOR(assessment : TEXT, mark : NUMBER, weight : NUMBER)
+		SET THIS.assessment TO assessment
+        	SET THIS.mark TO mark
+        	SET THIS.weight TO weight
+	END CONSTRUCTOR
+
+	METHODS
+		GET_mark()
+            		DISPLAY mark
+        	END METHOD
+
+		GET_weight()
+            		DISPLAY weight
+       		END METHOD
+		
+END CLASS
+	
+
+pseudocode:
+START
+	BEGIN
+		CREATE OBJECT teacher1 OF TEACHER("Ali Ahmed","Mathematics")
+
+        	CREATE OBJECT class1 OF CLASSROOM("IT-101","Programming","8:00 AM",30,teacher1)
+
+       		CREATE OBJECT student1 OF STUDENT("Sara Ali","10:00 AM")
+
+        	CREATE OBJECT grade1 OF GRADE("Quiz 1",85,20)
+
+        	CREATE OBJECT grade2 OF GRADE("Midterm",90,30)
+
+        	student1.ADDGRADE(grade1)
+
+        	student1.ADDGRADE(grade2)
+
+        	class1.ADDSTUDENT(student1)
+
+        	student1.GETAVERAGE()
 	END
 STOP
