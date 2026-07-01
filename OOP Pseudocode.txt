@@ -333,3 +333,135 @@ START
 
 		SET item2.CHANGEQUANTITY(2)
 END
+---------------------------------------------------------------------------------------------------------
+Scenario 4: Airline Flight
+
+Blueprint:
+	
+CLASS FLIGHT
+    ATTRIBUTES
+        id: NUMBER
+        flightNumber: TEXT
+        origin: TEXT
+        destination: TEXT
+        departureTime: TEXT
+        aircraft: AIRCRAFT
+        bookings: LIST OF BOOKING
+
+    CONSTRUCTOR (fi: NUMBER, fNum: TEXT, orig: TEXT, dest: TEXT, dTime: TEXT, acObj: AIRCRAFT)
+        SET id TO fi
+        SET flightNumber TO fNum
+        SET origin TO orig
+        SET destination TO dest
+        SET departureTime TO dTime
+        SET aircraft TO acObj
+    END CONSTRUCTOR
+
+    METHODS
+        ADDBOOKING (newBooking: BOOKING)
+            ADD newBooking TO LIST bookings
+        END METHOD
+
+        COUNTFREESEATS ()
+            DISPLAY "Compare the aircraft's seats with the bookings to see how many are left"
+        END METHOD
+
+        CHECKIFFULL ()
+            DISPLAY "Every seat in the plan is full and booked"
+        END METHOD
+    END CLASS
+
+CLASS AIRCRAFT
+    ATTRIBUTES
+        id: NUMBER
+        registration: TEXT
+        model: TEXT
+        seats: LIST OF SEAT
+
+    CONSTRUCTOR (ai: NUMBER, reg: TEXT, mdl: TEXT)
+        SET id TO ai
+        SET registration TO reg
+        SET model TO mdl
+    END CONSTRUCTOR
+
+    METHODS
+        COUNTTOTALSEATS ()
+            DISPLAY "How many seats has are there?"
+        END METHOD
+    END CLASS
+
+CLASS BOOKING
+    ATTRIBUTES
+        id: NUMBER
+        bookingReference: TEXT
+        bookingDate: TEXT
+       
+        
+    CONSTRUCTOR (bi: NUMBER, bRef: TEXT, bDate: TEXT,)
+        SET id TO bi
+        SET bookingReference TO bRef
+        SET bookingDate TO bDate
+    END CONSTRUCTOR
+
+    METHODS
+        ASSIGNSEAT(selectedSeat: SEAT)
+            SET seat TO selectedSeat
+        END METHOD
+
+        DESCRIBEITSELF()
+            DISPLAY "Enter passenger name and seat number togther"
+        END METHOD
+    END CLASS
+
+CLASS PASSENGER
+    ATTRIBUTES
+        id: NUMBER
+        passportNumber: TEXT
+        fullName: TEXT
+        nationality: TEXT
+
+    CONSTRUCTOR (pi: NUMBER, passNum: TEXT, name: TEXT, nat: TEXT)
+        SET id TO pi
+        SET passportNumber TO passNum
+        SET fullName TO name
+        SET nationality TO nat
+    END CONSTRUCTOR
+
+END CLASS
+
+CLASS SEAT
+    ATTRIBUTES
+        id: NUMBER
+        seatNumber: TEXT
+        section: TEXT
+        isWindow: BOOLEAN
+
+    CONSTRUCTOR (si: NUMBER, sNum: TEXT, sec: TEXT, window: BOOLEAN)
+        SET id TO si
+        SET seatNumber TO sNum
+        SET section TO sec
+        SET isWindow TO window
+    END CONSTRUCTOR
+
+END CLASS
+
+Pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT plane1 OF AIRCRAFT(501, "A4O-OM", "Boeing 787")
+		CREATE OBJECT seatA1 OF SEAT(7001, "1A", "Business", TRUE)
+   		CREATE OBJECT seatB1 OF SEAT(7002, "12B", "Economy", FALSE)
+
+		ADD seatA1 TO LIST plane1.seats
+    		ADD seatB1 TO LIST plane1.seats
+	
+		CREATE OBJECT flight1 OF FLIGHT(1002, "WY101", "Muscat", "London", "14:15", plane1)
+
+		CREATE OBJECT passenger1 OF PASSENGER(9001, "A00112233", "Ahmed Al-Balushi", "Omani")
+		CREATE OBJECT booking1 OF BOOKING(8001, "PXR73Q", "30-June-2026", passenger1)
+
+    		SET booking1.ASSIGNSEAT(seatA1)
+    		SET flight1.ADDBOOKING(booking1)
+
+END
