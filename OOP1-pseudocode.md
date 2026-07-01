@@ -1,1 +1,205 @@
-#### **Task 279: Movie Theater****Blueprint:**CLASS FILM&#x09;ATTRIBUTES&#x09;	id: NUMBER&#x09;	title: TEXT&#x09;	duration: NUMBER&#x09;	caption: TEXT&#x09;	filmType: TEXT&#x09;	showtimes: LIST OF SHOWTIMES&#x09;&#x09;CONTRACTOR (title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)&#x09;	SET THIS.title TO title&#x09;	SET THIS.duartion TO duration&#x09;	SET THIS.caption TO caption&#x09;	SET THIS.filmType TO filmType&#x09;END CONSTRCTOR&#x09;METHODS&#x09;	ADDSHOWRIME(show: SHOWTIMES)&#x09;		ADD show TO showtimes&#x09;	END METHOD&#x09;&#x09;	GET\_id()&#x09;		DISPLAY id&#x09;	END METHOD&#x09;	GET\_title()&#x09;		DISPLAY title&#x09;	END METHOD&#x09;	GET\_duration()&#x09;		DISPLAY duration&#x09;	END METHOD&#x09;	SET\_duration(newDuration: TEXT)&#x09;		IF LENGTH OF newDuration GREATHER THAN 0 THEN&#x09;			SET duration TO newDuration&#x09;		ELSE&#x09;			DISPLAY "Error assigning time duration"&#x09;		END IF&#x09;	END METHOD&#x09;	GET\_caption()&#x09;		DISPLAY caption&#x09;	END METHOD&#x09;	GET\_filmType()&#x09;		DISPLAY filmtype&#x09;	END METHODEND CLASSCLASS SHOWTIME&#x09;ATTRIBUTES&#x09;	id: NUMBER&#x20;       	date: TEXT&#x20;       	time: TEXT&#x20;       	screen: SCREEN&#x20;       	tickets: LIST OF TICKET&#x09;CONSTRUCTOR(date: TEXT, time: TEXT, screen: SCREEN)&#x20;       	SET THIS.date TO date&#x20;       	SET THIS.time TO time&#x20;       	SET THIS.screen TO screen&#x20;   	END CONSTRUCTOR&#x09;METHODS&#x09;	&#x09;	ADDTICKET(ticket: TICKET)&#x09;		ADD ticket TO tickets&#x09;	END METHOD&#x20;&#x09;	GET\_id()&#x09;		DISPLAY id&#x09;	END METHOD&#x09;&#x09;	GET\_date()&#x09;		DISPLAY date&#x09;	END METHOD&#x09;	SET\_date(newDate: TEXT)&#x09;		DISPLAY "Enter date you want for the show"&#x09;		SET date TO newDate&#x09;	END METHOD()&#x09;	GET\_time()&#x09;		DISPLAY time&#x09;	END METHOD&#x09;	SET\_time(newTime: TEXT)&#x09;		DISPLAY "Enter time you want for the show"&#x09;		SET time TO newTime&#x09;	END METHOD()&#x09;	GET\_screen()&#x09;		DISPLAY screen&#x09;	END METHOD&#x09;	DISPLAYSHOWTIME()&#x20;           		DISPLAY id&#x20;           		DISPLAY date&#x20;           		DISPLAY time&#x20;       	END METHODEND CLASSCLASS SCREEN&#x09;ATTRIBUTES&#x09;	id: NUMBER&#x20;       	screenName: TEXT&#x09;	capcity: NUMBER&#x09;CONSTRUCTOR(screenName: TEXT, capacity: NUMBER)&#x20;       	SET THIS.screenName TO screenName&#x20;       	SET THIS.capacity TO capacity&#x20;   	END CONSTRUCTOR&#x09;&#x09;METHODS&#x09;	GET\_id()&#x09;		DISPLAY id&#x09;	END METHOD&#x09;	GET\_screenName()&#x09;		DISPLAY screenName&#x09;	END METHOD&#x09;	GET\_capcity()&#x09;		DISPLAY capcity&#x09;	END METHOD&#x09;	&#x20;		DISPLAYSCREEN()&#x20;           		DISPLAY id&#x20;           		DISPLAY screenName&#x20;           		DISPLAY capacity&#x20;       	END METHOD&#x09;END CLASSCLASS TICKET&#x09;ATTRIBUTES&#x09;	id: NUMBER&#x20;       	custName: TEXT&#x09;	seatNumber: NUMBER&#x09;CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER)&#x20;       	SET THIS.custName TO custName&#x20;       	SET THIS.seatNumber TO seatNumber&#x20;   	END CONSTRUCTOR&#x09;METHODS&#x09;	GET\_id()&#x09;		DISPLAY id&#x09;	END METHOD&#x09;	GET\_custName()&#x20;          		 DISPLAY custName&#x20;       	END METHOD&#x20;     		GET\_seatNumber()&#x20;           		DISPLAY seatNumber&#x20;       	END METHOD&#x09;	SET\_custName(newCust: TEXT)&#x09;		DISPLAY "PLease enter your name:"&#x09;		SET custName TO newCust&#x09;	END METHOD&#x09;	seatNumber(newSeat: NUMBER)&#x09;		DISPLAY "Please enter seat number"&#x09;		IF newSEAT GREATER THAN 0 THEN&#x09;			DISPLAY "Seat booked Successfully"&#x09;		ELSE&#x09;			DISPLAY "Error, no seat with this number please start from 1"&#x09;	END METHOD&#x09;	PRINTTICKET()&#x09;		DISPLAY id&#x09;		DISPLAY custName&#x09;		DISPLAY seatNumber&#x09;	END METHODEND CLASS**pseudocode:**START&#x09;BEGIN&#x09;	CREATE OBJECT film1 OF FILM (1, "Avater", 180, "Action")&#x09;	CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)&#x09;	CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)&#x09;	CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)&#x09;	film1.ADDSHOWTIME(show1)&#x09;	show1.ADDTIRCKT(ticket1)&#x09;	&#x09;	show1.DISPLAYSHOWTIME()&#x20;       	screen1.DISPLAYSCREEN()&#x20;       	ticket1.PRINTTICKET()&#x09;ENDSTOP
+Task 279: Movie Theater
+
+Blueprint:
+
+CLASS FILM
+	ATTRIBUTES
+		id: NUMBER
+		title: TEXT
+		duration: NUMBER
+		caption: TEXT
+		filmType: TEXT
+		showtimes: LIST OF SHOWTIMES
+
+	
+	CONTRACTOR (title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)
+		SET THIS.title TO title
+		SET THIS.duartion TO duration
+		SET THIS.caption TO caption
+		SET THIS.filmType TO filmType
+	END CONSTRCTOR
+
+	METHODS
+		ADDSHOWRIME(show: SHOWTIMES)
+			ADD show TO showtimes
+		END METHOD
+	
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_title()
+			DISPLAY title
+		END METHOD
+
+		GET_duration()
+			DISPLAY duration
+		END METHOD
+
+		SET_duration(newDuration: TEXT)
+			IF LENGTH OF newDuration GREATHER THAN 0 THEN
+				SET duration TO newDuration
+			ELSE
+				DISPLAY "Error assigning time duration"
+			END IF
+		END METHOD
+
+		GET_caption()
+			DISPLAY caption
+		END METHOD
+
+		GET_filmType()
+			DISPLAY filmtype
+		END METHOD
+
+END CLASS
+
+
+CLASS SHOWTIME
+	ATTRIBUTES
+		id: NUMBER
+        	date: TEXT
+        	time: TEXT
+        	screen: SCREEN
+        	tickets: LIST OF TICKET
+	CONSTRUCTOR(date: TEXT, time: TEXT, screen: SCREEN)
+        	SET THIS.date TO date
+        	SET THIS.time TO time
+        	SET THIS.screen TO screen
+    	END CONSTRUCTOR
+
+	METHODS
+	
+		ADDTICKET(ticket: TICKET)
+			ADD ticket TO tickets
+		END METHOD
+ 
+		GET_id()
+			DISPLAY id
+		END METHOD
+	
+		GET_date()
+			DISPLAY date
+		END METHOD
+
+		SET_date(newDate: TEXT)
+			DISPLAY "Enter date you want for the show"
+			SET date TO newDate
+		END METHOD()
+
+
+		GET_time()
+			DISPLAY time
+		END METHOD
+
+		SET_time(newTime: TEXT)
+			DISPLAY "Enter time you want for the show"
+			SET time TO newTime
+		END METHOD()
+
+		GET_screen()
+			DISPLAY screen
+		END METHOD
+
+		DISPLAYSHOWTIME()
+            		DISPLAY id
+            		DISPLAY date
+            		DISPLAY time
+        	END METHOD
+
+END CLASS
+
+CLASS SCREEN
+	ATTRIBUTES
+		id: NUMBER
+        	screenName: TEXT
+		capcity: NUMBER
+
+	CONSTRUCTOR(screenName: TEXT, capacity: NUMBER)
+        	SET THIS.screenName TO screenName
+        	SET THIS.capacity TO capacity
+    	END CONSTRUCTOR
+	
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_screenName()
+			DISPLAY screenName
+		END METHOD
+		GET_capcity()
+			DISPLAY capcity
+		END METHOD
+	
+ 		DISPLAYSCREEN()
+            		DISPLAY id
+            		DISPLAY screenName
+            		DISPLAY capacity
+        	END METHOD
+	
+END CLASS
+
+CLASS TICKET
+	ATTRIBUTES
+		id: NUMBER
+        	custName: TEXT
+		seatNumber: NUMBER
+
+	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER)
+        	SET THIS.custName TO custName
+        	SET THIS.seatNumber TO seatNumber
+    	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_custName()
+           		 DISPLAY custName
+        	END METHOD
+
+      		GET_seatNumber()
+            		DISPLAY seatNumber
+        	END METHOD
+
+		SET_custName(newCust: TEXT)
+			DISPLAY "PLease enter your name:"
+			SET custName TO newCust
+		END METHOD
+
+		seatNumber(newSeat: NUMBER)
+			DISPLAY "Please enter seat number"
+			IF newSEAT GREATER THAN 0 THEN
+				DISPLAY "Seat booked Successfully"
+			ELSE
+				DISPLAY "Error, no seat with this number please start from 1"
+		END METHOD
+		PRINTTICKET()
+			DISPLAY id
+			DISPLAY custName
+			DISPLAY seatNumber
+		END METHOD
+
+
+END CLASS
+
+pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT film1 OF FILM (1, "Avater", 180, "Action")
+		CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)
+		CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)
+		CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)
+
+		film1.ADDSHOWTIME(show1)
+		show1.ADDTIRCKT(ticket1)
+
+	
+		show1.DISPLAYSHOWTIME()
+        	screen1.DISPLAYSCREEN()
+        	ticket1.PRINTTICKET()
+	END
+STOP
