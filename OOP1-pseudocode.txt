@@ -1,1 +1,382 @@
-Task 279: Movie TheaterBlueprint:CLASS FILM	ATTRIBUTES		id: NUMBER		title: TEXT		duration: NUMBER		caption: TEXT		filmType: TEXT		showtimes: LIST OF SHOWTIMES		CONTRACTOR (title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)		SET THIS.title TO title		SET THIS.duartion TO duration		SET THIS.caption TO caption		SET THIS.filmType TO filmType	END CONSTRCTOR	METHODS		ADDSHOWRIME(show: SHOWTIMES)			ADD show TO showtimes		END METHOD			GET_id()			DISPLAY id		END METHOD		GET_title()			DISPLAY title		END METHOD		GET_duration()			DISPLAY duration		END METHOD		SET_duration(newDuration: TEXT)			IF LENGTH OF newDuration GREATHER THAN 0 THEN				SET duration TO newDuration			ELSE				DISPLAY "Error assigning time duration"			END IF		END METHOD		GET_caption()			DISPLAY caption		END METHOD		GET_filmType()			DISPLAY filmtype		END METHODEND CLASSCLASS SHOWTIME	ATTRIBUTES		id: NUMBER        	date: TEXT        	time: TEXT        	screen: SCREEN        	tickets: LIST OF TICKET	CONSTRUCTOR(date: TEXT, time: TEXT, screen: SCREEN)        	SET THIS.date TO date        	SET THIS.time TO time        	SET THIS.screen TO screen    	END CONSTRUCTOR	METHODS			ADDTICKET(ticket: TICKET)			ADD ticket TO tickets		END METHOD 		GET_id()			DISPLAY id		END METHOD			GET_date()			DISPLAY date		END METHOD		SET_date(newDate: TEXT)			DISPLAY "Enter date you want for the show"			SET date TO newDate		END METHOD()		GET_time()			DISPLAY time		END METHOD		SET_time(newTime: TEXT)			DISPLAY "Enter time you want for the show"			SET time TO newTime		END METHOD()		GET_screen()			DISPLAY screen		END METHOD		DISPLAYSHOWTIME()            		DISPLAY id            		DISPLAY date            		DISPLAY time        	END METHODEND CLASSCLASS SCREEN	ATTRIBUTES		id: NUMBER        	screenName: TEXT		capcity: NUMBER	CONSTRUCTOR(screenName: TEXT, capacity: NUMBER)        	SET THIS.screenName TO screenName        	SET THIS.capacity TO capacity    	END CONSTRUCTOR		METHODS		GET_id()			DISPLAY id		END METHOD		GET_screenName()			DISPLAY screenName		END METHOD		GET_capcity()			DISPLAY capcity		END METHOD	 		DISPLAYSCREEN()            		DISPLAY id            		DISPLAY screenName            		DISPLAY capacity        	END METHOD	END CLASSCLASS TICKET	ATTRIBUTES		id: NUMBER        	custName: TEXT		seatNumber: NUMBER	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER)        	SET THIS.custName TO custName        	SET THIS.seatNumber TO seatNumber    	END CONSTRUCTOR	METHODS		GET_id()			DISPLAY id		END METHOD		GET_custName()           		 DISPLAY custName        	END METHOD      		GET_seatNumber()            		DISPLAY seatNumber        	END METHOD		SET_custName(newCust: TEXT)			DISPLAY "PLease enter your name:"			SET custName TO newCust		END METHOD		seatNumber(newSeat: NUMBER)			DISPLAY "Please enter seat number"			IF newSEAT GREATER THAN 0 THEN				DISPLAY "Seat booked Successfully"			ELSE				DISPLAY "Error, no seat with this number please start from 1"		END METHOD		PRINTTICKET()			DISPLAY id			DISPLAY custName			DISPLAY seatNumber		END METHODEND CLASSpseudocode:START	BEGIN		CREATE OBJECT film1 OF FILM (1, "Avater", 180, "Action")		CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)		CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)		CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)		film1.ADDSHOWTIME(show1)		show1.ADDTIRCKT(ticket1)			show1.DISPLAYSHOWTIME()        	screen1.DISPLAYSCREEN()        	ticket1.PRINTTICKET()	ENDSTOP
+Task 279: Movie Theater
+
+Blueprint:
+
+CLASS FILM
+	ATTRIBUTES
+		id: NUMBER
+		title: TEXT
+		duration: NUMBER
+		caption: TEXT
+		filmType: TEXT
+		showtimes: LIST OF SHOWTIMES
+
+	
+	CONTRACTOR (title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)
+		SET THIS.title TO title
+		SET THIS.duartion TO duration
+		SET THIS.caption TO caption
+		SET THIS.filmType TO filmType
+	END CONSTRCTOR
+
+	METHODS
+		ADDSHOWRIME(show: SHOWTIMES)
+			ADD show TO showtimes
+		END METHOD
+	
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_title()
+			DISPLAY title
+		END METHOD
+
+		GET_duration()
+			DISPLAY duration
+		END METHOD
+
+		SET_duration(newDuration: TEXT)
+			IF LENGTH OF newDuration GREATHER THAN 0 THEN
+				SET duration TO newDuration
+			ELSE
+				DISPLAY "Error assigning time duration"
+			END IF
+		END METHOD
+
+		GET_caption()
+			DISPLAY caption
+		END METHOD
+
+		GET_filmType()
+			DISPLAY filmtype
+		END METHOD
+
+END CLASS
+
+
+CLASS SHOWTIME
+	ATTRIBUTES
+		id: NUMBER
+        	date: TEXT
+        	time: TEXT
+        	screen: SCREEN
+        	tickets: LIST OF TICKET
+	CONSTRUCTOR(date: TEXT, time: TEXT, screen: SCREEN)
+        	SET THIS.date TO date
+        	SET THIS.time TO time
+        	SET THIS.screen TO screen
+    	END CONSTRUCTOR
+
+	METHODS
+	
+		ADDTICKET(ticket: TICKET)
+			ADD ticket TO tickets
+		END METHOD
+ 
+		GET_id()
+			DISPLAY id
+		END METHOD
+	
+		GET_date()
+			DISPLAY date
+		END METHOD
+
+		SET_date(newDate: TEXT)
+			DISPLAY "Enter date you want for the show"
+			SET date TO newDate
+		END METHOD()
+
+
+		GET_time()
+			DISPLAY time
+		END METHOD
+
+		SET_time(newTime: TEXT)
+			DISPLAY "Enter time you want for the show"
+			SET time TO newTime
+		END METHOD()
+
+		GET_screen()
+			DISPLAY screen
+		END METHOD
+
+		DISPLAYSHOWTIME()
+            		DISPLAY id
+            		DISPLAY date
+            		DISPLAY time
+        	END METHOD
+
+END CLASS
+
+CLASS SCREEN
+	ATTRIBUTES
+		id: NUMBER
+        	screenName: TEXT
+		capcity: NUMBER
+
+	CONSTRUCTOR(screenName: TEXT, capacity: NUMBER)
+        	SET THIS.screenName TO screenName
+        	SET THIS.capacity TO capacity
+    	END CONSTRUCTOR
+	
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_screenName()
+			DISPLAY screenName
+		END METHOD
+		GET_capcity()
+			DISPLAY capcity
+		END METHOD
+	
+ 		DISPLAYSCREEN()
+            		DISPLAY id
+            		DISPLAY screenName
+            		DISPLAY capacity
+        	END METHOD
+	
+END CLASS
+
+CLASS TICKET
+	ATTRIBUTES
+		id: NUMBER
+        	custName: TEXT
+		seatNumber: NUMBER
+
+	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER)
+        	SET THIS.custName TO custName
+        	SET THIS.seatNumber TO seatNumber
+    	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_custName()
+           		 DISPLAY custName
+        	END METHOD
+
+      		GET_seatNumber()
+            		DISPLAY seatNumber
+        	END METHOD
+
+		SET_custName(newCust: TEXT)
+			DISPLAY "PLease enter your name:"
+			SET custName TO newCust
+		END METHOD
+
+		seatNumber(newSeat: NUMBER)
+			DISPLAY "Please enter seat number"
+			IF newSEAT GREATER THAN 0 THEN
+				DISPLAY "Seat booked Successfully"
+			ELSE
+				DISPLAY "Error, no seat with this number please start from 1"
+		END METHOD
+		PRINTTICKET()
+			DISPLAY id
+			DISPLAY custName
+			DISPLAY seatNumber
+		END METHOD
+
+
+END CLASS
+
+pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT film1 OF FILM (1, "Avater", 180, "Action")
+		CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)
+		CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)
+		CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)
+
+		film1.ADDSHOWTIME(show1)
+		show1.ADDTIRCKT(ticket1)
+
+	
+		show1.DISPLAYSHOWTIME()
+        	screen1.DISPLAYSCREEN()
+        	ticket1.PRINTTICKET()
+	END
+STOP
+
+---------------------------------------------------------------------------------------
+Task 280: Warehouse Inventory
+Blueprint:
+
+CLASS PRODUCT
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		category: TEXT
+		vendor : VENDOR
+		bins: LIST OF STORAGEBIN
+		movements: LIST OF STOCKMOVEMENT
+
+	CONSTRCUTOR(n: TEXT, c: TEXT, v: VENDOR)
+		SET name TO n
+		SET category TO c
+		SET vendor TO v
+	END CONSTRCTOR
+	
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_name()
+			DISPLAY name
+		END METHOD
+
+		SET_name(newName : TEXT)
+			IF LENGTH OF newname GREATE THAN 0 THEN
+				DISPLAY "Enter product new name: "
+				SET name TO newname
+			ELSE
+				DISPLAY "Invalid name, please enter a name"
+			END IF
+		END METHOD
+
+		AddBin(newBins : TEXT)
+			ADD bin TO STORAGEBIN
+		END METHOD
+
+		ADDMOVEMENT(move : STOCKMOVEMENT)
+			IF move.movementType EQUALS "OUT" THEN
+				IF GET_totalstock() GREATER THEN move.qauntity THEN
+					ADD move TO movements
+				ELSE
+					DISPLAY "Not enough stock"
+				END IF
+			ELSE
+				ADD move TO movements
+			END IF
+		END METHOD
+		
+		GET_totalStock()
+			SET total TO 0
+			REAPET FROM I = 1 TO SIZE OF bins
+				SET total TO total + bins[I].qaunity
+			END REAPEAT
+			DISPLAY total
+		END METHOD		
+END CLASS
+
+CLASS STORAGEBIN
+	ATTRIBUTES
+		id: NUMBER
+		location: TEXT
+		quantity: NUMBER
+
+	CONSTRCTOR(l: TEXT, q: NUMBER)
+		SET l TO location
+		SET q TO quantity
+	END CONSTRUCTOR
+
+
+	METHODS
+		GET_location()
+			DISPLAY location
+		END METHOD
+		
+		GET_quantity
+			DISPLAY quantity
+		END METHOD
+
+		SET_quantity(newQuantity : NUMBER)
+			IF newQuantity GREATER THAN OR EQUALS TO 0 THEN
+				SET quantity TO newQuantity
+			ELSE
+				DISPLAY "Invaild quantity"
+			END IF
+		END METHOD
+END CLASS
+
+CLASS VENDOR
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		contact: TEXT
+		rating: NUMBER
+		products: LIST OF PRODUCT
+
+	CONSTRUCTOR(nv: TEXT, cv: TEXT)
+		SET nv TO name
+		SET cv TO contact
+		SET rating TO 5
+	END CONSTRCTOR
+
+	
+	METHODS
+		ADDPRODUCT (product: PRODUCT)
+			ADD product TO products
+		END METHOD
+
+		UPDATERATE(lateDilvery:BOOLEAN)
+			IF lateDilvery EQUALS TRUE THEN
+				SET rating TO rating -1
+			END IF
+		END METHOD
+
+		GET_rating()
+			DISPLAY rating
+		END METHOD
+
+END CLASS
+
+CLASS STOCKMOVMENT
+	ATTRIBUTES
+		id: NUMBER
+		movementType: TEXT
+		quantity: NUMBER
+		date: TEXT
+
+	CONSTRUCTOR(ts : TEXT, qs: NUMBER, ds: TEXT)
+		SET ts TO movementType
+		SET qs TO quantity
+		SET ds TO date
+	END CONTRUCTOR
+
+	METHODS
+		GET_quantityStock()
+			DISPLAY quantity
+		END METHOD
+
+		GET_movementType()
+			DISPLAY movementType
+		END METHOD
+
+END CLASS
+
+pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT vednor1 OF VENDOR("XYZ supplier", "99228001")
+
+		CREATE OBJECT product1 OF PRODUCT("Laptop","Electronics",vendor1)
+
+		CREATE OBJECT bin1 OF STORAGEBIN("A-01",50)
+
+        	CREATE OBJECT bin2 OF STORAGEBIN("A-02",30)
+
+        	CREATE OBJECT move1 OF STOCKMOVEMENT("OUT",20,"01-July-2026")
+
+		vendor1.ADDPRODUCT(product1)
+
+       	 	product1.ADDBIN(bin1)
+
+        	product1.ADDBIN(bin2)
+
+        	product1.ADDMOVEMENT(move1)
+
+        	product1.GETTOTALSTOCK()
+
+        	vendor1.GET_rating()
+	
+	END
+STOP
