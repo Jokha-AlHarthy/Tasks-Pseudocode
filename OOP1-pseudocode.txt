@@ -1092,3 +1092,199 @@ START
 		task1.MARKDONE()
     END
 STOP
+---------------------------------------------------------------------------------------------
+Task 285: Concert Ticketing 
+
+- A platform has many tickets.
+- A concert has many venues.
+- A venue has one artist.
+- A venue has many concert.
+- A concert has many tickets.
+
+
+Blueprint:
+
+CLASS CONCERT
+	ATTRIBUTES
+		id: NUMBER
+		conName: TEXT
+		conDate: TEXT
+		tires: LIST OF TicketTier
+		artist: LIST OF ARTISTS
+		venue: LIST OF VENUES
+		soldTicket: LIST OF TICKETS
+
+	CONSTRUCTOR(conName: TEXT, conDate: TEXT)
+		SET THIS.conName TO conName
+		SET THIS.conDate TO conDate
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+		
+		ADDTIER(newTire: TEXT)
+			ADD newTire TO TicketTier
+		END METHOD
+
+		GET_venue()
+			DISPLAY venue
+		END METHOD
+
+		GET_Date()
+			DISPLAY conDate
+		END METHOD
+
+		GET_RemainingTicket(totalCap: NUMBER)
+			SET totalCap TO 0
+			FOREACH t IN tires
+				totalCap = totalCap + t.GET_capcity()
+			END FOREACH
+
+			DISPLAY totalCap - LENGTH(soldTicket)
+		END METHOD
+
+		BOOKTICKET(newTicket: TEXT)
+			ADD newTicket TO soldTicket
+		END METHOD
+
+END CLASS
+
+CLASS VENUE
+	ATTRIBUTES
+		id: NUMBER
+		vName: TEXT
+		seatNo: NUMBER 
+
+	CONSTRUCTOR(vName: TEXT, seatNo: NUMBER)
+		SET THIS.vName TO vName
+		SET THIS.seatNo TO seatNo
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+		
+
+		GET_VunueName()
+			DISPLAY vName
+		END METHOD
+
+		CONUT_seatNo()
+			DISPLAY "Number of seats availbes are:" + seatNo
+		END METHOD
+	
+END CLASS
+
+CLASS TICKETTIRE
+	ATTRIBUTES
+		id: NUMBER
+		ticketName: TEXT
+		price: NUMBER
+		capcity: NUMBER
+
+	CONSTRUCTOR(ticketName: TEXT, price: NUMBER, capcity: NUMBER)
+		SET THIS.ticketName TO ticketName
+		SET THIS.priceTO price
+		SET THIS.capcity TO capcity
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+		
+		GET_TicketPrice()
+			DISPALY price
+		END METHOD
+
+		GET_TicketCapcity()
+			DISPALY capcity
+		END METHOD
+		
+	
+END CLASS
+
+CLASS TICKET
+	ATTRIBUTES
+		id: NUMBER
+		concert: LIST OF CONCERT
+    		tier: LIST OF TICKETTIRE
+   	 	seatNumber: NUMBER
+    		finalPrice: NUMBER
+	
+	CONSTRUCTOR(seatNumber: NUMBER, finalPrice: NUMBER)
+		SET THIS.seatNumber TO seatNumber
+		SET THIS.finalPrice TO finalPrice
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_seatNumber()
+			DISPLAY seatNumber
+		END METHOD
+	
+		GET_finalPrice()
+			DISPLAY finalPrice
+		END METHOD
+END CLASS
+
+CLASS ARTIST
+	ATTRIBUTES
+		id: NUMBER
+		artistName: TEXT
+	
+
+	CONSTRUCTOR(artistName: TEXT)
+		SET THIS.artistName TO artistName
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+	
+END CLASS
+
+
+
+CLASS PLATFORM
+	ATTRIBUTES
+		id: NUMBER
+		tickets: LIST OF TICKETS
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+		
+	ADDTICKET(newTicket: TEXT)
+			ADD newTicket TO tickets
+	END METHOD	
+END CLASS
+
+
+
+pseudocode:
+START
+    BEGIN
+        CREATE OBJECT Artist1 OF ARTIST(1, "Billie Eilish")
+
+        CREATE OBJECT Venue1 OF VENUE(201, "Madison Square Garden", 20000, Artist1)
+
+        CREATE OBJECT Concert1 OF CONCERT(10, "Hit Me Hard and Soft Tour", "10-05-2026")
+
+        CREATE OBJECT Tier1 OF TICKETTIER(501, "General Admission", 150, 5000)
+
+        CREATE OBJECT Platform1 OF PLATFORM(101)
+        Platform1.ADDCONCERT(Concert1)
+        
+        CREATE OBJECT Ticket1 OF TICKET(901, 104, 150, Tier1)
+        Concert1.BOOKTICKET(Ticket1)
+    END
+STOP
