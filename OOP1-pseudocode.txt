@@ -1288,3 +1288,197 @@ START
         Concert1.BOOKTICKET(Ticket1)
     END
 STOP
+
+------------------------------------------------------------------------------------------
+Task 286: Software Sprint
+
+- A sprint has many tasks.
+- A developer has one or many tasks.
+- A team has many sprints.
+
+
+Blueprint:
+
+
+CLASS SPRINT
+	ATTRIBUTES
+		id: NUMBER
+		sprintName: TEXT
+		taskList: LIST OF TASKS
+
+	CONSTRCTOR(sprintName: TEXT)
+		SET THIS.sprintName TO sprintName
+	END CONSTRCUTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_Progress()
+            		SET completeCount TO 0
+            		SET totalTasks TO LENGTH(THIS.taskList)
+            
+            		IF totalTasks EQUALS 0 THEN
+                		DISPLAY "Sprint Progress: 0%"
+            		END IF
+
+            		FOREACH t IN THIS.taskList
+                		IF t.GET_Status() EQUALS "Done" THEN
+                    			SET completeCount = completeCount + 1
+                		END IF
+            		END FOREACH
+
+            		SET percentage TO (completeCount / totalTasks) * 100
+            		DISPLAY "Sprint Progress: " + percentage + "%"
+        	END METHOD
+
+
+		ADDTASK(newTask: TEXT, dev: TEXT)
+			ADD newTask TO taskList
+		END METHOD	
+END CLASS
+
+CLASS TASK
+    ATTRIBUTES
+        id: NUMBER
+        title: TEXT
+        points: NUMBER
+        status: TEXT         
+        assignedDev: LIST OF DEVELOPER
+
+    CONSTRUCTOR(title: TEXT, points: NUMBER)
+        SET THIS.id TO id
+        SET THIS.title TO title
+        SET THIS.points TO points
+        SET THIS.status TO "Todo"
+        SET THIS.assignedDev TO NULL
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY THIS.id
+        END METHOD
+
+        GET_Points()
+            DISPLAY THIS.points
+        END METHOD
+
+        GET_Status()
+            DISPLAY THIS.status
+        END METHOD
+
+        ASSIGN_Developer(dev: TEXT)
+            SET assignedDev TO dev
+        END METHOD
+
+        GET_Developer()
+            DISPLAY assignedDev
+        END METHOD
+
+        MARKSTATUS()
+            IF status EQUALS "Todo" THEN
+                SET status TO "In Progress"
+            ELSEIF status EQULAS "In Progress" THEN
+                SET status TO "Review"
+            ELSEIF status EQULAS "Review" THEN
+                SET status TO "Done"
+            ELSE
+                DISPLAY "Task is already completed"
+            END IF
+        END METHOD
+
+        MARKCOMPLETE()
+            IF status EQUALS "Review" THEN
+                SET status TO "Done"
+            ELSEIF EQUALS "Done" THEN
+                DISPLAY "Task already done"
+            ELSE
+                DISPLAY "Error: Cannot complete task directly from: " + status
+            END IF
+        END METHOD
+END CLASS
+
+CLASS DEVELOPER
+	ATTRIBUTES
+        	id: NUMBER
+        	devName: TEXT
+        	maxCapacity: NUMBER
+        
+
+    CONSTRUCTOR(devName: TEXT, maxCapacity: NUMBER)
+        SET THIS.id TO id
+        SET THIS.devName TO devName
+        SET THIS.maxCapacity TO maxCapacity
+    END CONSTRUCTOR
+
+	 METHODS
+        	GET_id()
+            		DISPLAY id
+        	END METHOD
+
+        	GET_DevName()
+            		DISPLAY devName
+        	END METHOD
+
+        	GET_MaxCapacity()
+            		DISPLAY maxCapacity
+        	END METHOD
+END CLASS
+
+CLASS BACKLOG
+    ATTRIBUTES
+        id: NUMBER
+        unassignedTasks: LIST OF TASK
+
+    CONSTRUCTOR(id: NUMBER)
+        SET THIS.id TO id
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        ADDTOBACKLOG(newTask: TEXT)
+            ADD newTask TO unassignedTasks
+        END METHOD
+
+        REMOVEBACKLOG(removeTask: TASK)
+            REMOVE removeTask FROM unassignedTasks
+        END METHOD
+END CLASS
+
+pseudocode:
+
+START
+    BEGIN
+        
+        CREATE OBJECT Backlog1 OF BACKLOG(501)
+
+        CREATE OBJECT Task1 OF TASK(101, "Design Database Schema", 5)
+        CREATE OBJECT Task2 OF TASK(102, "Implement Auth System", 8)
+        CREATE OBJECT Task3 OF TASK(103, "Write Unit Tests", 3)
+        
+        Backlog1.ADDTOBACKLOG(Task1)
+        Backlog1.ADDTOBACKLOG(Task2)
+	Backlog1.ADDTOBACKLOG(Task3)
+
+        CREATE OBJECT Dev1 OF DEVELOPER(1, "Alice Smith", 10)
+
+        CREATE OBJECT Sprint1 OF SPRINT(201, "Sprint 1: Core API")
+
+        Backlog1.REMOVEBACKLOG(Task1)
+        Sprint1.ADDTASK(Task1, Dev1)
+
+        Sprint1.ADDTASK(Task2, Dev2)
+
+        Task1.MARKCOMPLETE() 
+
+        Task1.MARKSTATUS() 
+        Task1.MARKSTATUS() 
+        Task1.MARKCOMPLETE()
+
+        Sprint1.GET_Progress()
+    END
+STOP
