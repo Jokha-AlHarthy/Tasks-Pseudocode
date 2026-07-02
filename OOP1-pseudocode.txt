@@ -908,3 +908,187 @@ START
 
     END
 STOP
+---------------------------------------------------------------------------------------------------
+Task 284:  Wedding Planning 
+
+- A company manages many events.
+- A one event belongs to one couple.
+- A one event has many tasks.
+- A one task has one vendor.
+- A one event has many guests.
+
+Blueprint:
+
+CLASS EVENT
+	ATTRIBUTES
+		id: NUMBER
+		eventName: TEXT
+		eventDate: TEXT
+		eventDay: TEXT
+		budget: NUMBER
+		taskCost: NUMBER
+		totalSpending: NUMBER
+		tasks: LIST OF TASKS
+		guests: LIST OF GUEST
+		
+	CONSTRUCTOR (eN: TEXT, eD: NUMBER, eDay:TEXT, eB: NUMBER)
+		SET eN TO eventName
+		SET eD TO eventDay
+		SET eDay TO eventDay
+		SET eB TO budget
+		SET tCost TO taskCost
+		SRT totalSpending TO 0
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_name()
+			DISPALY eventName
+		END METHOD
+
+		GET_eventDate()
+			DISPALY eventDate
+		END METHOD
+		
+	
+		GET_eventDay()
+			DISPALY eventDay
+		END METHOD
+
+		CALCULATETASKS(CompTask: NUMBER)
+			IF CompTask LENGTH EQUALS TO 0
+				DISPLAY "This task is marked as done"
+			ELSE
+				DISPALY "This task is not completed yet!"
+			END IF
+		END METHOD
+
+		ADDTASKS(newTask: TEXT)
+            		IF newTask.budget + TotalSpending GREATER THAN budget THEN 
+				DISPLAY "Can't add new task"
+			ELSE
+				totalSpending = totalSpending + newTask.budget
+				ADD newTask to tasks 
+			END IF
+        	END METHOD
+
+		ADDGUEST(newGuest: TEXT)
+            		ADD newGuest TO guests
+        	END METHOD
+		
+END CLASS
+
+
+CLASS TASK
+	ATTRIBUTES
+		id: NUMBER
+		taskName: TEXT
+		isCompelted: BOOLEAN
+		cost: NUMBER
+		vendor: LIST OF VENDOR
+
+		
+	CONSTRUCTOR (tN: TEXT, tC: NUMBER)
+		SET tN TO taskName
+		SET tC TO cost
+		SET isCompelted TO FALSE
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_name()
+			DISPALY taskName
+		END METHOD
+
+		MARKDONE()
+			SET isCompelted TO TRUE
+		END METHOD
+			
+END CLASS
+
+CLASS VENDOR
+	ATTRIBUTES
+		id: NUMBER
+		vendorName: TEXT
+		specialty: TEXT
+		contactDetials: NUMBER
+		bookedDates: LIST OF DATES
+	
+	CONSTRUCTOR (vN: TEXT, vS: NUMBER, vC:TEXT)
+		SET vN TO vendorName
+		SET vS TO specialty
+		SET vC TO contactDetials			
+		
+	END CONSTRUCTOR
+
+	METHODS
+		
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_vendorName()
+			DISPALY vendorName
+		END METHOD
+
+		GET_contactDetials()
+			DISPLAY contactDetials
+		END METHOD
+
+		BOOKDATE(eventDate: TEXT)
+			ADD eventDate TO DATES
+		END METHOD
+END CLASS
+
+
+CLASS GUEST
+	ATTRIBUTES
+		id: NUMBER
+		guestName: TEXT
+		contInfo: TEXT
+	
+	CONSTRUCTOR (gN: TEXT, gC: TEXT)
+		SET gN TO guestName
+		SET gC TO contInfo
+	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_guestName()
+			DISPALY guestName
+		END METHOD
+
+		GET_contInfo()
+			DISPALY contInfo
+		END METHOD
+END CLASS
+
+pseudocode:
+START
+    BEGIN
+		CREATE OBJECT V1 OF VEDOR(1, "Ahmed hamed", "Food", 99009900)
+		CREATE OBJECT V2 OF VEDOR(1, "Mohammed Ali", "Photographer", 92985985)
+
+		CREATE OBJECT wedding OF EVENT(101, "Ahmed & Alia", "2-Jul-2026", "Thursady", 5000)
+
+		CREATE OBJECT task1 OF TASK(1, "Book Dinner Buffet", 1500, v1)
+		CREATE OBJECT task2 OF TASK(1, "Book Photographer", 350, v2)
+
+		wedding.ADDTASKS(task1)
+		wedding.ADDTASKS(task2)
+
+		CREATE OBJECT guest1 OF GUSET("Jokha Al Harthy" , "jokha.hamed.official@gmail.com")
+		wedding.ADDGUSTS(guest1)
+
+		task1.MARKDONE()
+    END
+STOP
