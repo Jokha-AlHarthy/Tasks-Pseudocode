@@ -721,4 +721,190 @@ START
         	policy1.GETREMAININGCOVERAGE()
 	END
 STOP
+---------------------------------------------------------------------------------
+Task 283: Car Dealership
 
+- A dealership has many vehicles.
+- A vehicle belongs to one dealership.
+- A vehicle belongs to one model.
+- A model has many vehicles.
+- A customer can have many sales.
+- A sale belongs to one customer.
+- A sale is for one vehicle.
+- A sale has many add-on features.
+
+Blueprint:
+
+CLASS DEALERSHIP
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		phoneNO: NUMBER
+		email: TEXT
+		vehicles: LIST OF VEHICLE
+
+	CONSTRUCTOR (n: TEXT, p: NUMBER, e: EMAIL)
+		SET n TO name
+		SET p TO phoneNO
+		SET e TO email
+	END CONSTRUCTOR
+
+	METHODS
+		ADDVEHICLE(vehicle: VEHICLE)
+            		ADD vehicle TO vehicles
+        	END METHOD
+            	
+		GET_name()
+            		DISPLAY name
+        	END METHOD
+END CLASS
+
+CLASS VEHICLE
+    	ATTRIBUTES
+       		id: NUMBER
+        	model: TEXT
+        	color: TEXT
+        	price: NUMBER
+        	available: BOOLEAN
+
+	CONSTRUCTOR(model: MODEL, color: TEXT)
+        	SET THIS.model TO model
+        	SET THIS.color TO color
+        	SET available TO TRUE
+    	END CONSTRUCTOR
+
+    METHODS
+		MARKASSOLD()
+            		SET available TO FALSE
+        	END METHOD
+
+        	GET_price()
+            		DISPLAY price
+        	END METHOD
+
+		SET_price()
+			IF price GREATER THAN model.basePrice THEN
+            			SET THIS.price TO price
+        		ELSE
+            			DISPLAY "Price cannot be below"
+        		END IF
+		END METHOD
+END CLASS
+
+CLASS MODEL
+    ATTRIBUTES
+        id: NUMBER
+        modelName: TEXT
+        basePrice: NUMBER
+        vehicles: LIST OF VEHICLE
+
+    CONSTRUCTOR(modelName: TEXT, basePrice: NUMBER)
+        SET THIS.modelName TO modelName
+        SET THIS.basePrice TO basePrice
+    END CONSTRUCTOR
+
+    METHODS
+        ADDVEHICLE(vehicle: VEHICLE)
+            ADD vehicle TO vehicles
+        END METHOD
+
+END CLASS
+
+
+CLASS CUSTOMER
+    ATTRIBUTES
+        id: NUMBER
+        fullName: TEXT
+        phone: TEXT
+        sales: LIST OF SALE
+    CONSTRUCTOR(fullName: TEXT, phone: TEXT)
+        SET THIS.fullName TO fullName
+        SET THIS.phone TO phone
+    END CONSTRUCTOR
+
+    METHODS
+        ADDSALE(sale: SALE)
+            ADD sale TO sales
+        END METHOD
+
+END CLASS
+
+CLASS ADDON
+    ATTRIBUTES
+        id: NUMBER
+        featureName: TEXT
+        cost: NUMBER
+
+    CONSTRUCTOR(featureName: TEXT, cost: NUMBER)
+        SET THIS.featureName TO featureName
+        SET THIS.cost TO cost
+    END CONSTRUCTOR
+
+END CLASS
+
+CLASS SALE
+
+    ATTRIBUTES
+        id: NUMBER
+        agreedPrice: NUMBER
+        saleDate: TEXT
+        customer: CUSTOMER
+        vehicle: VEHICLE
+        addOns: LIST OF ADDON
+
+    CONSTRUCTOR(agreedPrice: NUMBER, saleDate: TEXT, customer: CUSTOMER, vehicle: VEHICLE)
+        IF vehicle.available EQUALS TRUE THEN
+            SET THIS.agreedPrice TO agreedPrice
+            SET THIS.saleDate TO saleDate
+            SET THIS.customer TO customer
+            SET THIS.vehicle TO vehicle
+            vehicle.MARKASSOLD()
+        ELSE
+            DISPLAY "Vehicle already sold"
+        END IF
+    END CONSTRUCTOR
+
+    METHODS
+        ADDADDON(addOn: ADDON)
+            ADD addOn TO addOns
+        END METHOD
+
+        GETTOTALPRICE()
+            SET total TO agreedPrice
+            REPEAT FROM I EQUALS 1 TO SIZE OF addOns
+                SET total TO total + addOns[I].cost
+            END REPEAT
+            DISPLAY total
+        END METHOD
+END CLASS
+
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT dealer1 OF DEALERSHIP("ABC Motors",91234567,"abc@dealer.com")
+
+        CREATE OBJECT model1 OF MODEL("Toyota Corolla",9000)
+
+        CREATE OBJECT vehicle1 OF VEHICLE(model1,"White",9500)
+
+        CREATE OBJECT customer1 OF CUSTOMER("Ahmed Ali","99887766")
+
+        CREATE OBJECT sale1 OF SALE(9500,"01-July-2026",customer1,vehicle1)
+
+        CREATE OBJECT addon1 OF ADDON("Window Tint",150)
+
+        dealer1.ADDVEHICLE(vehicle1)
+
+        model1.ADDVEHICLE(vehicle1)
+
+        customer1.ADDSALE(sale1)
+
+        sale1.ADDADDON(addon1)
+
+        sale1.GETTOTALPRICE()
+
+    END
+STOP
