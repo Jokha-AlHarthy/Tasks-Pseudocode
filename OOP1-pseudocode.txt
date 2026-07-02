@@ -1482,3 +1482,150 @@ START
         Sprint1.GET_Progress()
     END
 STOP
+
+-------------------------------------------------------------
+Task 287: Farm Management 
+- A Farm has many Fields.
+- A Field belongs to one Farm.
+- A Field has one Crop.
+- A Crop can be planted in many Fields.
+- A Field has many Activities.
+- An Activity belongs to one Field.
+- A Worker performs many Activities.
+- An Activity is performed by one Worker.
+- A Farm has many Workers.
+- A Worker belongs to one Farm.
+
+
+CLASS FIELD
+    ATTRIBUTES
+        id: NUMBER
+        fieldName: TEXT
+        acreage: NUMBER
+        currentCrop: LIST OF CROPS
+        activityLog: LIST OF ACTIVITY
+
+    CONSTRUCTOR(fieldName: TEXT, acreage: NUMBER)
+        SET THIS.fieldName TO fieldName
+        SET THIS.acreage TO acreage
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        ADDLOGACTIVITY(newActivity: TEXT)
+            SET newActivity TO activityLog
+        END METHOD
+END CLASS
+
+
+CLASS CROP
+    ATTRIBUTES
+        id: NUMBER
+        cropName: TEXT
+        cropFiled: NUMBER
+        waterRequired: NUMBER
+
+    CONSTRUCTOR(cropName: TEXT, cropFiled: NUMBER, minWaterRequired: NUMBER)
+        SET THIS.cropName TO cropName
+        SET cropFiled TO cropFiled
+        SET THIS.minWaterRequired TO minWaterRequired
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_cropFiled()
+            DISPLAY cropFiled
+        END METHOD
+
+        GET_waterRequired()
+            DISPLAY waterRequired
+        END METHOD
+END CLASS
+
+CLASS ACTIVITY
+    ATTRIBUTES
+        id: NUMBER
+        activityType: TEXT     
+        amountApplied: NUMBER  
+        isHealthyCare: BOOLEAN 
+        assignedWorker: LIST OF WORKER
+
+    CONSTRUCTOR(activityType: TEXT, amountApplied: NUMBER)
+        SET THIS.activityType TO activityType
+        SET THIS.amountApplied TO amountApplied
+        SET THIS.isHealthyCare TO TRUE
+    END CONSTRUCTOR
+
+    METHODS
+        SET_AsUnhealthy()
+            SET isHealthyCare TO FALSE
+        END METHOD
+
+        GET_IsHealthy()
+            DISPLAY isHealthyCare
+        END METHOD
+
+        GET_Type()
+            DISPLAY activityType
+        END METHOD
+END CLASS
+
+CLASS WORKER
+    ATTRIBUTES
+        id: NUMBER
+        workerName: TEXT
+        dailyActivityLimit: NUMBER
+        activitiesToday: NUMBER
+
+    CONSTRUCTOR(workerName: TEXT, dailyActivityLimit: NUMBER)
+        SET THIS.workerName TO workerName
+        SET THIS.dailyActivityLimit TO dailyActivityLimit
+        SET THIS.activitiesToday TO 0
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_WorkerName()
+            DISPLAY workerName
+        END METHOD
+
+        CAN_WorkToday()
+            DISPLAY activitiesToday LESS THAN dailyActivityLimit
+        END METHOD
+
+        INCREMENT_Workload()
+            SET activitiesToday TO activitiesToday + 1
+        END METHOD
+
+        RESET_DailyWorkload()
+            SET activitiesToday TO 0
+        END METHOD
+END CLASS
+
+
+pseudocode:
+
+START
+    BEGIN
+        CREATE OBJECT Crop1 OF CROP(401, "Organic Strawberries", 500, 100)
+
+        CREATE OBJECT Field1 OF FIELD(101, "North Plateau Field", 10, Crop1)
+
+        CREATE OBJECT Worker1 OF WORKER(1, "John Doe", 2)
+
+        CREATE OBJECT Act1 OF ACTIVITY(801, "Watering", 120, Worker1)
+
+        CREATE OBJECT Act2 OF ACTIVITY(802, "Watering", 50, Worker1)
+
+        CREATE OBJECT Act3 OF ACTIVITY(803, "Fertilizing", 25, Worker1)
+    END
+STOP
