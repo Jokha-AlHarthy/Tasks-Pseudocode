@@ -739,7 +739,7 @@ CLASS DEALERSHIP
 		email: TEXT
 		vehicles: LIST OF VEHICLE
 
-	CONSTRUCTOR (n: TEXT, p: NUMBER, e: EMAIL)
+	CONSTRUCTOR (n: TEXT, p: NUMBER, e: TEXT)
 		SET n TO name
 		SET p TO phoneNO
 		SET e TO email
@@ -747,26 +747,27 @@ CLASS DEALERSHIP
 
 	METHODS
 		ADDVEHICLE(vehicle: VEHICLE)
-            		ADD vehicle TO vehicles
-        	END METHOD
+            	ADD vehicle TO vehicles
+        END METHOD
             	
 		GET_name()
-            		DISPLAY name
-        	END METHOD
+            	DISPLAY name
+        END METHOD
 END CLASS
 
 CLASS VEHICLE
     	ATTRIBUTES
        		id: NUMBER
-        	model: TEXT
+        	model: MODEL
         	color: TEXT
         	price: NUMBER
         	available: BOOLEAN
 
-	CONSTRUCTOR(model: MODEL, color: TEXT)
+	CONSTRUCTOR(model: MODEL, color: TEXT, price: NUMBER)
         	SET THIS.model TO model
         	SET THIS.color TO color
-        	SET available TO TRUE
+			SET THIS.price TO price
+        	SET THIS.available TO TRUE
     	END CONSTRUCTOR
 
     METHODS
@@ -778,12 +779,12 @@ CLASS VEHICLE
             		DISPLAY price
         	END METHOD
 
-		SET_price()
-			IF price GREATER THAN model.basePrice THEN
-            			SET THIS.price TO price
-        		ELSE
-            			DISPLAY "Price cannot be below"
-        		END IF
+		SET_price(newPrice: NUMBER)
+			IF newPrice GREATER THAN OR EQUAL TO model.basePrice THEN
+    			SET THIS.price TO newPrice
+			ELSE
+    			DISPLAY "Price cannot be below base price"
+			END IF
 		END METHOD
 END CLASS
 
@@ -867,7 +868,7 @@ CLASS SALE
 
         GETTOTALPRICE()
             SET total TO agreedPrice
-            REPEAT FROM I EQUALS 1 TO SIZE OF addOns
+            REPEAT FROM I = 1 TO SIZE OF addOns
                 SET total TO total + addOns[I].cost
             END REPEAT
             DISPLAY total
@@ -881,27 +882,16 @@ START
     BEGIN
 
         CREATE OBJECT dealer1 OF DEALERSHIP("ABC Motors",91234567,"abc@dealer.com")
-
         CREATE OBJECT model1 OF MODEL("Toyota Corolla",9000)
-
         CREATE OBJECT vehicle1 OF VEHICLE(model1,"White",9500)
-
         CREATE OBJECT customer1 OF CUSTOMER("Ahmed Ali","99887766")
-
         CREATE OBJECT sale1 OF SALE(9500,"01-July-2026",customer1,vehicle1)
-
         CREATE OBJECT addon1 OF ADDON("Window Tint",150)
-
         dealer1.ADDVEHICLE(vehicle1)
-
         model1.ADDVEHICLE(vehicle1)
-
         customer1.ADDSALE(sale1)
-
         sale1.ADDADDON(addon1)
-
         sale1.GETTOTALPRICE()
-
     END
 STOP
 ---------------------------------------------------------------------------------------------------
