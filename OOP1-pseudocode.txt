@@ -581,30 +581,36 @@ CLASS POLICYHOLDER
 
 	METHODS
 		ADDPOLICY(policy: POLICY)
-            		ADD policy TO policies
-        	END METHOD
+            ADD policy TO policies
+        END METHOD
 		
 		GET_fullName()
-            		DISPLAY fullName
-        	END METHOD
+            DISPLAY fullName
+        END METHOD
 
-       		GET_phone()
-           		DISPLAY phone
-        	END METHOD
+       	GET_phone()
+           	DISPLAY phone
+        END METHOD
+
+		GET_POLICIES()
+   		 	DISPLAY policies
+		END METHOD
 END CLASS
 
 CLASS POLICY
 	ATTRIBUTES
 		id: NUMBER
-		ploicyNumber: TEXT
+		policyNumber: TEXT
 		holder: POLICYHOLDER
 		coverages: LIST OF COVERAGE
 		claims: LIST OF CLAIM
+		status: TEXT
 
-	CONSTRUCTOR(ploicyNumer: TEXT, holder: POLICYHOLDER)
-		SET THIS.ploicyNubmer TO ploicyNumber
+	CONSTRUCTOR(policyNumber: TEXT, holder: POLICYHOLDER)
+		SET THIS.policyNumber TO policyNumber
 		SET THIS.holder TO holder
-	END CONSTRCTOR
+		SET THIS.status TO "Active"
+	END CONSTRUCTOR
 
 	METHODS
 		ADDCOVERAGE(coverage: COVERAGE)
@@ -670,54 +676,45 @@ CLASS CLAIM
 		policy: POLICY
 
 	CONSTRUCTOR(amount: NUMBER, status: TEXT, policy: POLICY)
-        	SET THIS.amount TO amount
-        	SET THIS.status TO status
-        	SET THIS.policy TO policy
-    	END CONSTRUCTOR
+		SET THIS.amount TO amount
+    	SET THIS.status TO status
+    	SET THIS.policy TO policy
+    END CONSTRUCTOR
 
 	METHODS
 		SET_status(newStatus: TEXT)
-			IF status EQUALS "Pending" THEN
-                		SET status TO newStatus
-           		ELSE
-                		DISPLAY "Claim amount can not be changed after filing"
-            		END IF
-       		END METHOD
+    		IF status EQUALS "Pending" AND newStatus EQUALS "Under Review" THEN
+        		SET status TO newStatus
+    		ELSE IF status EQUALS "Under Review" THEN
+        		SET status TO newStatus
+    		ELSE
+        		DISPLAY "Invalid status change"
+    		END IF
+		END METHOD
 
 		GET_amount()
-            		DISPLAY amount
-        	END METHOD
+            	DISPLAY amount
+        END METHOD
 
-        	GET_status()
-            		DISPLAY status
-        	END METHOD
+        GET_status()
+    		DISPLAY status
+		END METHOD
 END CLASS
-
-
 
 pseudocode:
 
 START
 	BEGIN
 		CREATE OBJECT holder1 OF POLICYHOLDER("Ahmed Ali","99221144")
-
-        	CREATE OBJECT policy1 OF POLICY("PL-1001",holder1)
-
-        	CREATE OBJECT coverage1 OF COVERAGE("Medical",10000,policy1)
-
-        	CREATE OBJECT coverage2 OF COVERAGE("Accident",5000,policy1)
-
-        	CREATE OBJECT claim1 OF CLAIM(2500,"Approved",policy1)
-
-        	holder1.ADDPOLICY(policy1)
-
-        	policy1.ADDCOVERAGE(coverage1)
-
-        	policy1.ADDCOVERAGE(coverage2)
-
-        	policy1.ADDCLAIM(claim1)
-
-        	policy1.GETREMAININGCOVERAGE()
+        CREATE OBJECT policy1 OF POLICY("PL-1001",holder1)
+        CREATE OBJECT coverage1 OF COVERAGE("Medical",10000,policy1)
+        CREATE OBJECT coverage2 OF COVERAGE("Accident",5000,policy1)
+        CREATE OBJECT claim1 OF CLAIM(2500,"Approved",policy1)
+        holder1.ADDPOLICY(policy1)
+        policy1.ADDCOVERAGE(coverage1)
+        policy1.ADDCOVERAGE(coverage2)
+        policy1.ADDCLAIM(claim1)
+        policy1.GETREMAININGCOVERAGE()
 	END
 STOP
 ---------------------------------------------------------------------------------
