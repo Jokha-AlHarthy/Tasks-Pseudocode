@@ -422,24 +422,24 @@ CLASS CLASSROOM
 		teacher: TEACHER
 		students: LIST OF STUDENT
 	
-	CONTRACTOR(className: TEXT, subject: TEXT, schedule : TEXT, maxSize: NUMBER, teacher: TEACHER)
+	CONSTRUCTOR(className: TEXT, subject: TEXT, schedule : TEXT, maxSize: NUMBER, teacher: TEACHER)
 		SET THIS.className TO className
 		SET THIS.subject TO subject
 		SET THIS.schedule TO schedule
 		SET THIS.maxSize TO maxSize
 		SET THIS.teacher TO teacher
-	END CONSTRCTOR
+	END CONSTRUCTOR
 	
 	METHODS
 		ADDSTUDENT(newStudent: STUDENT)
 			IF SIZE OF students LESS THAN maxSize THEN
-				IF student.schedule NOT EQUAL TO schedule THEN
-					ADD student TO students
+				IF newStudent.schedule NOT EQUAL TO schedule THEN
+    				ADD newStudent TO students
 				ELSE 
 					DISPLAY "Student already has class at same time"
 				END IF
 			ELSE
-				DISPLAY "Classroos is full"
+				DISPLAY "Classroom is full"
 			END IF
 		END METHOD
 		
@@ -453,7 +453,7 @@ CLASS CLASSROOM
 
 		GET_subject()
             		DISPLAY subject
-       		END METHOD
+       	END METHOD
 		
 	
 END CLASS
@@ -463,7 +463,7 @@ CLASS STUDENT
 		id: NUMBER
 		fullName: TEXT
 		schedule : TEXT
-		grade: LIST OF GRADE
+		grades: LIST OF GRADE
 
 	CONSTRUCTOR(fullName : TEXT, schedule : TEXT)
 		SET THIS.fullName TO fullName
@@ -473,24 +473,25 @@ CLASS STUDENT
 	METHODS
 		ADDGRADE(grade : GRADE)
             		ADD grade TO grades
-        	END METHOD
+        END METHOD
 
 		GETAVERAGE()
-			SET total TO 0
-            		SET totalWeight TO 0
-			REPEAT FROM I EQUALS 1 TO SIZE OF grades
-                		SET total TO total + (grades[I].mark * grades[i].weight)
-                		SET totalWeight TO totalWeight + grades[I].weight
+    		SET total TO 0
+    		SET totalWeight TO 0
+			REPEAT FROM I = 1 TO SIZE OF grades
+        		SET total TO total + (grades[I].mark * grades[I].weight)
+        		SET totalWeight TO totalWeight + grades[I].weight
+    		END REPEAT
+    		IF totalWeight GREATER THAN 0 THEN
+        		DISPLAY total / totalWeight
+    		ELSE
+        		DISPLAY "No grades available"
+    		END IF
+		END METHOD
 
-            		END REPEAT
-			DISPLAY total / totalWeight
-
-        	END METHOD
-		
 		GET_fullName()
-            		DISPLAY fullName
-        	END METHOD
-	
+			DISPLAY fullName
+		END METHOD
 END CLASS
 
 CLASS TEACHER
@@ -543,22 +544,14 @@ pseudocode:
 START
 	BEGIN
 		CREATE OBJECT teacher1 OF TEACHER("Ali Ahmed","Mathematics")
-
-        	CREATE OBJECT class1 OF CLASSROOM("IT-101","Programming","8:00 AM",30,teacher1)
-
-       		CREATE OBJECT student1 OF STUDENT("Sara Ali","10:00 AM")
-
-        	CREATE OBJECT grade1 OF GRADE("Quiz 1",85,20)
-
-        	CREATE OBJECT grade2 OF GRADE("Midterm",90,30)
-
-        	student1.ADDGRADE(grade1)
-
-        	student1.ADDGRADE(grade2)
-
-        	class1.ADDSTUDENT(student1)
-
-        	student1.GETAVERAGE()
+        CREATE OBJECT class1 OF CLASSROOM("IT-101","Programming","8:00 AM",30,teacher1)
+       	CREATE OBJECT student1 OF STUDENT("Sara Ali","10:00 AM")
+        CREATE OBJECT grade1 OF GRADE("Quiz 1",85,20)
+        CREATE OBJECT grade2 OF GRADE("Midterm",90,30)
+        student1.ADDGRADE(grade1)
+        student1.ADDGRADE(grade2)
+        class1.ADDSTUDENT(student1)
+        student1.GETAVERAGE()
 	END
 STOP
 -------------------------------------------------------------------------------------------------------
