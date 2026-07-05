@@ -917,13 +917,12 @@ CLASS EVENT
 		tasks: LIST OF TASKS
 		guests: LIST OF GUEST
 		
-	CONSTRUCTOR (eN: TEXT, eD: NUMBER, eDay:TEXT, eB: NUMBER)
+	CONSTRUCTOR (eN: TEXT, eD: TEXT, eDay:TEXT, eB: NUMBER)
 		SET eN TO eventName
 		SET eD TO eventDay
 		SET eDay TO eventDay
 		SET eB TO budget
-		SET tCost TO taskCost
-		SRT totalSpending TO 0
+		SET totalSpending TO 0
 	END CONSTRUCTOR
 
 	METHODS
@@ -944,26 +943,28 @@ CLASS EVENT
 			DISPALY eventDay
 		END METHOD
 
-		CALCULATETASKS(CompTask: NUMBER)
-			IF CompTask LENGTH EQUALS TO 0
-				DISPLAY "This task is marked as done"
-			ELSE
-				DISPALY "This task is not completed yet!"
-			END IF
-		END METHOD
+		CALCULATETASKS()
+    		SET completed TO 0
+    		REPEAT FROM I = 1 TO SIZE OF tasks
+        		IF tasks[I].isCompleted EQUALS TRUE THEN
+            		SET completed TO completed + 1
+        		END IF
+    		END REPEAT
+    		DISPLAY completed
+END METHOD
 
-		ADDTASKS(newTask: TEXT)
-            		IF newTask.budget + TotalSpending GREATER THAN budget THEN 
-				DISPLAY "Can't add new task"
-			ELSE
-				totalSpending = totalSpending + newTask.budget
-				ADD newTask to tasks 
-			END IF
-        	END METHOD
+		ADDTASKS(newTask: TASK)
+            	IF newTask.budget + TotalSpending GREATER THAN budget THEN 
+					DISPLAY "Can't add new task"
+				ELSE
+					SET totalSpending = totalSpending + newTask.cost
+					ADD newTask to tasks 
+				END IF
+        END METHOD
 
-		ADDGUEST(newGuest: TEXT)
-            		ADD newGuest TO guests
-        	END METHOD
+		ADDGUEST(newGuest: GUEST)
+            	ADD newGuest TO guests
+        END METHOD
 		
 END CLASS
 
@@ -974,12 +975,13 @@ CLASS TASK
 		taskName: TEXT
 		isCompelted: BOOLEAN
 		cost: NUMBER
-		vendor: LIST OF VENDOR
+		vendor: VENDOR
 
 		
-	CONSTRUCTOR (tN: TEXT, tC: NUMBER)
+	CONSTRUCTOR (tN: TEXT, tC: NUMBER, vendor: VENDOR)
 		SET tN TO taskName
 		SET tC TO cost
+		SET THIS.vendor TO vendor
 		SET isCompelted TO FALSE
 	END CONSTRUCTOR
 
@@ -1006,7 +1008,7 @@ CLASS VENDOR
 		contactDetials: NUMBER
 		bookedDates: LIST OF DATES
 	
-	CONSTRUCTOR (vN: TEXT, vS: NUMBER, vC:TEXT)
+	CONSTRUCTOR (vN: TEXT, vS: TEXT, vC:TEXT)
 		SET vN TO vendorName
 		SET vS TO specialty
 		SET vC TO contactDetials			
@@ -1028,7 +1030,7 @@ CLASS VENDOR
 		END METHOD
 
 		BOOKDATE(eventDate: TEXT)
-			ADD eventDate TO DATES
+			ADD eventDate TO bookedDates
 		END METHOD
 END CLASS
 
@@ -1061,18 +1063,14 @@ END CLASS
 pseudocode:
 START
     BEGIN
-		CREATE OBJECT V1 OF VEDOR(1, "Ahmed hamed", "Food", 99009900)
-		CREATE OBJECT V2 OF VEDOR(1, "Mohammed Ali", "Photographer", 92985985)
-
-		CREATE OBJECT wedding OF EVENT(101, "Ahmed & Alia", "2-Jul-2026", "Thursady", 5000)
-
+		CREATE OBJECT V1 OF VENDOR(1, "Ahmed hamed", "Food", 99009900)
+		CREATE OBJECT V2 OF VENDOR(1, "Mohammed Ali", "Photographer", 92985985)
+		CREATE OBJECT wedding OF EVENT(101, "Ahmed & Alia", "2-Jul-2026", "Thursday", 5000)
 		CREATE OBJECT task1 OF TASK(1, "Book Dinner Buffet", 1500, v1)
 		CREATE OBJECT task2 OF TASK(1, "Book Photographer", 350, v2)
-
 		wedding.ADDTASKS(task1)
 		wedding.ADDTASKS(task2)
-
-		CREATE OBJECT guest1 OF GUSET("Jokha Al Harthy" , "jokha.hamed.official@gmail.com")
+		CREATE OBJECT guest1 OF GUEST("Jokha Al Harthy" , "jokha.hamed.official@gmail.com")
 		wedding.ADDGUSTS(guest1)
 
 		task1.MARKDONE()
