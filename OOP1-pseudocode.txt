@@ -248,11 +248,11 @@ CLASS PRODUCT
 		bins: LIST OF STORAGEBIN
 		movements: LIST OF STOCKMOVEMENT
 
-	CONSTRCUTOR(n: TEXT, c: TEXT, v: VENDOR)
+	CONSTRUCTOR(n: TEXT, c: TEXT, v: VENDOR)
 		SET name TO n
 		SET category TO c
 		SET vendor TO v
-	END CONSTRCTOR
+	END CONSTRUCTOR
 	
 	METHODS
 		GET_id()
@@ -272,27 +272,27 @@ CLASS PRODUCT
 			END IF
 		END METHOD
 
-		AddBin(newBins : TEXT)
-			ADD bin TO STORAGEBIN
+		ADDBIN(bin : STORAGEBIN)
+    		ADD bin TO bins
 		END METHOD
 
 		ADDMOVEMENT(move : STOCKMOVEMENT)
-			IF move.movementType EQUALS "OUT" THEN
-				IF GET_totalstock() GREATER THEN move.qauntity THEN
-					ADD move TO movements
-				ELSE
-					DISPLAY "Not enough stock"
-				END IF
-			ELSE
-				ADD move TO movements
-			END IF
+    		IF move.movementType EQUALS "OUT" THEN
+        		IF GET_totalStock() GREATER THAN OR EQUAL TO move.quantity THEN
+            		ADD move TO movements
+        		ELSE
+            		DISPLAY "Not enough stock"
+        		END IF
+    		ELSE
+        		ADD move TO movements
+    		END IF
 		END METHOD
 		
 		GET_totalStock()
 			SET total TO 0
-			REAPET FROM I = 1 TO SIZE OF bins
-				SET total TO total + bins[I].qaunity
-			END REAPEAT
+			REPEAT FROM I = 1 TO SIZE OF bins
+				SET total TO total + bins[I].quantity
+			END REPEAT
 			DISPLAY total
 		END METHOD		
 END CLASS
@@ -339,7 +339,7 @@ CLASS VENDOR
 		SET nv TO name
 		SET cv TO contact
 		SET rating TO 5
-	END CONSTRCTOR
+	END CONSTRUCTOR
 
 	
 	METHODS
@@ -347,10 +347,12 @@ CLASS VENDOR
 			ADD product TO products
 		END METHOD
 
-		UPDATERATE(lateDilvery:BOOLEAN)
-			IF lateDilvery EQUALS TRUE THEN
-				SET rating TO rating -1
-			END IF
+		UPDATERATE(lateDelivery: BOOLEAN)
+    		IF lateDelivery EQUALS TRUE THEN
+        		IF rating GREATER THAN 0 THEN
+            		SET rating TO rating - 1
+        		END IF
+    		END IF
 		END METHOD
 
 		GET_rating()
@@ -359,7 +361,7 @@ CLASS VENDOR
 
 END CLASS
 
-CLASS STOCKMOVMENT
+CLASS STOCKMOVEMENT
 	ATTRIBUTES
 		id: NUMBER
 		movementType: TEXT
@@ -370,7 +372,7 @@ CLASS STOCKMOVMENT
 		SET ts TO movementType
 		SET qs TO quantity
 		SET ds TO date
-	END CONTRUCTOR
+	END CONSTRUCTOR
 
 	METHODS
 		GET_quantityStock()
@@ -387,28 +389,17 @@ pseudocode:
 
 START
 	BEGIN
-		CREATE OBJECT vednor1 OF VENDOR("XYZ supplier", "99228001")
-
+		CREATE OBJECT vendor1 OF VENDOR("XYZ supplier", "99228001")
 		CREATE OBJECT product1 OF PRODUCT("Laptop","Electronics",vendor1)
-
 		CREATE OBJECT bin1 OF STORAGEBIN("A-01",50)
-
-        	CREATE OBJECT bin2 OF STORAGEBIN("A-02",30)
-
-        	CREATE OBJECT move1 OF STOCKMOVEMENT("OUT",20,"01-July-2026")
-
+        CREATE OBJECT bin2 OF STORAGEBIN("A-02",30)
+        CREATE OBJECT move1 OF STOCKMOVEMENT("OUT",20,"01-July-2026")
 		vendor1.ADDPRODUCT(product1)
-
-       	 	product1.ADDBIN(bin1)
-
-        	product1.ADDBIN(bin2)
-
-        	product1.ADDMOVEMENT(move1)
-
-        	product1.GETTOTALSTOCK()
-
-        	vendor1.GET_rating()
-	
+       	product1.ADDBIN(bin1)
+        product1.ADDBIN(bin2)
+        product1.ADDMOVEMENT(move1)
+        product1.GET_totalStock()
+        vendor1.GET_rating()
 	END
 STOP
 -------------------------------------------------------------------------------------------
