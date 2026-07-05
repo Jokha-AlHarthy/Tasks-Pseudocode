@@ -19,15 +19,15 @@ CLASS FILM
 		showtimes: LIST OF SHOWTIMES
 
 	
-	CONTRACTOR (title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)
+	CONSTRUCTOR(title: TEXT, duration: NUMBER, caption: TEXT,filmType: TEXT)
 		SET THIS.title TO title
-		SET THIS.duartion TO duration
+		SET THIS.duration TO duration
 		SET THIS.caption TO caption
 		SET THIS.filmType TO filmType
-	END CONSTRCTOR
+	END CONSTRUCTOR
 
 	METHODS
-		ADDSHOWRIME(show: SHOWTIMES)
+		ADDSHOWTIME(show: SHOWTIMES)
 			ADD show TO showtimes
 		END METHOD
 	
@@ -56,7 +56,7 @@ CLASS FILM
 		END METHOD
 
 		GET_filmType()
-			DISPLAY filmtype
+			DISPLAY filmType
 		END METHOD
 
 END CLASS
@@ -78,7 +78,17 @@ CLASS SHOWTIME
 	METHODS
 	
 		ADDTICKET(ticket: TICKET)
-			ADD ticket TO tickets
+    	SET booked TO FALSE
+    	REPEAT FROM I = 1 TO SIZE OF tickets
+        	IF tickets[I].seatNumber EQUALS ticket.seatNumber THEN
+            	SET booked TO TRUE
+        	END IF
+    	END REPEAT
+    	IF booked EQUALS FALSE THEN
+        	ADD ticket TO tickets
+    	ELSE
+        	DISPLAY "Seat already booked"
+    	END IF
 		END METHOD
  
 		GET_id()
@@ -94,7 +104,6 @@ CLASS SHOWTIME
 			SET date TO newDate
 		END METHOD()
 
-
 		GET_time()
 			DISPLAY time
 		END METHOD
@@ -109,18 +118,23 @@ CLASS SHOWTIME
 		END METHOD
 
 		DISPLAYSHOWTIME()
-            		DISPLAY id
-            		DISPLAY date
-            		DISPLAY time
-        	END METHOD
+            DISPLAY id
+            DISPLAY date
+            DISPLAY time
+        END METHOD
 
+		GETREMAININGSEATS()
+    		SET remaining TO screen.capacity - SIZE OF tickets
+    		DISPLAY remaining
+		END METHOD
+		
 END CLASS
 
 CLASS SCREEN
 	ATTRIBUTES
 		id: NUMBER
-        	screenName: TEXT
-		capcity: NUMBER
+        screenName: TEXT
+		capacity: NUMBER
 
 	CONSTRUCTOR(screenName: TEXT, capacity: NUMBER)
         	SET THIS.screenName TO screenName
@@ -135,15 +149,15 @@ CLASS SCREEN
 		GET_screenName()
 			DISPLAY screenName
 		END METHOD
-		GET_capcity()
-			DISPLAY capcity
+		GET_capacity()
+			DISPLAY capacity
 		END METHOD
 	
  		DISPLAYSCREEN()
             		DISPLAY id
             		DISPLAY screenName
             		DISPLAY capacity
-        	END METHOD
+        END METHOD
 	
 END CLASS
 
@@ -156,9 +170,13 @@ CLASS TICKET
 
 	CONSTRUCTOR(custName: TEXT, seatNumber: NUMBER, showtime: SHOWTIME)
         	SET THIS.custName TO custName
-        	SET THIS.seatNumber TO seatNumber
 			SET THIS.showtime TO showtime
-    	END CONSTRUCTOR
+			IF seatNumber GREATER THAN 0 AND seatNumber LESS THAN OR EQUAL TO showtime.screen.capacity THEN
+				SET THIS.seatNumber TO seatNumber
+			ELSE
+				DISPLAY "Invaild number of seat"
+			END IF
+    END CONSTRUCTOR
 
 	METHODS
 		GET_id()
@@ -178,38 +196,35 @@ CLASS TICKET
 			SET custName TO newCust
 		END METHOD
 
-		seatNumber(newSeat: NUMBER)
+		SET_seatNumber(newSeat: NUMBER)
 			DISPLAY "Please enter seat number"
 			IF newSEAT GREATER THAN 0 THEN
-				DISPLAY "Seat booked Successfully"
+				SET seatNumber TO newSeat
 			ELSE
-				DISPLAY "Error, no seat with this number please start from 1"
+				DISPLAY "Invalid seat number"
 		END METHOD
+
 		PRINTTICKET()
 			DISPLAY id
 			DISPLAY custName
 			DISPLAY seatNumber
 		END METHOD
-
-
 END CLASS
 
 pseudocode:
 
 START
 	BEGIN
-		CREATE OBJECT film1 OF FILM (1, "Avater", 180, show1)
-		CREATE OBJECT screen1 OF SCREEN(1, "screen A", 150)
-		CREATE OBJECT show1 OF SHOWTIME(101, "02-July-2026", "7:00 PM", screen1)
-		CREATE OBJECT ticket1 OF TICKER(5001, "Ahmed ali", 25)
-
+		CREATE OBJECT film1 OF FILM ("Avater", 180, "English", "Action")
+		CREATE OBJECT screen1 OF SCREEN("screen A", 150)
+		CREATE OBJECT show1 OF SHOWTIME("02-July-2026", "7:00 PM", screen1)
+		CREATE OBJECT ticket1 OF TICKET("Ahmed ali", 25, show1)
 		film1.ADDSHOWTIME(show1)
 		show1.ADDTIRCKT(ticket1)
-
-	
 		show1.DISPLAYSHOWTIME()
-        	screen1.DISPLAYSCREEN()
-        	ticket1.PRINTTICKET()
+		show1.GETREMAININGSEATS()
+        screen1.DISPLAYSCREEN()
+        ticket1.PRINTTICKET()
 	END
 STOP
 
