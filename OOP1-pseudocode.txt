@@ -1277,15 +1277,13 @@ Task 286: Software Sprint
 - A developer has one or many tasks.
 - A team has many sprints.
 
-
 Blueprint:
-
 
 CLASS SPRINT
 	ATTRIBUTES
 		id: NUMBER
 		sprintName: TEXT
-		taskList: LIST OF TASKS
+		taskList: LIST OF TASK
 
 	CONSTRCTOR(sprintName: TEXT)
 		SET THIS.sprintName TO sprintName
@@ -1315,7 +1313,7 @@ CLASS SPRINT
         	END METHOD
 
 
-		ADDTASK(newTask: TEXT, dev: TEXT)
+		ADDTASK(newTask: TASK, dev: DEVELOPER)
 			ADD newTask TO taskList
 		END METHOD	
 END CLASS
@@ -1326,10 +1324,9 @@ CLASS TASK
         title: TEXT
         points: NUMBER
         status: TEXT         
-        assignedDev: LIST OF DEVELOPER
+        assignedDev: DEVELOPER
 
     CONSTRUCTOR(title: TEXT, points: NUMBER)
-        SET THIS.id TO id
         SET THIS.title TO title
         SET THIS.points TO points
         SET THIS.status TO "Todo"
@@ -1349,7 +1346,7 @@ CLASS TASK
             DISPLAY THIS.status
         END METHOD
 
-        ASSIGN_Developer(dev: TEXT)
+        ASSIGN_Developer(dev: DEVELOPER)
             SET assignedDev TO dev
         END METHOD
 
@@ -1372,7 +1369,7 @@ CLASS TASK
         MARKCOMPLETE()
             IF status EQUALS "Review" THEN
                 SET status TO "Done"
-            ELSEIF EQUALS "Done" THEN
+            ELSEIF status EQUALS "Done" THEN
                 DISPLAY "Task already done"
             ELSE
                 DISPLAY "Error: Cannot complete task directly from: " + status
@@ -1386,9 +1383,7 @@ CLASS DEVELOPER
         	devName: TEXT
         	maxCapacity: NUMBER
         
-
     CONSTRUCTOR(devName: TEXT, maxCapacity: NUMBER)
-        SET THIS.id TO id
         SET THIS.devName TO devName
         SET THIS.maxCapacity TO maxCapacity
     END CONSTRUCTOR
@@ -1421,7 +1416,7 @@ CLASS BACKLOG
             DISPLAY id
         END METHOD
 
-        ADDTOBACKLOG(newTask: TEXT)
+        ADDTOBACKLOG(newTask: TASK)
             ADD newTask TO unassignedTasks
         END METHOD
 
@@ -1434,36 +1429,25 @@ pseudocode:
 
 START
     BEGIN
-        
         CREATE OBJECT Backlog1 OF BACKLOG(501)
-
-        CREATE OBJECT Task1 OF TASK(101, "Design Database Schema", 5)
-        CREATE OBJECT Task2 OF TASK(102, "Implement Auth System", 8)
-        CREATE OBJECT Task3 OF TASK(103, "Write Unit Tests", 3)
-        
+        CREATE OBJECT Task1 OF TASK("Design Database Schema", 5)
+        CREATE OBJECT Task2 OF TASK("Implement Auth System", 8)
+        CREATE OBJECT Task3 OF TASK("Write Unit Tests", 3)
         Backlog1.ADDTOBACKLOG(Task1)
         Backlog1.ADDTOBACKLOG(Task2)
-	Backlog1.ADDTOBACKLOG(Task3)
-
-        CREATE OBJECT Dev1 OF DEVELOPER(1, "Alice Smith", 10)
-
-        CREATE OBJECT Sprint1 OF SPRINT(201, "Sprint 1: Core API")
-
+		Backlog1.ADDTOBACKLOG(Task3)
+        CREATE OBJECT Dev1 OF DEVELOPER("Alice Smith", 10)
+		CREATE OBJECT Dev2 OF DEVELOPER("Jokha Hamed", 20)
+        CREATE OBJECT Sprint1 OF SPRINT("Sprint 1: Core API")
         Backlog1.REMOVEBACKLOG(Task1)
         Sprint1.ADDTASK(Task1, Dev1)
-
         Sprint1.ADDTASK(Task2, Dev2)
-
-        Task1.MARKCOMPLETE() 
-
         Task1.MARKSTATUS() 
         Task1.MARKSTATUS() 
         Task1.MARKCOMPLETE()
-
         Sprint1.GET_Progress()
     END
 STOP
-
 -------------------------------------------------------------
 Task 287: Farm Management 
 - A Farm has many Fields.
