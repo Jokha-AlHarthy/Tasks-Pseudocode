@@ -201,3 +201,189 @@ START
         sale1.PRINTRECEIPT()
     END
 STOP
+
+-------------------------------------------------------------------------------------------
+Task 289: Online Exam Platform 
+- An online platform runs exams.
+- An online platform runs students.
+- An exam has many questions.
+- A questions belongs to one exams
+- One question has one correct answer.
+- One student has one exam.
+- One student has many attempts.
+- One attempt for one student.
+
+
+Blueprint:
+CLASS EXAM
+    ATTRIBUTES
+        id: NUMBER
+        examTitle: TEXT
+        timeLimit: NUMBER
+        questions: LIST OF QUESTION
+
+    CONSTRUCTOR(et: TEXT, tl: NUMBER)
+        SET et TO examTitle
+        SET tl TO timeLimit
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_examTitle()
+            DISPLAY examTitle
+        END METHOD
+
+        GET_timeLimit()
+            DISPLAY timeLimit
+        END METHOD
+
+        ADDQUESTION(newQuestion: QUESTION)
+            ADD newQuestion TO questions
+        END METHOD
+END CLASS
+
+CLASS QUESTION
+    ATTRIBUTES
+        id: NUMBER
+        questionText: TEXT
+        correctAnswer: TEXT
+        points: NUMBER
+
+    CONSTRUCTOR(qt: TEXT, ca: TEXT, p: NUMBER)
+        SET qt TO questionText
+        SET ca TO correctAnswer
+        IF points GREATER THAN 0 THEN
+            SET p TO points
+        ELSE
+            DISPLAY "Invalid point value"
+        END IF
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_questionText()
+            DISPLAY questionText
+        END METHOD
+
+        GET_points()
+            DISPLAY points
+        END METHOD
+
+END CLASS
+
+CLASS STUDENT
+	ATTRIBUTES
+		id: NUMBER
+		studentName: TEXT
+		attempts: LIST OF ATTEMPT
+	
+	CONSTRUCTOR(sn: TEXT)
+		SET sn TO studentName
+        END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+	
+
+		GET_studentName()
+			DISPLAY studentName
+		END METHOD
+
+
+		ADDATTEMPT(newAttempt: ATTEMPT)
+			ADD newAttempt TO attempts
+		END METHOD
+
+		GET_ATTEMPT()
+			DISPLAY SIZE of attempts
+		END METHOD
+END CLASS
+
+
+CLASS ATTEMPT
+	ATTRIBUTES
+		id: NUMBER
+		exam: EXAM
+		student: STUDENT
+		answers: LIST OF ANSWER
+		isTimeExpired: BOOLEAN
+
+	CONSTRUCTOR(ex: EXAM, st: STUDENT)
+		SET ex TO EXAM
+		SET st TO STUDENT
+        END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		ADDANSWER(newAnswer: ANSWER)
+			IF isTimeExpired EQUALS FALSE THEN
+				ADD newAnswer TO answers
+			ELSE
+				DISPLAY "The time has been expreied"
+			END IF
+		END METHOD
+
+		SET_EXPIRE()
+			SET isTimeExpired TO TURE
+		END METHOD
+
+		CALCULATE_SCORE()
+			SET SCORE TO 0
+			REPEAT FROM I = 1 TO SIZE OF answers
+				IF answers[I].selectedAnswer EQUALS answers[I].question.correctAnswer
+					SET SCORE TO + answers[I].question.points
+				END IF
+			END REPEAT
+		END METHOD
+END CLASS
+
+CLASS ANSWER
+	ATTRIBUTES
+		id: NUMBER
+		question: QUESTION
+		selectedAnswer: TEXT
+
+	CONSTRUCTOR(q: QUESTION, selA: TEXT)
+		SET q TO question
+		SET selA TO selectedAnswer
+        END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_selectedAnswer()
+			DISPLAY selectedAnswer
+		END METHOD
+END CLASS
+
+
+Pseudocode:
+START
+	BEGIN
+		CREATE OBJECT exam1 OF EXAM ("Introduction to programming", 50)
+		CREATE OBJECT question1 OF QUESTION("What is python?", "High-level, interpreted programming language", 5)
+		CREATE OBJECT question2 OF QUESTION("What of the following is a keyword in python", "Flase", 5)
+		exam1.ADDQUESTION(question1)
+		exam1.ADDQUESTION(question2)
+		CREATE OBJECT student1 OF STUDENT("Jokha Hamed")
+		CREATE OBJECT attempt1 OF ATTEMPT(exam1, student1)
+		CREATE OBJECT answer1 OF ANSWER(question1, "High-level, interpreted programming language")
+		CREATE OBJECT answer2 OF ANSWER(question2, "Flase")
+		attempt1.ADDANSWER(answer1)
+		attempt1.ADDANSWER(answer2)
+		attempt1.CALCULATE_SCORE()			
+	END
+END
