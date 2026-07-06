@@ -581,3 +581,213 @@ START
 		pass1.GETTRIPCOUNT()
 	END
 STOP
+-----------------------------------------------------------------------------------------
+Task 291: Co-working Space 
+
+- A co-working space rents many meeting rooms members.
+- A member has one membership plan.
+- A membership plan belong to many members.
+- A member has many bookings.
+- A room has many bookings.
+- A booking belongs to many room.
+
+Blueprint:
+
+CLASS COWORKINGSPCAE
+	ATTRIBUTES
+		id: NUMBER
+		spaceName: TEXT
+		members: LIST OF MEMBER
+		rooms: LIST OF ROOM
+
+	CONSTRUCTOR(sn: TEXT)
+        	SET sn TO spaceName
+    	END CONSTRUCTOR
+
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_spaceName()
+			DISPLAY spaceName
+		END METHOD
+
+
+		ADDMEMBER(newMember: MEMBER)
+			ADD newMember TO members
+		END METHOD
+
+		ADDROOM(newRoom: ROOM)
+			ADD newRoom TO rooms
+		END METHOD		
+END CLASS
+
+CLASS MEMBERSHIPPLAN
+	ATTRIBUTES
+		id: NUMBER
+		planName: TEXT
+		monthQuota: NUKBER
+
+	CONSTRUCTOR(memN: TEXT, month: NUMBER)
+ 		SET memN TO planName
+		SET month TO monthQuota
+    	END CONSTRUCTOR
+
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_planName()
+			DISPLAY planName
+		END METHOD
+
+END CLASS
+
+CLASS 
+	ATTRIBUTES
+		id: NUMBER
+		memberName: TEXT
+		phone: NUMBER
+		plan: MEMBERSHIPPLAN
+		bookings: LIST OF BOOKING
+	
+		
+	CONSTRUCTOR(mName: TEXT, p: NUMBER, planSh: MEMBERSHIPPLAN)
+ 		SET mName TO memberName
+		SET p TO phone
+		SET planSh TO plan
+    	END CONSTRUCTOR
+
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_memberName()
+			DISPLAY memberName
+		END MEHTHOD
+
+		GET_phone()
+			DISPLAY phone
+		END METHOD
+
+		ADDBOOKING(newBooking: BOOKING)
+			IF GETREMAININGHOURS() GREATER THAN OR EQUAL TO newBooking.duration THEN
+                		ADD newBooking TO bookings
+            		ELSE
+                		DISPLAY "Monthly quota rejected"
+            		END IF
+		END METHOD
+		
+		GETREMAININGHOURS()
+            		SET usedHours TO 0
+            		REPEAT FROM I = 1 TO SIZE OF bookings
+               		SET usedHours TO usedHours + bookings[I].duration
+            		END REPEAT
+            		DISPLAY plan.monthlyQuota - usedHours
+        	END METHOD
+		
+END CLASS
+
+CLASS ROOM
+	ATTRIBUTES
+		id: NUMBER
+		roomName: TEXT
+		capacity: NUMBER
+		bookings: LIST OF BOOKING
+
+	CONSTRUCTOR(rn: TEXT, c: NUMBER)
+ 		SET rn TO roomName
+		SET c TO capacity
+    	END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_roomName()
+			DISPLAY roomName
+		END METHOD
+
+		GET_capacity()
+			DISPLAY capacity
+		END METHOD
+
+		ADDBOOKING(newBooking: BOOKING)
+			SET overlap TO FALSE
+			REPEAT FROM I = 1 TO SIZE OF bookings
+				IF bookings[I].bookingDate EQUALS newBooking.bookingDate AND bookings[I].startTime EQUALS newBooking.startTime THEN
+                    	SET overlap TO TRUE
+                END IF
+            END REPEAT
+            	IF overlap EQUALS FALSE THEN
+                	ADD newBooking TO bookings
+            	ELSE
+                	DISPLAY "Room already booked for this time"
+            	END IF
+END CLASS
+
+CLASS BOOKING
+	ATTRIBUTES
+		id: NUMBER
+		bookingDate: TEXT
+		startTime: TEXT
+		duration: NUMBER
+		member: MEMBER
+		room: ROOM
+
+	CONSTRUCTOR(date: TEXT, time: TEXT, du: TEXT, m: MEMBER, r: ROOM)
+ 		SET date TO bookingDate
+		SET time TO startTime
+		IF duration GREATER THAN 0 THEN
+			SET du TO duration
+		ELSE
+			DISPLAY "Invalid duration"
+		END IF
+		SET m TO member
+		SET r TO room
+    	END CONSTRUCTOR
+
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_bookingDate()
+			DISPLAY bookingDate
+		END METHOD
+
+		GET_startTime()
+			DISPLAY startTime
+		END METHOD
+		
+		GET_duration()
+			DISPLAY duration
+		END METHOD	
+END CLASS
+
+
+Pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT space1 OF COWORKINGSPACE("COFFIECE")
+		CEATE OBJECT plan1 OF MEMBERSHIPPLAN("Standard", 20)
+		CREATE OBJECT member1 OF MEMBER("Khalfan Hamed", 91879992, plan1)
+		CREATE OBJECT room1 OF ROOM ("Meeting room A", 10)
+		CREATE OBJECT bookings1 OF BOOKING("15-Jul-2026", "10:00AM", 2, member1, room1)
+		space1.ADDMEMBER(member1)
+        space1.ADDROOM(room1)
+    	room1.ADDBOOKING(booking1)
+        member1.ADDBOOKING(booking1)
+       	booking1.PRINTBOOKING()
+        member1.GETREMAININGHOURS()
+	END
+STOP
