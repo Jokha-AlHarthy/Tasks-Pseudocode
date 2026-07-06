@@ -1093,10 +1093,9 @@ CLASS CONCERT
 		id: NUMBER
 		conName: TEXT
 		conDate: TEXT
-		tires: LIST OF TicketTier
-		artist: LIST OF ARTISTS
-		venue: LIST OF VENUES
-		soldTicket: LIST OF TICKETS
+		tiers: LIST OF TICKETTIER
+		venues: LIST OF VENUE
+		soldTicket: LIST OF TICKET
 
 	CONSTRUCTOR(conName: TEXT, conDate: TEXT)
 		SET THIS.conName TO conName
@@ -1108,12 +1107,12 @@ CLASS CONCERT
 			DISPALY id
 		END METHOD
 		
-		ADDTIER(newTire: TEXT)
-			ADD newTire TO TicketTier
+		ADDTIER(newTier: TICKETTIER)
+			ADD newTier TO tiers
 		END METHOD
 
 		GET_venue()
-			DISPLAY venue
+			DISPLAY venues
 		END METHOD
 
 		GET_Date()
@@ -1122,14 +1121,14 @@ CLASS CONCERT
 
 		GET_RemainingTicket(totalCap: NUMBER)
 			SET totalCap TO 0
-			FOREACH t IN tires
-				totalCap = totalCap + t.GET_capcity()
+			FOREACH t IN tiers
+				SET totalCap TO totalCap + t.GET_TicketCapcity()
 			END FOREACH
 
 			DISPLAY totalCap - LENGTH(soldTicket)
 		END METHOD
 
-		BOOKTICKET(newTicket: TEXT)
+		BOOKTICKET(newTicket: TICKET)
 			ADD newTicket TO soldTicket
 		END METHOD
 
@@ -1140,10 +1139,12 @@ CLASS VENUE
 		id: NUMBER
 		vName: TEXT
 		seatNo: NUMBER 
+		artist: ARTIST
 
-	CONSTRUCTOR(vName: TEXT, seatNo: NUMBER)
+	CONSTRUCTOR(vName: TEXT, seatNo: NUMBER, artist: ARTIST)
 		SET THIS.vName TO vName
 		SET THIS.seatNo TO seatNo
+		SET THIS.artist TO artist
 	END CONSTRUCTOR
 
 	METHODS
@@ -1162,7 +1163,7 @@ CLASS VENUE
 	
 END CLASS
 
-CLASS TICKETTIRE
+CLASS TICKETTIER
 	ATTRIBUTES
 		id: NUMBER
 		ticketName: TEXT
@@ -1171,7 +1172,7 @@ CLASS TICKETTIRE
 
 	CONSTRUCTOR(ticketName: TEXT, price: NUMBER, capcity: NUMBER)
 		SET THIS.ticketName TO ticketName
-		SET THIS.priceTO price
+		SET THIS.price TO price
 		SET THIS.capcity TO capcity
 	END CONSTRUCTOR
 
@@ -1194,12 +1195,14 @@ END CLASS
 CLASS TICKET
 	ATTRIBUTES
 		id: NUMBER
-		concert: LIST OF CONCERT
-    		tier: LIST OF TICKETTIRE
+		concert: CONCERT
+    	tier: TICKETTIER
    	 	seatNumber: NUMBER
-    		finalPrice: NUMBER
+    	finalPrice: NUMBER
 	
-	CONSTRUCTOR(seatNumber: NUMBER, finalPrice: NUMBER)
+	CONSTRUCTOR(concert: CONCERT, tier: TICKETTIER, seatNumber: NUMBER, finalPrice: NUMBER)
+		SET THIS.concert TO concert
+		SET THIS.tier TO tier
 		SET THIS.seatNumber TO seatNumber
 		SET THIS.finalPrice TO finalPrice
 	END CONSTRUCTOR
@@ -1240,14 +1243,14 @@ END CLASS
 CLASS PLATFORM
 	ATTRIBUTES
 		id: NUMBER
-		tickets: LIST OF TICKETS
+		tickets: LIST OF TICKET
 
 	METHODS
 		GET_id()
 			DISPALY id
 		END METHOD
 		
-	ADDTICKET(newTicket: TEXT)
+	ADDTICKET(newTicket: TICKET)
 			ADD newTicket TO tickets
 	END METHOD	
 END CLASS
@@ -1257,22 +1260,16 @@ END CLASS
 pseudocode:
 START
     BEGIN
-        CREATE OBJECT Artist1 OF ARTIST(1, "Billie Eilish")
-
-        CREATE OBJECT Venue1 OF VENUE(201, "Madison Square Garden", 20000, Artist1)
-
-        CREATE OBJECT Concert1 OF CONCERT(10, "Hit Me Hard and Soft Tour", "10-05-2026")
-
-        CREATE OBJECT Tier1 OF TICKETTIER(501, "General Admission", 150, 5000)
-
-        CREATE OBJECT Platform1 OF PLATFORM(101)
-        Platform1.ADDCONCERT(Concert1)
-        
-        CREATE OBJECT Ticket1 OF TICKET(901, 104, 150, Tier1)
+        CREATE OBJECT Artist1 OF ARTIST("Billie Eilish")
+        CREATE OBJECT Venue1 OF VENUE("Madison Square Garden", 20000, Artist1)
+		CREATE OBJECT Concert1 OF CONCERT("Hit Me Hard and Soft Tour", "10-05-2026")
+		CREATE OBJECT Tier1 OF TICKETTIER("General Admission", 150, 5000)
+        CREATE OBJECT Platform1 OF PLATFORM()
+        CREATE OBJECT Ticket1 OF TICKET(Concert1, Tier1, 104, 150)
+		Platform1.ADDTICKET(Ticket1)
         Concert1.BOOKTICKET(Ticket1)
     END
 STOP
-
 ------------------------------------------------------------------------------------------
 Task 286: Software Sprint
 
