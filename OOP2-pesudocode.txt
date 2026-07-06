@@ -1,0 +1,203 @@
+Task 288: Bookshop
+
+- A bookshop sells many books.
+- A book belongs to one genre.
+- A genre has many books.
+- A customer has many sales.
+- A sale belongs to one customer.
+- A sale is for one book.
+- A bookshop records many sales.
+
+
+Blueprint:
+
+CLASS BOOKAHOP
+	ATTRIBUTES
+        	id: NUMBER
+        	shopName: TEXT
+        	books: LIST OF BOOK
+        	sales: LIST OF SALE
+	
+
+	CONSTRUCTOR(shopName: TEXT)
+        	SET THIS.shopName TO shopName
+    	END CONSTRUCTOR	
+
+
+	METHODS
+		GET_id()
+            		DISPLAY id
+        	END METHOD
+
+		GET_shopName()
+            		DISPLAY shopName
+        	END METHOD
+
+		ADDBOOK(newBook: BOOK)
+            		ADD newBook TO books
+        	END METHOD
+
+		ADDSALE(newSale: SALE)
+            		ADD newSale TO sales
+        	END METHOD
+END CLASS
+
+CLASS BOOK
+    ATTRIBUTES
+        id: NUMBER
+        bookTitle: TEXT
+        bookAuthor: TEXT
+        bookPrice: NUMBER
+        genre: GENRE
+
+    CONSTRUCTOR(bookTitle: TEXT, bookAuthor: TEXT, bookPrice: NUMBER, genre: GENRE)
+        SET THIS.title TO bookTitle
+        SET THIS.author TO bookAuthor
+	SET THIS.genre TO genre
+        IF price GREATER THAN 0 THEN
+            SET THIS.price TO bookPrice
+        ELSE
+            DISPLAY "Invalid price"
+        END IF
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_title()
+            DISPLAY title
+        END METHOD
+
+        GET_author()
+            DISPLAY author
+        END METHOD
+
+        GET_price()
+            DISPLAY price
+        END METHOD
+
+        SET_price(newPrice: NUMBER)
+            IF newPrice GREATER THAN 0 THEN
+                SET price TO newPrice
+            ELSE
+                DISPLAY "Invalid price"
+            END IF
+        END METHOD
+END CLASS
+
+CLASS GENRE
+    ATTRIBUTES
+        id: NUMBER
+        genreName: TEXT
+        books: LIST OF BOOK
+
+    CONSTRUCTOR(genreName: TEXT)
+        SET THIS.genreName TO genreName
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_genreName()
+            DISPLAY genreName
+        END METHOD
+
+        ADDBOOK(book: BOOK)
+            ADD book TO books
+        END METHOD
+END CLASS
+
+CLASS CUSTOMER
+
+    ATTRIBUTES
+        id: NUMBER
+        fullName: TEXT
+        phone: TEXT
+        purchaseHistory: LIST OF SALE
+
+    CONSTRUCTOR(fullName: TEXT, phone: TEXT)
+        SET THIS.fullName TO fullName
+        SET THIS.phone TO phone
+    END CONSTRUCTOR
+
+    METHODS
+
+	GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_fullName()
+            DISPLAY fullName
+        END METHOD
+
+        ADDSALE(sale: SALE)
+            ADD sale TO purchaseHistory
+        END METHOD
+
+        GETPURCHASECOUNT()
+            DISPLAY SIZE OF purchaseHistory
+        END METHOD
+END CLASS
+
+CLASS SALE
+
+    ATTRIBUTES
+        id: NUMBER
+        soldPrice: NUMBER
+        saleDate: TEXT
+        customer: CUSTOMER
+        book: BOOK
+
+    CONSTRUCTOR(soldPrice: NUMBER, saleDate: TEXT, customer: CUSTOMER, book: BOOK)
+        IF soldPrice GREATER THAN 0 THEN
+            SET THIS.soldPrice TO soldPrice
+        ELSE
+            DISPLAY "Invalid price"
+        END IF
+        SET THIS.saleDate TO saleDate
+        SET THIS.customer TO customer
+        SET THIS.book TO book
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_soldPrice()
+            DISPLAY soldPrice
+        END METHOD
+
+        GET_saleDate()
+            DISPLAY saleDate
+        END METHOD
+
+        PRINTRECEIPT()
+            DISPLAY "Customer Full Name: " + customer.fullName
+            DISPLAY "Book Title: " + book.title
+            DISPLAY "Book Price: " + soldPrice
+            DISPLAY "Sold Date: " + saleDate
+        END METHOD
+
+END CLASS
+
+Pseudocode:
+START
+    BEGIN
+        CREATE OBJECT shop1 OF BOOKSHOP("Al Edrisi Bookshop Azaiba")
+        CREATE OBJECT genre1 OF GENRE("Fiction")
+        CREATE OBJECT book1 OF BOOK("Dune", "Frank Herbert", 15, genre1)
+        CREATE OBJECT customer1 OF CUSTOMER("Khalfan Hamed","91879992")
+        CREATE OBJECT sale1 OF SALE(15,"09-July-2026", customer1,book1)
+        shop1.ADDBOOK(book1)
+        genre1.ADDBOOK(book1)
+        customer1.ADDSALE(sale1)
+        shop1.ADDSALE(sale1)
+        customer1.GETPURCHASECOUNT()
+        sale1.PRINTRECEIPT()
+    END
+STOP
