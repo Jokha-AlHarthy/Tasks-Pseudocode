@@ -387,3 +387,197 @@ START
 		attempt1.CALCULATE_SCORE()			
 	END
 END
+-------------------------------------------------------------------------------------------
+Task 290: Taxi Company 
+
+- A company has many drivers.
+- A drive belongs to one company.
+- A drive has one vehicle.
+- A drive completes many trips.
+- A trip belong to one driver.
+- A passenger has many trips.
+- A trip belong to one passenger.
+
+Blueprint:
+
+CLASS COMPANY
+	ATTRIBUTES
+		id: NUMBER
+		compName: TEXT
+		drivers: LIST OF DRIVER
+		
+	CONSTRUCTOR(comp: TEXT)
+		SET comp TO compName
+        END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_compName()
+			DISPLAY compName
+		END METHOD
+
+		ADDDRIVER(newDriver: DERIVER)
+			ADD newDriver TO drivers
+		END METHOD	
+END CLASS
+
+CLASS DRIVER
+	ATTRIBUTES
+		id: NUMBER
+		driverName: TEXT
+		phone: NUMBER
+		vehicle: VEHCLE
+		trips: LIST OF TRIP
+		
+		
+	CONSTRUCTOR(dvName: TEXT, dvPhone: NUMBER, vdVehicle: VEHCLE)
+		SET dvName TO driverName
+		SET dvPhone TO phone
+		SET vdVehicle TO vehicle
+        END CONSTRUCTOR
+
+	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_driverName()
+			DISPLAY driverName
+		END METHOD
+		
+		GET_phone()
+			DISPLAY phone
+		END METHOD
+
+		ADDTRIP(newTrip: TRIP)
+			ADD newTrip TO trips
+		END METHOD
+
+		GETTOTALFARE()
+            		SET total TO 0
+            		REPEAT FROM I = 1 TO SIZE OF trips
+                		SET total TO total + trips[I].fare
+            		END REPEAT
+            		DISPLAY total
+        	END METHOD	
+END CLASS
+
+CLASS VEHICLE
+    ATTRIBUTES
+        id: NUMBER
+        plateNumber: TEXT
+        model: TEXT
+        color: TEXT
+
+    CONSTRUCTOR(plateNo: TEXT, vmodel: TEXT, vcolor: TEXT)
+        SET plateNo TO plateNumber
+        SET vmodel TO model
+        SET vcolor TO color
+    END CONSTRUCTOR
+
+    METHODS
+
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_plateNumber()
+            DISPLAY plateNumber
+        END METHOD
+
+        GET_model()
+            DISPLAY model
+        END METHOD
+
+        GET_color()
+            DISPLAY color
+        END METHOD
+END CLASS
+
+CLASS PASSENGER
+    ATTRIBUTES
+        id: NUMBER
+        fullName: TEXT
+        phone: TEXT
+        trips: LIST OF TRIP
+
+    CONSTRUCTOR(fn: TEXT, pPhone: TEXT)
+        SET fn TO fullName
+        SET pPhone TO phone
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DISPLAY id
+	END METHOD
+
+	GET_fullName()
+            DISPLAY fullName
+        END METHOD
+
+        ADDTRIP(trip: TRIP)
+            ADD trip TO trips
+        END METHOD
+
+        GETTRIPCOUNT()
+            DISPLAY SIZE OF trips
+        END METHOD
+END CLASS
+
+CLASS TRIP
+    ATTRIBUTES
+        id: NUMBER
+        pickupLocation: TEXT
+        dropoffLocation: TEXT
+        fare: NUMBER
+        driver: DRIVER
+        passenger: PASSENGER
+
+    CONSTRUCTOR(pickLocation: TEXT, dropLocation: TEXT, f: NUMBER, d: DRIVER, p: PASSENGER)
+        SET pickLocation TO pickupLocation
+        SET dropLocation TO dropoffLocation
+        IF fare GREATER THAN 0 THEN
+            SET f TO fare
+        ELSE
+            DISPLAY "Invalid fare"
+        END IF
+        SET d TO driver
+        SET f TO passenger
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_pickupLocation()
+            DISPLAY pickupLocation
+        END METHOD
+
+        GET_dropoffLocation()
+            DISPLAY dropoffLocation
+        END METHOD
+
+        GET_fare()
+            DISPLAY fare
+        END METHOD
+END CLASS
+
+Pseudocode:
+START
+	BEGIN
+		CREATE OBJECT company1 OF COMPNAY("OTexi")
+		CREATE OBJECT vehicle1 OF VEHICLE("31555 H", "Altima Nissan", "White")
+		CREATE OBJECT driver1 OF DRIVER("Khalfan Hamed", 91879992,vehicle1)
+		CREATE OBJECT pass1 OF PASSENGER("Jokha Hamed", 72866566)
+		CREATE OBJECT trip1 OF TRIP("MALL OF OMAN", "UTAS", 6.500, driver1, pass1)
+		company1.ADDDRIVER(driver1)
+		driver1.ADDTRIP(trip1)
+		pass1.ADDTRIP(trip1)
+		driver1.GETTOTALFARE()
+		pass1.GETTRIPCOUNT()
+	END
+STOP
