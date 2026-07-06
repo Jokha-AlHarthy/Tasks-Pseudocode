@@ -913,11 +913,12 @@ CLASS EVENT
 		eventDay: TEXT
 		budget: NUMBER
 		taskCost: NUMBER
+		couple: COUPLE
 		totalSpending: NUMBER
 		tasks: LIST OF TASKS
 		guests: LIST OF GUEST
 		
-	CONSTRUCTOR (eN: TEXT, eD: TEXT, eDay:TEXT, eB: NUMBER)
+	CONSTRUCTOR (eN: TEXT, eD: TEXT, eDay:TEXT, eB: NUMBER, couple: COUPLE)
 		SET eN TO eventName
 		SET eD TO eventDay
 		SET eDay TO eventDay
@@ -1060,6 +1061,55 @@ CLASS GUEST
 		END METHOD
 END CLASS
 
+CLASS COMPANY
+    ATTRIBUTES
+        id: NUMBER
+        companyName: TEXT
+        events: LIST OF EVENT
+
+    CONSTRUCTOR(companyName: TEXT)
+        SET THIS.companyName TO companyName
+    END CONSTRUCTOR
+
+    METHODS
+        ADDEVENT(event: EVENT)
+            ADD event TO events
+        END METHOD
+
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_companyName()
+            DISPLAY companyName
+        END METHOD
+END CLASS
+
+CLASS COUPLE
+    ATTRIBUTES
+        id: NUMBER
+        groomName: TEXT
+        brideName: TEXT
+
+    CONSTRUCTOR(groomName: TEXT, brideName: TEXT)
+        SET THIS.groomName TO groomName
+        SET THIS.brideName TO brideName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_groomName()
+            DISPLAY groomName
+        END METHOD
+
+        GET_brideName()
+            DISPLAY brideName
+        END METHOD
+END CLASS
+
 pseudocode:
 START
     BEGIN
@@ -1072,7 +1122,6 @@ START
 		wedding.ADDTASKS(task2)
 		CREATE OBJECT guest1 OF GUEST("Jokha Al Harthy" , "jokha.hamed.official@gmail.com")
 		wedding.ADDGUSTS(guest1)
-
 		task1.MARKDONE()
     END
 STOP
@@ -1310,10 +1359,11 @@ CLASS SPRINT
 
             		SET percentage TO (completeCount / totalTasks) * 100
             		DISPLAY "Sprint Progress: " + percentage + "%"
-        	END METHOD
+        END METHOD
 
 
 		ADDTASK(newTask: TASK, dev: DEVELOPER)
+			newTask.ASSIGN_Developer(dev)
 			ADD newTask TO taskList
 		END METHOD	
 END CLASS
@@ -1425,6 +1475,30 @@ CLASS BACKLOG
         END METHOD
 END CLASS
 
+CLASS TEAM
+    ATTRIBUTES
+        id: NUMBER
+        teamName: TEXT
+        sprints: LIST OF SPRINT
+
+    CONSTRUCTOR(teamName: TEXT)
+        SET THIS.teamName TO teamName
+    END CONSTRUCTOR
+
+    METHODS
+        ADDSPRINT(sprint: SPRINT)
+            ADD sprint TO sprints
+        END METHOD
+
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_teamName()
+            DISPLAY teamName
+        END METHOD
+END CLASS
+
 pseudocode:
 
 START
@@ -1460,14 +1534,37 @@ Task 287: Farm Management
 - An Activity is performed by one Worker.
 - A Farm has many Workers.
 - A Worker belongs to one Farm.
+- A Farm has many Fields.
+- A Farm has many Workers.
 
+CLASS FARM
+	ATTRIBUTES
+		id: NUMBER
+		farmName: TEXT
+		fields: LIST OF FIELD
+		workers: LIST OF WORKER
+
+	CONSTRUCTOR(farmName: TEXT)
+        SET THIS.farmName TO farmName
+    END CONSTRUCTOR
+
+	METHODS
+		ADDFIELD(field: FIELD)
+            ADD field TO fields
+        END METHOD
+
+        ADDWORKER(worker: WORKER)
+            ADD worker TO workers
+        END METHOD
+END CLASS
 
 CLASS FIELD
     ATTRIBUTES
         id: NUMBER
         fieldName: TEXT
         acreage: NUMBER
-        currentCrop: LIST OF CROPS
+        currentCrop: CROP
+		farm: FARM
         activityLog: LIST OF ACTIVITY
 
     CONSTRUCTOR(fieldName: TEXT, acreage: NUMBER)
@@ -1480,8 +1577,8 @@ CLASS FIELD
             DISPLAY id
         END METHOD
 
-        ADDLOGACTIVITY(newActivity: TEXT)
-            SET newActivity TO activityLog
+        ADDLOGACTIVITY(newActivity: ACTIVITY)
+            ADD newActivity TO activityLog
         END METHOD
 END CLASS
 
@@ -1493,10 +1590,10 @@ CLASS CROP
         cropFiled: NUMBER
         waterRequired: NUMBER
 
-    CONSTRUCTOR(cropName: TEXT, cropFiled: NUMBER, minWaterRequired: NUMBER)
+    CONSTRUCTOR(cropName: TEXT, cropFiled: NUMBER, waterRequired: NUMBER)
         SET THIS.cropName TO cropName
-        SET cropFiled TO cropFiled
-        SET THIS.minWaterRequired TO minWaterRequired
+        SET THIS.cropFiled TO cropFiled
+        SET THIS.waterRequired TO waterRequired
     END CONSTRUCTOR
 
     METHODS
@@ -1519,7 +1616,8 @@ CLASS ACTIVITY
         activityType: TEXT     
         amountApplied: NUMBER  
         isHealthyCare: BOOLEAN 
-        assignedWorker: LIST OF WORKER
+		field: FIELD
+		assignedWorker: WORKER
 
     CONSTRUCTOR(activityType: TEXT, amountApplied: NUMBER)
         SET THIS.activityType TO activityType
@@ -1545,6 +1643,7 @@ CLASS WORKER
     ATTRIBUTES
         id: NUMBER
         workerName: TEXT
+		farm: FARM
         dailyActivityLimit: NUMBER
         activitiesToday: NUMBER
 
@@ -1582,15 +1681,15 @@ pseudocode:
 START
     BEGIN
         CREATE OBJECT Crop1 OF CROP(401, "Organic Strawberries", 500, 100)
-
         CREATE OBJECT Field1 OF FIELD(101, "North Plateau Field", 10, Crop1)
-
         CREATE OBJECT Worker1 OF WORKER(1, "John Doe", 2)
-
         CREATE OBJECT Act1 OF ACTIVITY(801, "Watering", 120, Worker1)
-
         CREATE OBJECT Act2 OF ACTIVITY(802, "Watering", 50, Worker1)
-
         CREATE OBJECT Act3 OF ACTIVITY(803, "Fertilizing", 25, Worker1)
+		Farm1.ADDFIELD(Field1)
+		Farm1.ADDWORKER(Worker1)
+		Field1.ADDLOGACTIVITY(Act1)
+		Field1.ADDLOGACTIVITY(Act2)
+		Field1.ADDLOGACTIVITY(Act3)
     END
 STOP
