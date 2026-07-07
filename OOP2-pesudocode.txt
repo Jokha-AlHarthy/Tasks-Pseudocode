@@ -791,3 +791,146 @@ START
         member1.GETREMAININGHOURS()
 	END
 STOP
+
+------------------------------------------------------------------------
+Task 292: Personal Trainer Bookings
+
+- A trainer has many sessions.
+- A trainer has many clients.
+- A client has many sessions.
+- A session belongs to one trainer.
+- A session belongs to one client.
+
+
+Blueprint:
+
+CLASS TRAINER
+    ATTRIBUTES
+        id: NUMBER
+        trainerName: TEXT
+        phone: NUMBER
+        sessions: LIST OF SESSION
+
+    CONSTRUCTOR(tN: TEXT, p: TEXT)
+        SET tN TO trainerName
+        SET p TO phone
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_trainerName()
+            DISPLAY trainerName
+        END METHOD
+
+        ADDSESSION(newSession: SESSION)
+            ADD newSession TO sessions
+        END METHOD
+
+        GETSESSIONCOUNT()
+            DISPLAY SIZE OF sessions
+        END METHOD
+
+END CLASS
+
+CLASS CLIENT
+    ATTRIBUTES
+        id: NUMBER
+        fullName: TEXT
+        phone: NUMBER
+        email: TEXT
+        sessions: LIST OF SESSION
+
+    CONSTRUCTOR(fn: TEXT, cp: TEXT, ce: TEXT)
+        SET fn TO fullName
+        SET cp TO phone
+        SET ce TO email
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_fullName()
+            DISPLAY fullName
+        END METHOD
+
+        GET_phone()
+            DISPLAY phone
+        END METHOD
+
+        ADDSESSION(newSession: SESSION)
+            ADD newSession TO sessions
+        END METHOD
+END CLASS
+
+CLASS SESSION
+    ATTRIBUTES
+        id: NUMBER
+        sessionDate: TEXT
+        duration: NUMBER
+        workoutType: TEXT
+        trainer: TRAINER
+        client: CLIENT
+
+    CONSTRUCTOR(date: TEXT, du: NUMBER, workType: TEXT, t: TRAINER, c: CLIENT)
+        SET date TO sessionDate
+
+        IF duration GREATER THAN 0 THEN
+            SET du TO duration
+        ELSE
+            DISPLAY "Invalid duration"
+        END IF
+
+        SET workType TO workoutType
+        SET t TO trainer
+        SET c TO client
+    END CONSTRUCTOR
+
+    METHODS
+
+        GET_id()
+            DISPLAY id
+        END METHOD
+
+        GET_sessionDate()
+            DISPLAY sessionDate
+        END METHOD
+
+        GET_duration()
+            DISPLAY duration
+        END METHOD
+
+        GET_workoutType()
+            DISPLAY workoutType
+        END METHOD
+
+        SET_workoutType(newType: TEXT)
+            IF LENGTH OF newType GREATER THAN 0 THEN
+                SET workoutType TO newType
+            ELSE
+                DISPLAY "Invalid workout type"
+            END IF
+        END METHOD
+END CLASS
+
+
+Pseudocode:
+
+START
+    BEGIN
+
+        CREATE OBJECT trainer1 OF TRAINER("Hamed Rashid", 92891951)
+        CREATE OBJECT client1 OF CLIENT("Khalfan Hamed", 99228001,"khalfan.h.r@gmail.com")
+        CREATE OBJECT session1 OF SESSION("07-July-2026", 1,"Strength Training",trainer1,client1)
+        CREATE OBJECT session2 OF SESSION("18-July-2026", 2, "Cardio", trainer1, client1)
+        trainer1.ADDSESSION(session1)
+        trainer1.ADDSESSION(session2)
+        client1.ADDSESSION(session1)
+        client1.ADDSESSION(session2)
+        trainer1.GETSESSIONCOUNT()
+    END
+STOP
