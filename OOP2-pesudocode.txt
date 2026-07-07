@@ -11,7 +11,7 @@ Task 288: Bookshop
 
 Blueprint:
 
-CLASS BOOKAHOP
+CLASS BOOKSHOP
 	ATTRIBUTES
         	id: NUMBER
         	shopName: TEXT
@@ -21,7 +21,7 @@ CLASS BOOKAHOP
 
 	CONSTRUCTOR(shopName: TEXT)
         	SET THIS.shopName TO shopName
-    	END CONSTRUCTOR	
+    END CONSTRUCTOR	
 
 
 	METHODS
@@ -51,15 +51,17 @@ CLASS BOOK
         genre: GENRE
 
     CONSTRUCTOR(bookTitle: TEXT, bookAuthor: TEXT, bookPrice: NUMBER, genre: GENRE)
-        SET THIS.title TO bookTitle
-        SET THIS.author TO bookAuthor
-	SET THIS.genre TO genre
-        IF price GREATER THAN 0 THEN
-            SET THIS.price TO bookPrice
-        ELSE
-            DISPLAY "Invalid price"
-        END IF
-    END CONSTRUCTOR
+    SET THIS.bookTitle TO bookTitle
+    SET THIS.bookAuthor TO bookAuthor
+    SET THIS.genre TO genre
+    IF bookPrice GREATER THAN 0 THEN
+        SET THIS.bookPrice TO bookPrice
+    ELSE
+        DISPLAY "Invalid price"
+        SET THIS.bookPrice TO 0
+    END IF
+
+END CONSTRUCTOR
 
     METHODS
         GET_id()
@@ -157,10 +159,15 @@ CLASS SALE
             SET THIS.soldPrice TO soldPrice
         ELSE
             DISPLAY "Invalid price"
+			SET THIS.soldPrice TO 0
         END IF
         SET THIS.saleDate TO saleDate
         SET THIS.customer TO customer
-        SET THIS.book TO book
+        IF book IS NOT NULL THEN
+        	SET THIS.book TO book
+    	ELSE
+        	DISPLAY "Invalid book"
+    	END IF
     END CONSTRUCTOR
 
     METHODS
@@ -252,10 +259,10 @@ CLASS QUESTION
         correctAnswer: TEXT
         points: NUMBER
 
-    CONSTRUCTOR(qt: TEXT, ca: TEXT, p: NUMBER)
-        SET qt TO questionText
-        SET ca TO correctAnswer
-        IF points GREATER THAN 0 THEN
+    CONSTRUCTOR(questionText: TEXT, correctAnswer: TEXT, points: NUMBER)
+        SET THIS.questionText TO questionText
+        SET THIS.correctAnswer TO correctAnswer
+        IF THIS.points GREATER THAN 0 THEN
             SET p TO points
         ELSE
             DISPLAY "Invalid point value"
@@ -283,9 +290,9 @@ CLASS STUDENT
 		studentName: TEXT
 		attempts: LIST OF ATTEMPT
 	
-	CONSTRUCTOR(sn: TEXT)
-		SET sn TO studentName
-        END CONSTRUCTOR
+	CONSTRUCTOR(studentName: TEXT)
+		SET THIS.studentName TO studentName
+    END CONSTRUCTOR
 
 	METHODS
 		GET_id()
@@ -317,9 +324,9 @@ CLASS ATTEMPT
 		isTimeExpired: BOOLEAN
 
 	CONSTRUCTOR(ex: EXAM, st: STUDENT)
-		SET ex TO EXAM
-		SET st TO STUDENT
-        END CONSTRUCTOR
+		SET RHIS.EXAM TO EXAM
+		SET THIS.STUDENT TO STUDENT
+    END CONSTRUCTOR
 
 	METHODS
 		GET_id()
@@ -335,7 +342,7 @@ CLASS ATTEMPT
 		END METHOD
 
 		SET_EXPIRE()
-			SET isTimeExpired TO TURE
+			SET isTimeExpired TO TRUE
 		END METHOD
 
 		CALCULATE_SCORE()
@@ -354,9 +361,9 @@ CLASS ANSWER
 		question: QUESTION
 		selectedAnswer: TEXT
 
-	CONSTRUCTOR(q: QUESTION, selA: TEXT)
-		SET q TO question
-		SET selA TO selectedAnswer
+	CONSTRUCTOR(question: QUESTION, selectedAnswer: TEXT)
+		SET THIS.question TO question
+		SET THIS.selectedAnswer TO selectedAnswer
         END CONSTRUCTOR
 
 	METHODS
@@ -433,11 +440,11 @@ CLASS DRIVER
 		trips: LIST OF TRIP
 		
 		
-	CONSTRUCTOR(dvName: TEXT, dvPhone: NUMBER, vdVehicle: VEHCLE)
-		SET dvName TO driverName
-		SET dvPhone TO phone
-		SET vdVehicle TO vehicle
-        END CONSTRUCTOR
+	CONSTRUCTOR(driverName: TEXT, phone: NUMBER, vehicle: VEHCLE)
+		SET THIS.driverName TO driverName
+		SET THIS.phone TO phone
+		SET THIS.vehicle TO vehicle
+    END CONSTRUCTOR
 
 	METHODS
 		GET_id()
@@ -504,9 +511,9 @@ CLASS PASSENGER
         phone: TEXT
         trips: LIST OF TRIP
 
-    CONSTRUCTOR(fn: TEXT, pPhone: TEXT)
-        SET fn TO fullName
-        SET pPhone TO phone
+    CONSTRUCTOR(fn: TEXT, phone: TEXT)
+        SET THIS.fullName TO fullName
+        SET THIS.phone TO phone
     END CONSTRUCTOR
 
     METHODS
@@ -517,6 +524,10 @@ CLASS PASSENGER
 	GET_fullName()
             DISPLAY fullName
         END METHOD
+
+	GET_phone()
+			DISPLAY phone
+	END METHOD
 
         ADDTRIP(trip: TRIP)
             ADD trip TO trips
@@ -536,16 +547,16 @@ CLASS TRIP
         driver: DRIVER
         passenger: PASSENGER
 
-    CONSTRUCTOR(pickLocation: TEXT, dropLocation: TEXT, f: NUMBER, d: DRIVER, p: PASSENGER)
-        SET pickLocation TO pickupLocation
-        SET dropLocation TO dropoffLocation
+    CONSTRUCTOR(pickupLocation: TEXT, dropoffLocation: TEXT, fare: NUMBER, driver: DRIVER, passenger: PASSENGER)
+        SET THIS.pickupLocation TO pickupLocation
+        SET THIS.dropoffLocation TO dropoffLocation
         IF fare GREATER THAN 0 THEN
-            SET f TO fare
+            SET THIS.fare TO fare
         ELSE
             DISPLAY "Invalid fare"
         END IF
-        SET d TO driver
-        SET f TO passenger
+        SET THIS.driver TO driver
+        SET THIS.passenger TO passenger
     END CONSTRUCTOR
 
     METHODS
@@ -593,15 +604,15 @@ Task 291: Co-working Space
 
 Blueprint:
 
-CLASS COWORKINGSPCAE
+CLASS COWORKINGSPACE
 	ATTRIBUTES
 		id: NUMBER
 		spaceName: TEXT
 		members: LIST OF MEMBER
 		rooms: LIST OF ROOM
 
-	CONSTRUCTOR(sn: TEXT)
-        	SET sn TO spaceName
+	CONSTRUCTOR(spaceName: TEXT)
+        	SET THIS.spaceName TO spaceName
     	END CONSTRUCTOR
 
 
@@ -647,7 +658,7 @@ CLASS MEMBERSHIPPLAN
 
 END CLASS
 
-CLASS 
+CLASS MEMBER 
 	ATTRIBUTES
 		id: NUMBER
 		memberName: TEXT
@@ -656,11 +667,11 @@ CLASS
 		bookings: LIST OF BOOKING
 	
 		
-	CONSTRUCTOR(mName: TEXT, p: NUMBER, planSh: MEMBERSHIPPLAN)
- 		SET mName TO memberName
-		SET p TO phone
-		SET planSh TO plan
-    	END CONSTRUCTOR
+	CONSTRUCTOR(memberName: TEXT, phone: NUMBER, plan: MEMBERSHIPPLAN)
+ 		SET THIS.memberName TO memberName
+		SET THIS.phone TO phone
+		SET THIS.plan TO plan
+    END CONSTRUCTOR
 
 
 	METHODS
@@ -701,9 +712,9 @@ CLASS ROOM
 		capacity: NUMBER
 		bookings: LIST OF BOOKING
 
-	CONSTRUCTOR(rn: TEXT, c: NUMBER)
- 		SET rn TO roomName
-		SET c TO capacity
+	CONSTRUCTOR(roomName: TEXT, capacity: NUMBER)
+ 		SET THIS.roomName TO roomName
+		SET THIS.capacity TO capacity
     	END CONSTRUCTOR
 
 	METHODS
@@ -742,16 +753,16 @@ CLASS BOOKING
 		member: MEMBER
 		room: ROOM
 
-	CONSTRUCTOR(date: TEXT, time: TEXT, du: TEXT, m: MEMBER, r: ROOM)
- 		SET date TO bookingDate
-		SET time TO startTime
+	CONSTRUCTOR(bookingDate: TEXT, startTime: TEXT, duration: NUMBER, member: MEMBER, room: ROOM)
+ 		SET THIS.bookingDate TO bookingDate
+		SET THIS.startTime TO startTime
 		IF duration GREATER THAN 0 THEN
-			SET du TO duration
+			SET THIS.duration TO duration
 		ELSE
 			DISPLAY "Invalid duration"
 		END IF
-		SET m TO member
-		SET r TO room
+		SET THIS.member TO member
+		SET THIS.room TO room
     	END CONSTRUCTOR
 
 
@@ -811,9 +822,9 @@ CLASS TRAINER
         phone: NUMBER
         sessions: LIST OF SESSION
 
-    CONSTRUCTOR(tN: TEXT, p: TEXT)
-        SET tN TO trainerName
-        SET p TO phone
+    CONSTRUCTOR(trainerName: TEXT, phone: TEXT)
+        SET THIS.trainerName TO trainerName
+        SET RHIS.phone TO phone
     END CONSTRUCTOR
 
     METHODS
@@ -843,10 +854,10 @@ CLASS CLIENT
         email: TEXT
         sessions: LIST OF SESSION
 
-    CONSTRUCTOR(fn: TEXT, cp: TEXT, ce: TEXT)
-        SET fn TO fullName
-        SET cp TO phone
-        SET ce TO email
+    CONSTRUCTOR(fullName: TEXT, phone : NUMBER, email: TEXT)
+        SET THIS.fullName TO fullName
+        SET THIS.phone TO phone
+        SET THIS.email TO email
     END CONSTRUCTOR
 
     METHODS
@@ -876,18 +887,18 @@ CLASS SESSION
         trainer: TRAINER
         client: CLIENT
 
-    CONSTRUCTOR(date: TEXT, du: NUMBER, workType: TEXT, t: TRAINER, c: CLIENT)
-        SET date TO sessionDate
+    CONSTRUCTOR(sessionDate: TEXT, duration: NUMBER, workoutType: TEXT, trainer: TRAINER, client: CLIENT)
+        SET THIS.sessionDate TO sessionDate
 
         IF duration GREATER THAN 0 THEN
-            SET du TO duration
+            SET THIS.duration TO duration
         ELSE
             DISPLAY "Invalid duration"
         END IF
 
-        SET workType TO workoutType
-        SET t TO trainer
-        SET c TO client
+        SET THIS.workoutType TO workoutType
+        SET THIS.trainer TO trainer
+        SET THIS.client TO client
     END CONSTRUCTOR
 
     METHODS
