@@ -1,0 +1,148 @@
+Task 293: Shape Drawing App  
+
+
+Blueprint:
+
+CLASS SHAPE
+	ATTRIBUTES
+        	id: NUMBER
+		color: TEXT
+		position_x: NUMBER
+		position_y: NUMBER
+		
+    	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER)
+		SET THIS.color TO color
+		SET THIS.position_x TO NUMBER
+		SET THIS.position_y TO NUMBER
+    	END CONSTRUCTOR
+
+    	METHODS
+		GET_id()
+			DISPLAY id
+		END METHOD
+
+		GET_color()
+			DISPLAY color
+		END METHOD
+
+		GET_AREA()
+			DISPLAY "Find the area: "
+		END METHOD
+			
+		GET_PERIMETER()
+			DISPLAY "Find the perimeter: "
+		END METHOD
+END CLASS 
+
+CLASS RECTANGLE INHERITS SHAPE
+	ATTRIBUTES
+		width: NUMBER
+		height: NUMBER
+    	CONSTRUCTOR(color: TEXT, width: NUMBER, height: NUMBER)
+		SUPER (color)
+		SET THIS.width TO width
+		SET THIS.height TO height
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRID GET_PERIMETER()
+			SET PerimeterOfRectangle TO 2 * (width + height)
+			DISPLAY PerimeterOfCircle
+		END METHOD
+
+		OVERRID GET_AREA()
+			SET AreaOfRectangle TO width * height
+			DISPLAY AreaOfRectangle
+		END METHOD
+END CLASS
+
+
+CLASS CIRCLE INHERITS SHAPE
+	ATTRIBUTES
+ 		radius: NUMBER
+
+    	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER, radius: NUMBER)
+		SUPER(color, position_x, position_y)
+		SET THIS.radius TO radius
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRID GET_PERIMETER()
+			SET PerimeterOfCircle TO 2 * 3.14 * radius
+			DISPLAY PerimeterOfCircle
+		END METHOD
+
+		OVERRID GET_AREA()
+			SET AreaOfCircle TO 3.14 * radius * radius
+			DISPLAY AreaOfCircle
+		END METHOD
+END CLASS
+
+CLASS TRIANGLE INHERITS SHAPE
+	ATTRIBUTES
+		base: NUMBER
+		height: NUMBER
+		side1 : NUMBER
+		side2: NUMBER
+		side3 : NUMBER
+ 
+    	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER, base: NUMBER, height: NUMBER, side1: NUMBER, side2: NUMBER, side3: NUMBER)
+	SET THIS.base TO base
+	SET THIS.height TO height
+	SET THIS.side1 TO side1
+	SET THIS.side2 TO side2
+	SET THIS.side3 TO side3
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRID GET_PERIMETER()
+			SET PerimeterOfTriangle TO side1 + side2 + side3
+			DISPLAY PerimeterOfTriangle
+		END METHOD
+
+		OVERRID GET_AREA()
+			SET AreaOfTriangle TO  (base * height) / 2
+			DISPLAY AreaOfTriangle
+		END METHOD
+
+END CLASS
+
+CLASS CANVAS
+	ATTRIBUTES
+		shapes: LIST OF SHAPE
+
+	METHODS
+		ADDSHAPE(newShape: SHAPE)
+			ADD newShape TO shapes
+		END METHOD
+
+		REMOVESHAPE(removeShape: SHAPE)
+			REMOVE removeShape FROM shapes
+		END METHOD
+
+		DIPLSAYSHAPES()
+			DISPLAY shapes
+		END METHOD
+END CLASS
+
+
+Pseudocode:
+START 
+	BEGIN
+		DECLARE canvas AS CANVAS
+		CREATE OBJECT shape1 OF RECTANGLE("Purple", 40, 10, 5, 8)
+		CREATE OBJECT shape2 OF TRIANGLE("Blue", 15, 25, 4)
+		CREATE OBJECT shape3 OF CIRCLE("Green", 5, 10, 6, 4, 5,5, 6)
+		canvas.ADDSHAPE(shape1)
+		canvas.ADDSHAPE(shape2)
+		canvas.ADDSHAPE(shape3)
+		shape1.GET_AREA()
+		shape1.GET_PERIMETER()
+		shape2.GET_AREA()
+		shape2.GET_PERIMETER()
+		shape3.GET_AREA()
+		shape3.GET_PERIMETER()
+		canvas.DIPLSAYSHAPES()
+		
+	STOP
+END
