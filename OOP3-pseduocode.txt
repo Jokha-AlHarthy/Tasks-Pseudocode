@@ -147,3 +147,128 @@ START
 		
 	STOP
 END
+
+----------------------------------------------------------------------------------
+Task 294: Employee Payroll  
+
+CLASS EMPLOYEE
+	ATTRIBUTES
+		EmpId: NUMBER
+		EmpName: TEXT
+		Emp_HireDate: TEXT
+		
+	CONSTRUCTOR(EmpName: TEXT,Emp_HireDate: TEXT)
+		SET THIS.EmpName TO EmpName
+		SET THIS.Emp_HireDate TO Emp_HireDate
+    	END CONSTRUCTOR
+
+	METHODS	
+		GET_id()
+			DIPLSAY EmpId
+		END METHOD
+
+		GET_name()
+			DISPLAY EmpName
+		END METHOD
+		calculatePay()
+			DISPLAY "The payment of the employee is: "
+		END METHOD
+END CLASS
+
+CLASS SalariedEmployee INHERITS EMPLOYEE
+
+	ATTRIBUTES
+		monthlyAmount:NUMBER
+
+	CONSTRUCTOR(EmpName: TEXT,Emp_HireDate: TEXT,monthlyAmount:NUMBER)
+		SUPER (EmpName,Emp_HireDate)
+		SET THIS.monthlyAmount TO monthlyAmount
+    	END CONSTRUCTOR
+
+		
+	METHODS	
+		OVERRID calculatePay()
+			DISPLAY "The payment of the employee is: " + monthlyAmount
+		END METHOD
+END CLASS
+
+CLASS HourlyEmployee INHERITS EMPLOYEE
+	ATTRIBUTES
+		hourWorked : NUMBER
+		hourlyRate: NUMBER
+	CONSTRUCTOR(EmpName: TEXT,Emp_HireDate: TEXT, hourWorked : NUMBER, hourlyRate: NUMBER)
+		SUPER (EmpName,Emp_HireDate)
+		SET THIS.hourWorked TO hourWorked
+		SET THIS.hourlyRate TO hourlyRate
+
+    	END CONSTRUCTOR
+		OVERRID calculatePay()
+			SET monthlyAmount TO hourWorked * hourlyRate
+			DISPLAY "The payment of the employee is: " + monthlyAmount
+		END METHOD
+		
+	METHODS	
+END CLASS
+
+CLASS CommissionEmployee INHERITS EMPLOYEE
+	ATTRIBUTES
+		basePay: NUMBER
+		percentageSales: NUMBER
+		commissionRate: NUMBER
+
+	CONSTRUCTOR(EmpName: TEXT,Emp_HireDate: TEXT, basePay: NUMBER, percentageSales: NUMBER, commissionRate:NUMBER)
+		SUPER (EmpName,Emp_HireDate)
+		SET THIS.basePay TO basePay
+		SET THIS.percentageSales TO percentageSales
+		SET THIS.commissionRate TO commissionRate
+    	END CONSTRUCTOR
+
+		
+	METHODS	
+		OVERRID calculatePay()
+			SET monthlyAmount TO basePay + (percentageSales*commissionRate)
+			DISPLAY "The payment of the employee is: " + monthlyAmount
+		END METHOD
+END CLASS
+
+CLASS PAYROLL
+	ATTRIBUTES
+		employees : LIST OF EMPLOYEE
+
+	CONSTRUCTOR()
+        	SET THIS.employees TO EMPTY LIST
+    	END CONSTRUCTOR
+
+		
+	METHODS	
+
+		ADDEMPLOYEE(newEmp: EMPLOYEE)
+			ADD newEmp TO employees
+		END METHOD
+
+		REMOVEEMPLOYEE(Emp : EMPLOYEE)
+			REMOVE Emp FROM employees
+		END METHOD
+
+		DISPLAYEMPLOYEE()
+			DISPLAY employees
+		END METHOD
+END CLASS
+
+
+Pseudocode:
+START
+	BEGIN
+		DECLARE Payrolls AS PAYROLL
+		CREATE OBJECT salEmployee OF SalariedEmployee("Rashid Hamed", "01-Jul-2026", 1550)
+		CREATE OBJECT HouEmployee OF HourlyEmployee("Khalfan Hamed", "01-Jan-2026", 12, 165)
+		CREATE OBJECT comEmployee OF CommissionEmployee("Jokha Hamed", "28-Jun-2026", 1003, 0.10, 0.50)
+		salEmployee.calculatePay()
+		HouEmployee.calculatePay()
+		comEmployee.calculatePay()
+		Payrolls.ADDEMPLOYEE(HouEmployee)
+		Payrolls.ADDEMPLOYEE(salEmployee)
+		Payrolls.ADDEMPLOYEE(comEmployee)
+		Payrolls.DISPLAYEMPLOYEE()	
+	STOP
+END
