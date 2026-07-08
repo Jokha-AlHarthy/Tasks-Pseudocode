@@ -86,13 +86,14 @@ CLASS TRIANGLE INHERITS SHAPE
 		side2: NUMBER
 		side3 : NUMBER
  
-    	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER, base: NUMBER, height: NUMBER, side1: NUMBER, side2: NUMBER, side3: NUMBER)
-	SET THIS.base TO base
-	SET THIS.height TO height
-	SET THIS.side1 TO side1
-	SET THIS.side2 TO side2
-	SET THIS.side3 TO side3
-    	END CONSTRUCTOR
+    CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER, base: NUMBER, height: NUMBER, side1: NUMBER, side2: NUMBER, side3: NUMBER)
+		SUPER (color, position_x, position_y)
+		SET THIS.base TO base
+		SET THIS.height TO height
+		SET THIS.side1 TO side1
+		SET THIS.side2 TO side2
+		SET THIS.side3 TO side3
+    END CONSTRUCTOR
 
     	METHODS
 		OVERRID GET_PERIMETER()
