@@ -572,3 +572,158 @@ START
 		order.CHECKOUT()
 	END
 STOP
+----------------------------------------------------------------------------------------------
+Task 297: Streaming Service Subscriptions  
+
+Blueprint:
+
+CLASS SUBSCRIPTION
+	ATTRIBUTES
+		startDate: TEXT
+		monthlyPrice: NUMBER
+			
+	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER)
+		SET THIS.startDate TO startDate
+		SET THIS.monthlyPrice TO monthlyPrice
+	END CONSTRUCTOR
+		
+	METHODS
+	GET_STARTDATE()
+            DISPLAY startDate
+        END METHOD
+
+        GET_MONTHLYPRICE()
+            DISPLAY monthlyPrice
+        END METHOD
+
+        IS_ACTIVE()
+            DISPLAY "Check if subscription is active or not"
+        END METHOD
+
+        GET_STREAMINGQUALITY()
+            DISPLAY "IS the streaming quality good or not?"
+        END METHOD
+
+        GET_DEVICELIMIT()
+            DISPLAY "The device limit is"
+        END METHOD
+END CLASS
+
+CLASS BASICPLAN INHERITS SUBSCRIPTION
+	ATTRIBUTES
+			
+	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER)
+		SUPER(startDate,monthlyPrice) 
+	END CONSTRUCTOR
+		
+	METHODS
+        	OVERRIDE GET_STREAMINGQUALITY()
+            		DISPLAY "The streaming quality is  standard-definition"
+        	END METHOD
+
+        	OVERRIDE GET_DEVICELIMIT()
+            		1
+       	 	END METHOD
+END CLASS
+
+CLASS STANDARDPLAN INHERITS SUBSCRIPTION
+	ATTRIBUTES
+			
+	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER)
+		SUPER(startDate,monthlyPrice) 
+	END CONSTRUCTOR
+		
+	METHODS
+        	OVERRIDE GET_STREAMINGQUALITY()
+            		DISPLAY "The streaming quality is high-definition"
+        	END METHOD
+
+        	OVERRIDE GET_DEVICELIMIT()
+            		2
+       	 	END METHOD
+END CLASS
+
+CLASS WATCHRECORD
+    ATTRIBUTES
+        title: TEXT
+        watchDate: TEXT
+
+    CONSTRUCTOR(title: TEXT, watchDate: TEXT)
+        SET THIS.title TO title
+        SET THIS.watchDate TO watchDate
+    END CONSTRUCTOR
+
+    METHODS
+        GET_TITLE()
+            DISPLAY title
+        END METHOD
+
+        GET_WATCH_DATE()
+            DISPLAY watchDate
+        END METHOD
+END CLASS
+
+CLASS PREMIUMPLAN 
+	ATTRIBUTES
+			
+	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER, downloadEnabled: BOOLEAN)
+		SUPER(startDate,monthlyPrice)
+		SET downloadEnabled TO downloadEnabled 
+	END CONSTRUCTOR
+		
+	METHODS
+        	OVERRIDE GET_STREAMINGQUALITY()
+            		DISPLAY "The streaming quality is  ultra-high definition"
+        	END METHOD
+
+        	OVERRIDE GET_DEVICELIMIT()
+            		4
+       	 	END METHOD
+		
+		GET_DOWNLOADS()
+			DISLPAY downloadEnabled 
+		END METHOD
+END CLASS
+
+
+CLASS USERACCOUNT
+
+	ATTRIBUTES
+		subscription : 	SUBSCRIPTION
+		watchHistory: LIST OF WATCHRECORD
+
+	CONSTRUCTOR(subscription : SUBSCRIPTION)
+		SET THIS.subscription TO subscription 
+	END CONSTRUCTOR
+		
+	METHODS
+        	ADDWATCHRECORD(newRecord: WATCHRECORD)
+            		ADD newRecord TO watchHistory
+        	END METHOD
+
+        	GET_SUBSCRIPTION()
+            		DISPLAY subscription
+        	END METHOD
+
+        	WATCHHISTORY()
+           		 DISPLAY watchHistory
+        	END METHOD
+END CLASS
+
+Pseudocode:
+START
+	BEGIN
+		DECLARE userAccount AS USERACCOUNT
+		CREATE OBJECT subscription OF PREMIUMPLAN("01-Jan-2025", 15, TRUE)
+		CREATE OBJECT userAccount OF USERACCOUNT(subscription)
+		CREATE OBEJECT watchRecord1 OF WATCHRECORD("The Avengers", "05-Jul-2026")	
+		CREATE OBJECT watchRecord2 OF WATCHRECORD("Inception", "06-Jul-2026")
+		userAccount.ADD_WATCH_RECORD(watchRecord1)
+		userAccount.ADD_WATCH_RECORD(watchRecord2)
+		subscription.IS_ACTIVE()
+		subscription.GET_STREAMINGQUALITY()
+		subscription.GET_DEVICELIMIT()
+		subscription.GET_DOWNLOADS()
+		userAccount.WATCHHISTORY()
+	END
+STOP
