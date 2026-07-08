@@ -902,3 +902,113 @@ START
  		route.DISPLAYSTOPS()
 	END
 STOP
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Task 299: Bank Cards
+
+Blueprint:
+CLASS CARD
+    ATTRIBUTES
+        cardNumber: NUMBER
+	expiryDate: TEXT
+	status: TEXT
+	chip : CHIP
+
+    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP)
+	SET THIS.cardNumber TO cardNumber
+	SET THIS.expiryDate TO expiryDate
+        SET THIS.status TO status
+	SET THIS.chip TO chip
+    END CONSTRUCTOR
+
+    METHODS
+	GET_CARDNUMBER()
+		DISPLAY cardNumber
+	END METHOD
+
+	GET_EXPIRYDATE()
+		DISLAY expiryDate
+	END METHOD
+
+	GET_STATUS()
+		DISPLAY status
+	END METHOD
+
+	AUTHORIZEPURCHASE()
+		DISPLAY "Authorizing the purchase.."
+	END METHOD
+END CLASS
+
+CLASS DEBITCARD INHERITS CARD
+    ATTRIBUTES
+       availableBalance: NUMBER
+
+    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP, availableBalance: NUMBER)
+        SUPER(cardNumber, expiryDate, status, chip)
+        SET THIS.availableBalance TO availableBalance
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE AUTHORIZEPURCHASE(newAmount: NUMBER)
+		IF availableBalance GREATER THAN newAmount THEN
+			DISPLAY "Purchase approved"
+		ELSE
+			DISPLAY "Not enough balance"
+		END IF
+	END METHOD
+END CLASS
+
+CLASS CREDITCARD INHERITS CARD
+    ATTRIBUTES
+       creditLimit: NUMBER
+	outstandingBalance: NUMBER
+
+    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP, outstandingBalance: NUMBER, creditLimit: NUMBER)
+        SUPER(cardNumber, expiryDate, status, chip)
+	SET THIS.outstandingBalance TO 0
+        SET THIS.creditLimit TO creditLimit
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE AUTHORIZEPURCHASE(newAmount: NUMBER)
+		IF outstandingBalance + newAmount LESS THAN creditLimit THEN
+			SET outstandingBalance TO outstandingBalance + newAmount
+			DISPLAY "Purchase approved"
+		ELSE
+			DISPLAY "Credit has exceed the limit"
+		END IF
+	END METHOD
+
+	GET_OUTSTANDINGBALANCE()
+            DISPLAY outstandingBalance
+        END METHOD
+
+END CLASS
+
+
+CLASS CHIP
+    ATTRIBUTES
+        encryptedSecurityData : TEXT
+
+    CONSTRUCTOR (encryptedSecurityData : TEXT)
+        SET THIS.encryptedSecurityData TO encryptedSecurityData
+    END CONSTRUCTOR
+
+    METHODS
+        GET_SECURITYDATA()
+		DISPLAY encryptedSecurityData
+	END METHOD
+END CLASS
+
+
+
+Pseudocode:
+START
+	BEGIN
+		CREATE OBEJCT chip OF CHIP("A1B2C3D4E5")
+		CREATE OBEJCT debitCard OF DEBITCARD("1234567890123456", "12/28", "Active", chip, 1000)
+		CREATE OBEJCT creditCard OF CREDITCARD("9876543210987654", "10/29", "Active", chip, 5000)
+		debitCard.AUTHORIZEPURCHASE(250)
+		creditCard.AUTHORIZEPURCHASE(800)
+		creditCard.GET_OUTSTANDINGBALANCE()
+	END
+STOP
