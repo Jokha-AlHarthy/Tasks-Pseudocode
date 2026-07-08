@@ -130,7 +130,7 @@ END CLASS
 Pseudocode:
 START 
 	BEGIN
-		DECLARE canvas AS CANVAS
+		CREATE OBJECT canvas OF CANVAS
 		CREATE OBJECT shape1 OF RECTANGLE("Purple", 40, 10, 5, 8)
 		CREATE OBJECT shape2 OF TRIANGLE("Blue", 15, 25, 4)
 		CREATE OBJECT shape3 OF CIRCLE("Green", 5, 10, 6, 4, 5,5, 6)
@@ -259,7 +259,7 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		DECLARE Payrolls AS PAYROLL
+		CREATE OBJECT Payrolls OF PAYROLL
 		CREATE OBJECT salEmployee OF SalariedEmployee("Rashid Hamed", "01-Jul-2026", 1550)
 		CREATE OBJECT HouEmployee OF HourlyEmployee("Khalfan Hamed", "01-Jan-2026", 12, 165)
 		CREATE OBJECT comEmployee OF CommissionEmployee("Jokha Hamed", "28-Jun-2026", 1003, 0.10, 0.50)
@@ -407,7 +407,7 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		DECLARE enclosures AS ENCLOSURE
+		CREATE OBJECT enclosures OF ENCLOSURE
 		CREATE OBJECT animal1 OF BIRD("Bird 1", 2, "Seed-Eaters", YES, YES)
 		CREATE OBJECT animal2 OF FISH("Fish1", 3, "carnivorous", YES, YES)
 		CREATE OBJECT animal3 OF carnivorousMAMMAL("Mamal 1", 1, "herbivorous", No, YES)
@@ -560,7 +560,7 @@ Pseudocode:
 
 START
 	BEGIN
-		DECLARE order AS ORDER
+		CREATE order OF ORDER
     	CREATE OBJECT item1 OF ITEM("Laptop", 450)
         CREATE OBJECT item2 OF ITEM("Mouse", 25)
      	order.ADDITEM(item1)
@@ -713,7 +713,7 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		DECLARE userAccount AS USERACCOUNT
+		CREATE userAccount OF USERACCOUNT
 		CREATE OBJECT subscription OF PREMIUMPLAN("01-Jan-2025", 15, TRUE)
 		CREATE OBJECT userAccount OF USERACCOUNT(subscription)
 		CREATE OBEJECT watchRecord1 OF WATCHRECORD("The Avengers", "05-Jul-2026")	
@@ -725,5 +725,180 @@ START
 		subscription.GET_DEVICELIMIT()
 		subscription.GET_DOWNLOADS()
 		userAccount.WATCHHISTORY()
+	END
+STOP
+------------------------------------------------------------------------------------------
+Task 298: Delivery Vehicles Fleet  
+
+Blueprint: 
+
+CLASS VEHICLE
+    ATTRIBUTES
+        id: NUMBER
+        licencePlate: TEXT
+        fuelLevel: NUMBER
+        engine: ENGINE
+
+    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE)
+        SET THIS.licencePlate TO licencePlate
+        SET THIS.fuelLevel TO fuelLevel
+        SET THIS.engine TO engine
+    END CONSTRUCTOR
+
+    METHODS
+        GET_LICENCEPLATE()
+            DISPLAY licencePlate
+        END METHOD
+
+        GET_FUELLEVEL()
+            DISPLAY fuelLevel
+        END METHOD
+
+        CALCULATE_DELIVERYTIME(distance: NUMBER)
+            DISPLAY "Calculate delivery time.."
+        END METHOD
+END CLASS 
+
+CLASS VAN INHERITS VEHICLE
+    ATTRIBUTES
+       cargoCapacity: NUMBER
+
+    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE,  cargoCapacity: NUMBER)
+        SUPER(licencePlate, fuelLevel, engine)
+        SET THIS.cargoCapacity  TO  cargoCapacity
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
+	    SET DeliveryTime TO distance / 100
+            DISPLAY DeliveryTime
+        END METHOD
+END CLASS 
+
+CLASS MOTORBICK INHERITS VEHICLE
+    ATTRIBUTES
+       smallPackage: NUMBER
+
+    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE,  smallPackage: NUMBER)
+        SUPER(licencePlate, fuelLevel, engine)
+        SET THIS.smallPackage TO  smallPackage
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
+	    SET DeliveryTime TO distance / 70
+            DISPLAY DeliveryTime
+        END METHOD
+END CLASS 
+
+CLASS TRUCK INHERITS VEHICLE
+    ATTRIBUTES
+       heavyLoads: NUMBER
+
+    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE,  heavyLoads: NUMBER)
+        SUPER(licencePlate, fuelLevel, engine)
+        SET THIS.heavyLoads TO heavyLoads
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
+	    SET DeliveryTime TO distance / 80
+            DISPLAY DeliveryTime
+        END METHOD
+END CLASS 
+
+CLASS ENGINE
+    ATTRIBUTES
+        horsePower: NUMBER
+        fuelEfficiency: NUMBER
+
+    CONSTRUCTOR(horsePower: NUMBER, fuelEfficiency: NUMBER)
+        SET THIS.horsePower TO horsePower
+        SET THIS.fuelEfficiency TO fuelEfficiency
+    END CONSTRUCTOR
+
+    METHODS
+        GET_HORSEPOWER()
+            DISPLAY horsePower
+        END METHOD
+
+        GET_FUELEFFICIENCY()
+            DISPLAY fuelEfficiency
+        END METHOD
+END CLASS
+
+CLASS PACKAGE
+    ATTRIBUTES
+        id: NUMBER
+        weight: NUMBER
+
+    CONSTRUCTOR(weight: NUMBER)
+        SET THIS.weight TO weight
+    END CONSTRUCTOR
+
+    METHODS
+        GET_WEIGHT()
+            DISPLAY weight
+        END METHOD
+END CLASS
+
+CLASS STOP
+    ATTRIBUTES
+        address: TEXT
+        package: PACKAGE
+
+    CONSTRUCTOR(address: TEXT, package: PACKAGE)
+        SET THIS.address TO address
+        SET THIS.package TO package
+    END CONSTRUCTOR
+
+    METHODS
+        GET_ADDRESS()
+            DISPLAY address
+        END METHOD
+
+        GET_PACKAGE()
+            DISPLAY package
+        END METHOD
+END CLASS
+
+CLASS ROUTE
+    ATTRIBUTES
+        stops: LIST OF STOP
+
+    CONSTRUCTOR()
+        SET THIS.stops TO EMPTY LIST
+    END CONSTRUCTOR
+
+    METHODS
+        ADDSTOP(stop: STOP)
+            ADD stop TO stops
+        END METHOD
+
+        REMOVESTOP(stop: STOP)
+            REMOVE stop FROM stops
+        END METHOD
+
+        DISPLAYSTOPS()
+            DISPLAY stops
+        END METHOD
+END CLASS
+
+
+Pseudocode:
+
+START
+	BEGIN
+		CREATE OBJECT engine OF ENGINE(250, 18)
+		CREATE OBJECT van OF VAN("ABC123", 80, engine, 1200)
+		CREATE OBJECT route OF ROUTE
+		CREATE package1 OF PACKAGE(10)
+		CREATE package2 OF PACKAGE(15)
+		CREATE stop1 OF STOP("Muscat", package1)
+		CREATE stop2 OF STOP("Sohar", package2)
+ 		route.ADDSTOP(stop1)
+		route.ADDSTOP(stop2)
+		van.CALCULATE_DELIVERYTIME(150)
+ 		route.DISPLAYSTOPS()
 	END
 STOP
