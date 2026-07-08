@@ -145,8 +145,8 @@ START
 		shape3.GET_PERIMETER()
 		canvas.DIPLSAYSHAPES()
 		
-	STOP
-END
+	END
+STOP
 
 ----------------------------------------------------------------------------------
 Task 294: Employee Payroll  
@@ -270,8 +270,8 @@ START
 		Payrolls.ADDEMPLOYEE(salEmployee)
 		Payrolls.ADDEMPLOYEE(comEmployee)
 		Payrolls.DISPLAYEMPLOYEE()	
-	STOP
-END
+	eND
+STOP
 ----------------------------------------------------------------------------------
 Task 295: Zoo Animal Enclosures
 
@@ -415,8 +415,8 @@ START
 		enclosures.ADDANIMAL(animal2)
 		enclosures.ADDANIMAL(animal3)
 		enclosures.DISPLAYANIMALS
-	STOP
-END
+	END
+STOP
 -------------------------------------------------------------------------------
 Task 296: Online Payment Methods 
 
@@ -570,5 +570,5 @@ START
         CREATE OBJECT payment3 OF WALLETPAYMENT(475, "Pending", 600)
 		order.SETPAYMENT(payment1)
 		order.CHECKOUT()
-	STOP
-END
+	END
+STOP
