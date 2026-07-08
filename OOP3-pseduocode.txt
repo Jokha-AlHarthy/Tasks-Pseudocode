@@ -404,9 +404,6 @@ CLASS ENCLOSURE
         END METHOD
 END CLASS
 
-
-	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT, hasFur: BOOLEAN,giveBirth: BOOLEAN)
-
 Pseudocode:
 START
 	BEGIN
