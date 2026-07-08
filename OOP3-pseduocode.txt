@@ -415,5 +415,160 @@ START
 		enclosures.ADDANIMAL(animal2)
 		enclosures.ADDANIMAL(animal3)
 		enclosures.DISPLAYANIMALS
-	END
+	STOP
+END
+-------------------------------------------------------------------------------
+Task 296: Online Payment Methods 
+
+Blueprint:
+
+CLASS PAYMENTMETHOD
+    ATTRIBUTES
+	id: NUMBER
+        amountPayment: NUMBER
+	status: TEXT
+	
+    CONSTRUCTOR(amountPayment: NUMBER, status: TEXT)
+	SET THIS.amountPayment TO amountPayment
+	SET THIS.status TO status
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DISPLAY id
+	END METHOD
+
+	GET_Amount()
+		DISPLAY amountPayment
+	END METHOD
+
+	GET_status()
+		DISPLAY status
+	END METHOD
+
+	PROCESS_PAYMENT()
+		DISPLAY "The payment is being process"
+	END METHOD
+        
+END CLASS
+
+CLASS CREDITCARDPAYEMNT INHERITS PAYMENTMETHOD
+    ATTRIBUTES
+	cardNo : TEXT
+        expriyDate: TEXT
+	
+    CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, cardNo : TEXT, expriyDate: TEXT)
+	SUPER (amountPayment, status)
+	SET THIS.cardNoTO cardNo
+	SET THIS.expriyDate TO expriyDate
+    END CONSTRUCTOR
+
+    METHODS
+	OVERRIDE PROCESS_PAYMENT()
+		DISPLAY "Validate card number.."
+		DISPLAY "Validate expiry date.."
+		SET status TO "completed"
+		DISPLAY status
+	END METHOD
+
+        
+END CLASS
+
+CLASS BANKTRANSFEWRPAYMENT INHERITS PAYMENTMETHOD
+    ATTRIBUTES
+	id: NUMBER
+        accountNo: TEXT
+	
+    CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, accountNo : TEXT)
+	SUPER(amountPayment, status)
+	SET THIS.accountNo TO accountNo
+    END CONSTRUCTOR
+
+    METHODS
+	OVERRIDE PROCESS_PAYMENT()
+		DISPLAY "Validate account number...."
+		DISPLAY "Transfer is in the progress.."
+		SET status TO "completed"
+		DISPLAY status
+	END METHOD
+
+        
+END CLASS
+
+CLASS WALLETPAYMENT INHERITS PAYMENTMETHOD
+    ATTRIBUTES
+	digitalWallet: NUMBER
+	
+    CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, digitalWallet: NUMBER)
+	SUPER(amountPayment, status)
+	SET digitalWallet TO digitalWallet
+    END CONSTRUCTOR
+
+    METHODS
+	OVERRIDE PROCESS_PAYMENT()
+		IF digitalWallet GREATER THAN amountPayment
+			DISPLAY "Enough balance"
+			SET status TO "completed"
+			DISPLAY status
+		ELSE 
+			DISPLAY "Not enough balance"
+		END IF
+	END METHOD
+END CLASS
+
+CLASS ITEM
+	ATTRIBUTES
+		id: NUMBER
+		name: TEXT
+		price: TEXT
+	CONSTRUCTOR(name: TEXT, price: NUMBER)
+        	SET THIS.name TO name
+        	SET THIS.price TO price
+    	END CONSTRUCTOR
+
+	METHODS
+
+        GET_PRICE()
+            DISPLAY price
+        END METHOD
+
+END CLASS 
+
+CLASS ORDER
+	ATTRIBUTES
+		payment: PAYMENTMETHOD
+		items: LIST OF ITEM
+	
+	METHODS
+		
+	ADDITEM(newItem: ITEM)
+            ADD newItem TO items
+        END METHOD
+
+        SETPAYMENT(payment:PAYMENTMETHOD)
+            SET THIS.payment TO payment
+        END METHOD
+
+        CHECKOUT()
+            DISPLAY payment.PAYMENTMETHOD()
+        END METHOD
+
+
+END CLASS 
+
+Pseudocode:
+
+START
+	BEGIN
+		DECLARE order AS ORDER
+    	CREATE OBJECT item1 OF ITEM("Laptop", 450)
+        CREATE OBJECT item2 OF ITEM("Mouse", 25)
+     	order.ADDITEM(item1)
+       	order.ADDITEM(item2)
+        CREATE OBJECT payment1 OF CREDITCARDPAYMENT(475, "Pending", "1234567890123456", "12/28")
+        CREATE OBJECT payment2 OF BANKTRANSFERPAYMENT(475, "Pending", "987654321")
+        CREATE OBJECT payment3 OF WALLETPAYMENT(475, "Pending", 600)
+		order.SETPAYMENT(payment1)
+		order.CHECKOUT()
+	STOP
 END
