@@ -272,3 +272,151 @@ START
 		Payrolls.DISPLAYEMPLOYEE()	
 	STOP
 END
+----------------------------------------------------------------------------------
+Task 295: Zoo Animal Enclosures
+
+Blueprint:
+
+CLASS ANIMAL
+	ATTRIBUTES
+		animalId: NUMBER
+		animalName: TEXT
+		animalAge: NUMBER
+		dietType: TEXT
+	
+
+	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT)
+        	SET THIS.animalName TO animalName
+		SET THIS.animalAge TO animalAge
+		SET THIS.dietType TO dietType
+    	END CONSTRUCTOR
+
+	
+	METHODS
+		GET_id()
+			DISPALY id
+		END METHOD
+
+		GET_animalName()
+			DISPLAY animalName
+		END METHOD
+
+		GET_SOUND()
+			DISPLAY "The animal sound is: "
+		END METHOD
+	
+		GET_MOVEMENT()
+			DISPLAY "The animal movements are: "
+		END METHOD
+END CLASS
+
+CLASS BIRD INHERITS ANIMAL
+	ATTRIBUTES
+		canFly: BOOLEAN
+		haveEgg: BOOLEAN
+
+	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT, canFly: BOOLEAN, haveEgg: BOOLEAN)
+ 		SUPER (animalName,animalAge,dietType)
+		SET THIS.canFly TO canFly
+		SET THIS.haveEgg TO haveEgg
+    	END CONSTRUCTOR
+
+	METHODS
+		OVERRIDE GET_SOUND()
+			DISPLAY "The sound of bird is  Chirp"
+		END METHOD
+
+		OVERRIDE GET_MOVEMENT()
+			DISPLAY "The bird can fly: " + canFly
+		END METHOD
+END CLASS
+
+CLASS FISH INHERITS ANIMAL
+	ATTRIBUTES
+		canSwim: BOOLEAN
+		canBreath: BOOLEAN
+
+	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT,canSwim: BOOLEAN,canBreath: BOOLEAN)
+ 		SUPER (animalName,animalAge,dietType)
+		SET THIS.canSwim TO canSwim
+		SET THIS.canBreath TO canBreath
+    	END CONSTRUCTOR
+
+	
+	METHODS
+		OVERRIDE GET_SOUND()
+			DISPLAY "The sound of bird is blub"
+		END METHOD
+
+		OVERRIDE GET_MOVEMENT()
+			DISPLAY "The fish can swim: " + canSwim
+		END METHOD
+
+
+	
+END CLASS
+
+CLASS MAMMAL INHERITS ANIMAL
+	ATTRIBUTES
+		hasFur: BOOLEAN
+		giveBirth: BOOLEAN
+
+	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT, hasFur: BOOLEAN,giveBirth: BOOLEAN)
+ 		SUPER (animalName,animalAge,dietType)
+		SET THIS.hasFur TO hasFur
+		SET THIS.giveBirth TO giveBirth
+    	END CONSTRUCTOR
+
+	
+	METHODS
+		OVERRIDE GET_SOUND()
+			DISPLAY "The sound of bird is Mammal sound"
+		END METHOD
+
+		OVERRIDE GET_MOVEMENT()
+			DISPLAY "The mammal can walk"
+		END METHOD
+	
+END CLASS
+
+CLASS ENCLOSURE
+    ATTRIBUTES
+        id: NUMBER
+        temperature: NUMBER
+        animals: LIST OF ANIMAL
+
+    CONSTRUCTOR(temperature: NUMBER)
+        SET THIS.temperature TO temperature
+        SET THIS.animals TO EMPTY LIST
+    END CONSTRUCTOR
+
+    METHODS
+        ADDANIMAL(newAnimal: ANIMAL)
+            ADD newAnimal TO animals
+        END METHOD
+
+        REMOVEANIMAL(animal: ANIMAL)
+            REMOVE animal FROM animals
+        END METHOD
+
+        DISPLAYANIMALS()
+            DISPLAY animals
+        END METHOD
+END CLASS
+
+
+	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT, hasFur: BOOLEAN,giveBirth: BOOLEAN)
+
+Pseudocode:
+START
+	BEGIN
+		DECLARE enclosures AS ENCLOSURE
+		CREATE OBJECT animal1 OF BIRD("Bird 1", 2, "Seed-Eaters", YES, YES)
+		CREATE OBJECT animal2 OF FISH("Fish1", 3, "carnivorous", YES, YES)
+		CREATE OBJECT animal3 OF carnivorousMAMMAL("Mamal 1", 1, "herbivorous", No, YES)
+		enclosures.ADDANIMAL(animal1)
+		enclosures.ADDANIMAL(animal2)
+		enclosures.ADDANIMAL(animal3)
+		enclosures.DISPLAYANIMALS
+	END
+END
