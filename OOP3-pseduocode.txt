@@ -1012,3 +1012,150 @@ START
 		creditCard.GET_OUTSTANDINGBALANCE()
 	END
 STOP
+------------------------------------------------------------------------------------------------
+Task 300: Hospital Staff Scheduling (Medium) 
+
+Blueprint:
+CLASS STAFFMEMBER
+    ATTRIBUTES
+	EmpId: NUMBER
+	staffName: TEXT
+	
+    CONSTRUCTOR(staffName: TEXT, EmpId: NUMBER)
+	SET THIS.EmpId TO EmpId
+	SET THIS.staffName TO staffName
+    END CONSTRUCTOR
+
+    METHODS
+	GET_EmpID()
+		DISPLAY EmpId 
+	END METHOD
+
+	GET_NAME()
+		DISPALY staffName
+	END METHOD
+
+	ASSIGNSHFIT(addShift : SHIFT)
+		DISPLAY "The shift is assigned.."
+	END METHOD
+END CLASS
+
+CLASS DOCTOR INHERITS STAFFMEMBER
+    ATTRIBUTES
+		
+    CONSTRUCTOR(staffName: TEXT, EmpId: NUMBER)
+	SUPER(staffName, EmpId)
+    END CONSTRUCTOR
+
+    METHODS
+	APPROVETREATMENT()
+		DISPLAY "The treatment is approved.."
+	END METHOD
+
+	MAKEDIAGONSIS()
+		DISPLAY "The diagnosis is completed.."
+	END METHOD
+END CLASS
+
+CLASS SURGEON INHERITS DOCTOR
+    ATTRIBUTES
+	specialization: TEXT
+    CONSTRUCTOR(staffName: TEXT, EmpId: NUMBER, specialization: TEXT)
+	SUPER(staffName, EmpId)
+	SET THIS.specialization TO specialization
+    END CONSTRUCTOR
+
+    METHODS
+	PERFORMOPERATIONS()
+		DISPLAY "The operation is already performed"
+	END METHOD
+END CLASS
+
+CLASS NURSE INHERITS STAFFMEMBER
+    ATTRIBUTES
+	
+
+    CONSTRUCTOR(staffName: TEXT, EmpId: NUMBER)
+	SUPER(staffName, EmpId)
+    END CONSTRUCTOR
+
+    METHODS
+	SET_MEDICTION()
+		DISPLAY "Get medication for patient"
+	END METHOD
+
+	RECORD_VITALSIGNS()
+		DISPLAY "The vital signs of the patient is recoded"
+	END METHOD
+END CLASS
+
+CLASS SHIFT
+    ATTRIBUTES
+	startTime: TEXT
+	endTime: TEXT
+	ward: WARD
+
+    CONSTRUCTOR(startTime: TEXT, endTime: TEXT, ward: WARD)
+	SET THIS.startTime TO startTime
+	SET THIS.endTime TO endTime
+	SET THIS.ward TO ward
+    END CONSTRUCTOR
+
+    METHODS
+	GET_STARTTIME()
+		DISPLAY startTime
+	END METHOD
+
+	GET_ENDTIME()
+		DISPLAY endTime
+	END METHOD
+
+	GET_ward()
+		DISPLAY ward
+	END METHOD
+END CLASS
+
+
+CLASS WARD
+    ATTRIBUTES
+	wardName: TEXT
+	shifts: LIST OF SHIFT
+
+    CONSTRUCTOR(wardName: TEXT)
+	SET THIS.wardName TO wardName
+    END CONSTRUCTOR
+
+    METHODS
+	ADDSHIFT(newShift: SHIFT)
+		ADD newShift TO shifts
+	END METHOD
+
+	REMOVE(shift: SHIFT)
+		REMOVE shift FROM shifts	
+	END METHOD
+
+	DISPLAYSHIFTS()
+		DISPLAY shifts
+	END METHOD
+END CLASS
+
+
+Pseudocode:
+START
+	BEGIN
+		CREATE OBJECT ward AS WARD("Emergency")
+		CREATE OBJECT shift1 OF SHIFT("08:00", "16:00", ward)
+		CREATE OBJECT shift2 OF SHIFT("16:00", "00:00", ward)
+		ward.ADDSHIFT(shift1)
+		ward.ADDSHIFT(shift2)
+		CREATE doctor OF DOCTOR ("Sondos", 8001)
+		CREATE nurse OF NURSE("Esraa", 1002)
+		CREATE surgeon OF SURGEON("Hawra", 1003, "Heart Surgery")
+		doctor.ADDSHIFT(shift1)
+		nurse.ADDSHIFT(shift2)
+		surgeon.ADDSHIFT(shift1)
+		doctor.APPROVETREATMENT()
+		doctor.MAKEDIAGONSIS()
+		ward.DISPLAYSHIFTS()
+	END
+STOP
