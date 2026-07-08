@@ -1159,3 +1159,143 @@ START
 		ward.DISPLAYSHIFTS()
 	END
 STOP
+---------------------------------------------------------------------------------
+Task 301: E-book Reader App (Medium)
+
+CLASS PUBLICATION
+    ATTRIBUTES
+	pubId: NUMBER
+	pubTitle : TEXT
+	pubAuthor : TEXT
+	totalPage: NUMBER
+	coverImage: COVERIMAGE
+
+    CONSTRUCTOR(pubTitle : TEXT, pubAuthor : TEXT, totalPage: NUMBER, coverImage: COVER_IMAGE)
+	SET THIS.pubTitle TO pubTitle
+	SET THIS.pubAuthor TO pubAuthor
+	SET THIS.totalPage TO totalPage
+	SET THIS.coverImage TO coverImage
+    END CONSTRUCTOR
+
+    METHODS
+	 GET_TITLE()
+            DISPLAY title
+        END METHOD
+
+        GET_AUTHOR()
+            DISPLAY author
+        END METHOD
+
+        GET_PROGRESS()
+            DISPLAY "Reading Progress.."
+        END METHOD
+END CLASS
+
+CLASS NOVAL INHERITS PUBLICATION
+    ATTRIBUTES
+	currentPage: NUMBER
+
+    CONSTRUCTOR(pubTitle : TEXT, pubAuthor : TEXT, totalPage: NUMBER, coverImage: COVER_IMAGE, currentPage: NUMBER)
+	SUPER(pubTitle, pubAuthor,totalPage, coverImage)
+	SET THIS.currentPage TO currentPage
+    END CONSTRUCTOR
+
+    METHODS
+	
+       	OVERRIDE GET_PROGRESS()
+	    SET Prgress TO (currentPage / totalPage) * 100
+            DISPLAY "The progress is: " + Prgress
+        END METHOD
+END CLASS
+
+CLASS MAGAZINE INHERITS PUBLICATION
+    ATTRIBUTES
+	totalAritcals: NUMBER
+	opendArticals: NUMBER
+
+    CONSTRUCTOR(pubTitle : TEXT, pubAuthor : TEXT, totalPage: NUMBER, coverImage: COVER_IMAGE, totalAritcals: NUMBER, opendArticals: NUMBER)
+	SUPER(pubTitle, pubAuthor,totalPage, coverImage)
+	SET THIS.totalAritcals TO totalAritcals
+	SET THIS.opendArticals TO opendArticals
+    END CONSTRUCTOR
+
+    METHODS
+       	OVERRIDE GET_PROGRESS()
+	    SET Prgress TO (opendArticals / totalAritcals) * 100
+            DISPLAY "The progress is: " + Prgress
+        END METHOD
+END CLASS
+
+CLASS AUDIOBOOK INHERITS PUBLICATION
+    ATTRIBUTES
+	totalListeningTime: NUMBER
+	ListenedTime: NUMBER
+
+ 	CONSTRUCTOR(pubTitle : TEXT, pubAuthor : TEXT, totalPage: NUMBER, coverImage: COVER_IMAGE, totalListeningTime: NUMBER, ListenedTime: NUMBER)
+	SUPER(pubTitle, pubAuthor,totalPage, coverImage)
+	SET THIS.totalListeningTime TO totalListeningTime
+	SET THIS.ListenedTime TO ListenedTime
+    END CONSTRUCTOR
+
+    METHODS
+       	OVERRIDE GET_PROGRESS()
+	    SET Prgress TO (ListenedTime / totalListeningTime) * 100
+            DISPLAY "The progress is: " + Prgress
+        END METHOD
+END CLASS
+
+CLASS COVERIMAGE
+	ATTRIBUTES
+		filePath: TEXT
+		width: NUMBER
+		height: NUMBER
+ 	CONSTRUCTOR(filePath: TEXT, width: NUMBER, height: NUMBER)
+		SET THIS.filePath TO filePath
+		SET THIS.width TO width
+		SET THIS.height TO height
+    	END CONSTRUCTOR
+
+    	METHODS
+       		GET_filePath()
+			DISPLAY filePath
+		END METHOD
+END CLASS
+
+CLASS LIBRARY
+	ATTRIBUTES
+		publications: LIST OF PUBLICATION
+
+    	METHODS
+       		ADDPUBLICATION(newPublication : PUBLICATION)
+			ADD newPublication TO publications
+		END METHOD
+
+		REMOVEPUBLICATION(Publication:PUBLICATION)
+			REMOVE Publication FROM publications
+		END METHOD
+
+		DISPLAYPUBLICATION()
+			DISPLAY publications
+		END MEHTOD
+END CPUBLICATIONLASS
+
+
+
+Pseudocode:
+START
+	BEGIN
+		CREATRE coverImage OF COVERIMAGE("cover.jpg", 600, 800)
+		CREATE novel OF NOVEL("The Alchemist", "Paulo Coelho", 200, coverImage, 120)
+		CREATE magazine OF MAGAZINE("Tech Monthly", "John Smith", 80, coverImage, 10, 7)
+		CREATE audiobook OF AUDIOBOOK("Atomic Habits", "James Clear", 0, coverImage, 600, 240)
+		CREATE library OF LIBRARY
+		library.ADDPUBLICATION(novel)
+		library.ADDPUBLICATION(magazine)
+		library.ADDPUBLICATION(audiobook)
+		novel.GET_PROGRESS()
+		magazine.GET_PROGRESS()
+		audiobook.GET_PROGRESS()
+		library.DISPLAYPUBLICATION()
+
+	END
+STOP
