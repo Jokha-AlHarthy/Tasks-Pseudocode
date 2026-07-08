@@ -5,7 +5,7 @@ Blueprint:
 
 CLASS SHAPE
 	ATTRIBUTES
-        	id: NUMBER
+        id: NUMBER
 		color: TEXT
 		position_x: NUMBER
 		position_y: NUMBER
@@ -38,8 +38,9 @@ CLASS RECTANGLE INHERITS SHAPE
 	ATTRIBUTES
 		width: NUMBER
 		height: NUMBER
-    	CONSTRUCTOR(color: TEXT, width: NUMBER, height: NUMBER)
-		SUPER (color)
+
+    	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER, width: NUMBER, height: NUMBER)
+		SUPER(color, position_x, position_y)
 		SET THIS.width TO width
 		SET THIS.height TO height
     	END CONSTRUCTOR
@@ -47,7 +48,7 @@ CLASS RECTANGLE INHERITS SHAPE
     	METHODS
 		OVERRID GET_PERIMETER()
 			SET PerimeterOfRectangle TO 2 * (width + height)
-			DISPLAY PerimeterOfCircle
+			DISPLAY PerimeterOfRectangle
 		END METHOD
 
 		OVERRID GET_AREA()
@@ -410,11 +411,11 @@ START
 		CREATE OBJECT enclosures OF ENCLOSURE
 		CREATE OBJECT animal1 OF BIRD("Bird 1", 2, "Seed-Eaters", YES, YES)
 		CREATE OBJECT animal2 OF FISH("Fish1", 3, "carnivorous", YES, YES)
-		CREATE OBJECT animal3 OF carnivorousMAMMAL("Mamal 1", 1, "herbivorous", No, YES)
+		CREATE OBJECT animal3 OF MAMMAL("Mamal 1", 1, "herbivorous", No, YES)
 		enclosures.ADDANIMAL(animal1)
 		enclosures.ADDANIMAL(animal2)
 		enclosures.ADDANIMAL(animal3)
-		enclosures.DISPLAYANIMALS
+		enclosures.DISPLAYANIMALS()
 	END
 STOP
 -------------------------------------------------------------------------------
@@ -452,14 +453,14 @@ CLASS PAYMENTMETHOD
         
 END CLASS
 
-CLASS CREDITCARDPAYEMNT INHERITS PAYMENTMETHOD
+CLASS CREDITCARDPAYMENT INHERITS PAYMENTMETHOD
     ATTRIBUTES
 	cardNo : TEXT
         expriyDate: TEXT
 	
     CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, cardNo : TEXT, expriyDate: TEXT)
 	SUPER (amountPayment, status)
-	SET THIS.cardNoTO cardNo
+	SET THIS.cardNo TO cardNo
 	SET THIS.expriyDate TO expriyDate
     END CONSTRUCTOR
 
@@ -467,14 +468,14 @@ CLASS CREDITCARDPAYEMNT INHERITS PAYMENTMETHOD
 	OVERRIDE PROCESS_PAYMENT()
 		DISPLAY "Validate card number.."
 		DISPLAY "Validate expiry date.."
-		SET status TO "completed"
+		SET THIS.status TO "completed"
 		DISPLAY status
 	END METHOD
 
         
 END CLASS
 
-CLASS BANKTRANSFEWRPAYMENT INHERITS PAYMENTMETHOD
+CLASS BANKTRANSFERPAYMENT INHERITS PAYMENTMETHOD
     ATTRIBUTES
 	id: NUMBER
         accountNo: TEXT
@@ -501,7 +502,7 @@ CLASS WALLETPAYMENT INHERITS PAYMENTMETHOD
 	
     CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, digitalWallet: NUMBER)
 	SUPER(amountPayment, status)
-	SET digitalWallet TO digitalWallet
+	SET THIS.digitalWallet TO digitalWallet
     END CONSTRUCTOR
 
     METHODS
@@ -550,7 +551,7 @@ CLASS ORDER
         END METHOD
 
         CHECKOUT()
-            DISPLAY payment.PAYMENTMETHOD()
+            payment.PROCESS_PAYMENT()
         END METHOD
 
 
@@ -622,7 +623,7 @@ CLASS BASICPLAN INHERITS SUBSCRIPTION
         	END METHOD
 
         	OVERRIDE GET_DEVICELIMIT()
-            		1
+            		DISPLAY 1
        	 	END METHOD
 END CLASS
 
@@ -639,7 +640,7 @@ CLASS STANDARDPLAN INHERITS SUBSCRIPTION
         	END METHOD
 
         	OVERRIDE GET_DEVICELIMIT()
-            		2
+            		DISPLAY 2
        	 	END METHOD
 END CLASS
 
@@ -663,12 +664,12 @@ CLASS WATCHRECORD
         END METHOD
 END CLASS
 
-CLASS PREMIUMPLAN 
+CLASS PREMIUMPLAN INHERITS SUBSCRIPTION
 	ATTRIBUTES
 			
 	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER, downloadEnabled: BOOLEAN)
 		SUPER(startDate,monthlyPrice)
-		SET downloadEnabled TO downloadEnabled 
+		SET THIS.downloadEnabled TO downloadEnabled 
 	END CONSTRUCTOR
 		
 	METHODS
@@ -677,7 +678,7 @@ CLASS PREMIUMPLAN
         	END METHOD
 
         	OVERRIDE GET_DEVICELIMIT()
-            		4
+            		DISPLAY 4
        	 	END METHOD
 		
 		GET_DOWNLOADS()
@@ -718,8 +719,8 @@ START
 		CREATE OBJECT userAccount OF USERACCOUNT(subscription)
 		CREATE OBEJECT watchRecord1 OF WATCHRECORD("The Avengers", "05-Jul-2026")	
 		CREATE OBJECT watchRecord2 OF WATCHRECORD("Inception", "06-Jul-2026")
-		userAccount.ADD_WATCH_RECORD(watchRecord1)
-		userAccount.ADD_WATCH_RECORD(watchRecord2)
+		userAccount.ADDWATCHRECORD(watchRecord1)
+		userAccount.ADDWATCHRECORD(watchRecord2)
 		subscription.IS_ACTIVE()
 		subscription.GET_STREAMINGQUALITY()
 		subscription.GET_DEVICELIMIT()
@@ -964,7 +965,7 @@ CLASS CREDITCARD INHERITS CARD
 
     CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP, outstandingBalance: NUMBER, creditLimit: NUMBER)
         SUPER(cardNumber, expiryDate, status, chip)
-	SET THIS.outstandingBalance TO 0
+	SET THIS.outstandingBalance TO outstandingBalance
         SET THIS.creditLimit TO creditLimit
     END CONSTRUCTOR
 
@@ -1151,9 +1152,9 @@ START
 		CREATE doctor OF DOCTOR ("Sondos", 8001)
 		CREATE nurse OF NURSE("Esraa", 1002)
 		CREATE surgeon OF SURGEON("Hawra", 1003, "Heart Surgery")
-		doctor.ADDSHIFT(shift1)
-		nurse.ADDSHIFT(shift2)
-		surgeon.ADDSHIFT(shift1)
+		doctor.ASSIGNSHIFT(shift1)
+		nurse.ASSIGNSHIFT(shift2)
+		surgeon.ASSIGNSHIFT(shift1)
 		doctor.APPROVETREATMENT()
 		doctor.MAKEDIAGONSIS()
 		ward.DISPLAYSHIFTS()
@@ -1179,11 +1180,11 @@ CLASS PUBLICATION
 
     METHODS
 	 GET_TITLE()
-            DISPLAY title
+            DISPLAY pubTitle
         END METHOD
 
         GET_AUTHOR()
-            DISPLAY author
+            DISPLAY pubAuthor
         END METHOD
 
         GET_PROGRESS()
@@ -1191,7 +1192,7 @@ CLASS PUBLICATION
         END METHOD
 END CLASS
 
-CLASS NOVAL INHERITS PUBLICATION
+CLASS NOVEL INHERITS PUBLICATION
     ATTRIBUTES
 	currentPage: NUMBER
 
@@ -1277,18 +1278,18 @@ CLASS LIBRARY
 		DISPLAYPUBLICATION()
 			DISPLAY publications
 		END MEHTOD
-END CPUBLICATIONLASS
+END CLASS
 
 
 
 Pseudocode:
 START
 	BEGIN
-		CREATRE coverImage OF COVERIMAGE("cover.jpg", 600, 800)
-		CREATE novel OF NOVEL("The Alchemist", "Paulo Coelho", 200, coverImage, 120)
-		CREATE magazine OF MAGAZINE("Tech Monthly", "John Smith", 80, coverImage, 10, 7)
-		CREATE audiobook OF AUDIOBOOK("Atomic Habits", "James Clear", 0, coverImage, 600, 240)
-		CREATE library OF LIBRARY
+		CREATRE OBJECT coverImage OF COVERIMAGE("cover.jpg", 600, 800)
+		CREATE OBJECT novel OF NOVEL("The Alchemist", "Paulo Coelho", 200, coverImage, 120)
+		CREATE OBJECT magazine OF MAGAZINE("Tech Monthly", "John Smith", 80, coverImage, 10, 7)
+		CREATE OBJECT audiobook OF AUDIOBOOK("Atomic Habits", "James Clear", 0, coverImage, 600, 240)
+		CREATE OBJECT library OF LIBRARY
 		library.ADDPUBLICATION(novel)
 		library.ADDPUBLICATION(magazine)
 		library.ADDPUBLICATION(audiobook)
@@ -1296,7 +1297,6 @@ START
 		magazine.GET_PROGRESS()
 		audiobook.GET_PROGRESS()
 		library.DISPLAYPUBLICATION()
-
 	END
 STOP
 --------------------------------------------------------------------------------------------
@@ -1462,18 +1462,18 @@ END CLASS
 
 START
 	BEGIN
-		CREATE OBJECT storageUnit OF STORAGEUNIT(700,100)
+		CREATE OBJECT storageUnit OF STORAGEUNIT(700)
 		CREATE OBJECT smartLight OF SMARTLIGHT("Living Light","Living Room","ON",50)
 		CREATE OBJECT smartThermostat OF SMARTTHERMOSTAT("Thermostat","Living Room","ON",2,30)
 		CREATE OBJECT smartCamera OF SMARTCAMERA("Front Camera","Entrance","ON",TRUE,storageUnit)
-		CREATE OBJECT room OF ROOM(1,"Living Room")
+		CREATE OBJECT room OF ROOM("Living Room")
 		room.ADDDEVICE(smartLight)
 		room.ADDDEVICE(smartThermostat)
 		room.ADDDEVICE(smartCamera)
 		smartLight.GET_POWERUSAGE()
 		smartThermostat.GET_POWERUSAGE()
-		smartCamera.START_RECORDING(50)
+		smartCamera.START_RECORDING()
 		smartCamera.GET_POWERUSAGE()
-		room.DISPLAYDEVICES
+		room.DISPLAYDEVICES()
 	END
 STOP
