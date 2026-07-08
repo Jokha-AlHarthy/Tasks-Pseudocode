@@ -1299,3 +1299,181 @@ START
 
 	END
 STOP
+--------------------------------------------------------------------------------------------
+Task 302: Smart Home Devices (Medium) 
+
+Blueprint: 
+CLASS DEVICE
+	ATTRIBUTES
+    		deviceId : NUMBER
+    		devideName : TEXT
+    		roomLocation: TEXT
+		status : TEXT
+	
+ 	CONSTRUCTOR(devideName:TEXT, roomLocation:TEXT, status:TEXT)
+    		SET THIS.devideName TO devideName
+    		SET THIS.roomLocation TO roomLocation
+		SET THIS.status TO status
+ 	END CONSTRUCTOR
+
+METHODS
+ 	GET_NAME()
+   		DISPLAY devideName
+ 	END METHOD
+
+ 	GET_ROOMLOCATION()
+   		DISPLAY roomLocation
+ 	END METHOD
+
+  	GET_STATUS()
+   		DISPLAY status
+ 	END METHOD
+
+	GET_POWERUSAGE()
+    		DISPLAY "The device power usage is"
+	END METHOD
+
+END CLASS
+
+CLASS SMARTLIGHT INHERITS DEVICE
+  	ATTRIBUTES
+   		brightnessLevel :NUMBER
+
+  	CONSTRUCTOR(devideName:TEXT, roomLocation:TEXT, status:TEXT, brightnessLevel :NUMBER)
+   		SUPER (devideName, roomLocation, status)
+   		SET THIS.brightnessLevel TO brightnessLevel
+  	END CONSTRUCTOR
+
+	METHODS
+		OVERRIDE GET_POWERUSAGE()
+			SET brightnessLevel TO brightnessLevel * 2
+    			DISPLAY "The device power usage is" +  brightnessLevel
+		END METHOD
+END CLASS
+
+CLASS SAMRTTHERMOSTAT INHERITS DEVICE
+ 	ATTRIBUTES
+		targetTemp : NUMBER
+   		heatingLevel : NUMBER
+
+	CONSTRUCTOR(devideName:TEXT, roomLocation:TEXT, status:TEXT, targetTemp : NUMBER, heatingLevel : NUMBER)
+    		SUPER (devideName, roomLocation, status)
+    		SET THIS.targetTemp TO targetTemp
+    		SET THIS.heatingLevel TO heatingLevel
+	END CONSTRUCTOR
+	
+	METHODS
+
+	GET_TARGETTEMP()
+    		DISPLAY targetTemp
+	END METHOD
+
+	OVERRIDE GET_POWERUSAGE()
+    		SET heatingLevel TO heatingLevel * 5
+		DISPLAY "The device power usage is" +  heatingLevel
+	END METHOD
+END CLASS
+
+CLASS SMART_CAMERA INHERITS DEVICE
+    ATTRIBUTES
+        isRecording: BOOLEAN
+        storageUnit: STORAGEUNIT
+
+    CONSTRUCTOR(devideName:TEXT, roomLocation:TEXT, status:TEXT, isRecording: BOOLEAN, storageUnit: STORAGE_UNIT)
+        SUPER (devideName, roomLocation, status)
+        SET THIS.isRecording TO isRecording
+        SET THIS.storageUnit TO storageUnit
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE GET_POWERUSAGE()
+            IF isRecording THEN
+                DISPLAY "The power usage is high"
+            ELSE
+                DISPLAY "The power usage is low"
+            END IF
+        END METHOD
+
+        START_RECORDING()
+            STORAGEUNIT.CHECKSTORAGE()
+            IF storageUnit.hasSpace THEN
+                SET isRecording TO TRUE
+                DISPLAY "The recording is started.."
+            ELSE
+                DISPLAY "Sorry the storage is full"
+            END IF
+        END METHOD
+END CLASS
+
+
+CLASS STORAGEUNIT
+    ATTRIBUTES
+        totalSpace: NUMBER
+        usedSpace: NUMBER
+        hasSpace: BOOLEAN
+
+    CONSTRUCTOR(totalSpace: NUMBER)
+        SET THIS.totalSpace TO totalSpace
+        SET THIS.usedSpace TO 0
+        SET THIS.hasSpace TO TRUE
+    END CONSTRUCTOR
+
+    METHODS
+        CHECKSTORAGE()
+            IF usedSpace GREATER THAN totalSpace THEN
+                SET hasSpace TO FALSE
+            ELSE
+                SET hasSpace TO TRUE
+            END IF
+        END METHOD
+
+        GET_AVAILABLESPACE()
+            DISPLAY totalSpace - usedSpace
+        END METHOD
+END CLASS
+
+
+CLASS ROOM
+
+CLASS ROOM
+    ATTRIBUTES
+        roomName: TEXT
+        devices: LIST OF DEVICE
+
+    CONSTRUCTOR(roomName: TEXT)
+        SET THIS.roomName TO roomName
+        SET THIS.devices TO EMPTY LIST
+    END CONSTRUCTOR
+
+    METHODS
+        ADDDEVICE(newDevice: DEVICE)
+            ADD newDevice TO devices
+        END METHOD
+
+        REMOVEDEVICE(device: DEVICE)
+            REMOVE device FROM devices
+        END METHOD
+
+        DISPLAYDEVICES()
+            DISPLAY devices
+        END METHOD
+END CLASS
+
+
+START
+	BEGIN
+		CREATE OBJECT storageUnit OF STORAGEUNIT(700,100)
+		CREATE OBJECT smartLight OF SMARTLIGHT("Living Light","Living Room","ON",50)
+		CREATE OBJECT smartThermostat OF SMARTTHERMOSTAT("Thermostat","Living Room","ON",2,30)
+		CREATE OBJECT smartCamera OF SMARTCAMERA("Front Camera","Entrance","ON",TRUE,storageUnit)
+		CREATE OBJECT room OF ROOM(1,"Living Room")
+		room.ADDDEVICE(smartLight)
+		room.ADDDEVICE(smartThermostat)
+		room.ADDDEVICE(smartCamera)
+		smartLight.GET_POWERUSAGE()
+		smartThermostat.GET_POWERUSAGE()
+		smartCamera.START_RECORDING(50)
+		smartCamera.GET_POWERUSAGE()
+		room.DISPLAYDEVICES
+	END
+STOP
