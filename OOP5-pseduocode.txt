@@ -546,3 +546,185 @@ START
         park.DISPLAYRIDES()
     END
 STOP
+----------------------------------------------------------------------------------------
+Task 311: Freelancer Invoicing Platform (Medium)
+
+CLASS INVOICE
+	ATTRIBUTES
+		invoiceId: NUMBER
+		inoviceNo: NUMBER
+		issueDate: TEXT
+		clientName: TEXT
+		paymentTerms: PAYMENTTERMS
+
+	CONSTRUCTOR(inoviceNo: NUMBER, issueDate: TEXT, clientName: TEXT, paymentTerms: PAYMENTTERMS)
+		SET THIS.inoviceNo TO inoviceNo
+		SET THIS.issueDate TO issueDate
+		SET THIS.clientName TO clientName
+		SET THIS.paymentTerms TO paymentTerms
+    	END CONSTRUCTOR
+	
+	METHODS
+		GET_id()
+			DISPLAY invoiceId
+		END METHOD
+		
+		GET_inoviceNo()
+			DISPLAY inoviceNo
+		END METHOD
+
+		GET_issueDate()
+			DISPLAY issueDate
+		END METHOD
+
+		GET_clientName()
+			DISPLAY clientName
+		END METHOD
+
+		calculateTotalAmount()
+			DISPLAY "The total amount due is: "
+		END METHOD
+ 
+END CLASS
+
+CLASS FIXEDPRICEINVOICE INHERITS INVOICE
+	ATTRIBUTES
+		singleProject: NUMBER
+		
+	CONSTRUCTOR(inoviceNo: NUMBER, issueDate: TEXT, clientName: TEXT, paymentTerms: PAYMENTTERMS, singleProject: NUMBER)
+		SUPER(inoviceNo, issueDate, clientName, paymentTerms)
+		SET THIS.singleProject TO singleProject
+    	END CONSTRUCTOR
+		
+	METHODS
+ 		OVERRIDE calculateTotalAmount()
+			DISPLAY "The total amount due is: " + singleProject
+		END METHOD
+
+END CLASS
+
+CLASS HOURLYINVOICE INHERITS INVOICE
+	ATTRIBUTES
+		loggedHours: NUMBER
+		hourlyRate: NUMBER
+		approved : BOOLEAN
+		
+	CONSTRUCTOR(inoviceNo: NUMBER, issueDate: TEXT, clientName: TEXT, paymentTerms: PAYMENTTERMS, loggedHours: NUMBER, hourlyRate: NUMBER, approved : BOOLEAN)
+		SUPER(inoviceNo, issueDate, clientName, paymentTerms)
+		SET THIS.loggedHours TO loggedHours
+		SET THIS.hourlyRate TO hourlyRate
+		SET THIS.approved TO approved
+    	END CONSTRUCTOR
+		
+	METHODS
+ 		OVERRIDE calculateTotalAmount()
+			IF approved EQUALS TO TURE THEN
+				SET TOTAL TO loggedHours * hourlyRate
+				DISPLAY "The total amount due is: " + TOTAL
+			ELSE 
+				SET TOTAL TO 0
+				DISPLAY "The hour entry that wasn't first marked as approved by the client"
+			END IF  
+		END METHOD
+
+END CLASS
+
+
+CLASS RETRAINERINVOICE INHERITS FIXEDPRICEINVOICE
+	ATTRIBUTES
+		charges: NUMBER
+		hourAllowance: NUMBER
+		hourStyle: NUMBER
+		
+	CONSTRUCTOR(inoviceNo: NUMBER, issueDate: TEXT, clientName: TEXT, paymentTerms: PAYMENTTERMS, singleProject: NUMBER, charges: NUMBER, hourAllowance: NUMBER, hourStyle: NUMBER)
+		SUPER(inoviceNo, issueDate, clientName, paymentTerms, singleProject)
+		SET THIS.charges TO charges
+		SET THIS.hourAllowance TO hourAllowance
+		SET THIS.hourStyle TO hourStyle
+    	END CONSTRUCTOR
+		
+	METHODS
+ 		OVERRIDE calculateTotalAmount()
+			SET TOTAL TO hourAllowance + (charges * hourStyle)
+            		DISPLAY "The total amount due is: " + total 
+		END METHOD
+
+END CLASS
+
+
+
+CLASS PAYMENTTERMS
+    ATTRIBUTES
+        dueDate: TEXT
+        lateInterestRate: NUMBER
+
+    CONSTRUCTOR(dueDate: TEXT, lateInterestRate: NUMBER)
+        SET THIS.dueDate TO dueDate
+        SET THIS.lateInterestRate TO lateInterestRate
+    END CONSTRUCTOR
+
+    METHODS
+        GET_dueDate()
+            DISPLAY dueDate
+        END METHOD
+
+        GET_lateInterestRate()
+            DISPLAY lateInterestRate
+        END METHOD
+END CLASS
+
+
+CLASS FREELANCERACCOUNT
+    ATTRIBUTES
+        accountId: NUMBER
+        freelancerName: TEXT
+        invoices: LIST OF INVOICE
+
+    CONSTRUCTOR(freelancerName: TEXT)
+        SET THIS.freelancerName TO freelancerName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY accountId
+        END METHOD
+
+        GET_freelancerName()
+            DISPLAY freelancerName
+        END METHOD
+
+        ADDINVOICE(newInvoice: INVOICE)
+            ADD newInvoice TO invoices
+        END METHOD
+
+        REMOVEINVOICE(invoice: INVOICE)
+            REMOVE invoice FROM invoices
+        END METHOD
+
+        DISPLAYINVOICES()
+            DISPLAY invoices
+        END METHOD
+END CLASS
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT paymentTerms OF PAYMENTTERMS("31-Aug-2026", 5)
+        CREATE OBJECT freelancerAccount OF FREELANCERACCOUNT("Ali")
+        CREATE OBJECT fixedPriceInvoice OF FIXEDPRICEINVOICE(1001, "01-Aug-2026", "ABC Company", paymentTerms, 2500)
+
+        CREATE OBJECT hourlyInvoice OF HOURLYINVOICE(1002, "02-Aug-2026", "XYZ Company", paymentTerms, 20, 30)
+        CREATE OBJECT retainerInvoice OF RETAINERINVOICE(1003, "03-Aug-2026", "Tech Solutions", paymentTerms, 3000, 40, 10, 35)
+
+        freelancerAccount.ADDINVOICE(fixedPriceInvoice)
+        freelancerAccount.ADDINVOICE(hourlyInvoice)
+        freelancerAccount.ADDINVOICE(retainerInvoice)
+        fixedPriceInvoice.calculateTotal()
+        hourlyInvoice.calculateTotal()
+        retainerInvoice.calculateTotal()
+        freelancerAccount.DISPLAYINVOICES()
+
+    END
+STOP
