@@ -46,6 +46,7 @@ CLASS VECHICLECLAIM INHERITS CLAIM
 		fixedExcess : NUMBER
 		
     	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, repairEstimates: NUMBER, fixedExcess : NUMBER)
+		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.repairEstimates TO repairEstimates
 		SET THIS.fixedExcess TO fixedExcess
     	END CONSTRUCTOR
@@ -63,6 +64,7 @@ CLASS MEDICALCLAIM INHERITS CLAIM
 		coverageLimit : NUMBER
 		
     	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, treatmentCosts: NUMBER, coverageLimit : NUMBER)
+		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.treatmentCosts TO treatmentCosts
 		SET THIS.coverageLimit TO coverageLimit
     	END CONSTRUCTOR
@@ -70,9 +72,9 @@ CLASS MEDICALCLAIM INHERITS CLAIM
     	METHODS
 		OVERRIDE calculatePayout()
 			IF treatmentCosts GREATER THAN coverageLimit THEN
-				SET PAYOUT TO treatmentCosts
-			ELSE 
 				SET PAYOUT TO coverageLimit
+			ELSE 
+				SET PAYOUT TO treatmentCosts
 			END IF 
 			DISPLAY "The medical claim payout is: " + PAYOUT
 		END METHOD
@@ -84,6 +86,7 @@ CLASS PROPERTYCLAIM INHERITS CLAIM
 		percentage : NUMBER
 		
     	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, eastimatedDamage: NUMBER, percentage : NUMBER)
+		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.percentage TO percentage 
 		SET THIS.eastimatedDamage TO eastimatedDamage
     	END CONSTRUCTOR
@@ -190,9 +193,9 @@ START
         documentationFolder.ADDDOCUMENT(document1)
         documentationFolder.ADDDOCUMENT(document2)
         CREATE OBJECT policy OF POLICY("Vehicle Policy")
-        CREATE OBJECT vehicleClaim OF VEHICLECLAIM("01-Aug-2026", "Pending", documentationFolder, 5000, 500)
-        CREATE OBJECT medicalClaim OF MEDICALCLAIM("02-Aug-2026", "Approved", documentationFolder, 2500, 2000)
-        CREATE OBJECT propertyClaim OF PROPERTYCLAIM("03-Aug-2026", "Pending", documentationFolder, 10000, 20)
+        CREATE OBJECT vehicleClaim OF VEHICLECLAIM(1001, "01-Aug-2026", "Pending", documentationFolder, 5000, 500)
+        CREATE OBJECT medicalClaim OF MEDICALCLAIM(1002,"02-Aug-2026", "Approved", documentationFolder, 2500, 2000)
+        CREATE OBJECT propertyClaim OF PROPERTYCLAIM(1003,"03-Aug-2026", "Pending", documentationFolder, 10000, 20)
         policy.ADDCLAIM(vehicleClaim)
         policy.ADDCLAIM(medicalClaim)
         policy.ADDCLAIM(propertyClaim)
