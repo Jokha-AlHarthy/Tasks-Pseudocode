@@ -590,3 +590,160 @@ START
         customerAccount.DISPLAYBILLS()
     END
 STOP
+------------------------------------------------------------------------------------------------------------
+Task 307: Ride-Sharing Vehicle Tiers
+
+Blueprint:
+
+CLASS RIDE
+    ATTRIBUTES
+	rideId: NUMBER
+	pickupLocation: TEXT
+	dropOffLocation: TEXT
+	route: ROUTE
+
+    CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE)
+	SET THIS.pickupLocation TO pickupLocation
+	SET THIS.dropOffLocation TO dropOffLocation
+	SET THIS.route TO route
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DIPSLAY rideId
+	END METHOD
+
+	GET_pickupLocation()
+		DIPSLAY pickupLocation
+	END METHOD
+
+	GET_dropOffLocation()
+		DISPLAY dropOffLocation
+	END METHOD
+
+	calculateFare()
+		DISPLAY "The ride fare is:"
+	END METHOD
+END CLASS
+
+CLASS STANDARDRIDE INHERITS RIDE
+    ATTRIBUTES
+	distance: NUMBER
+	baseKilometer: NUMBER
+
+    CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE, distance: NUMBER, baseKilometer: NUMBER)
+	SUPER(pickupLocation, dropOffLocation, route)
+	SET THIS.distance TO distance
+	SET THIS.baseKilometer TO baseKilometer
+    END CONSTRUCTOR
+
+    METHODS
+	OVERRIDE calculateFare()
+		SET fare TO distance * baseKilometer
+		DISPLAY "The standard ride fare is:" + fare
+	END METHOD
+END CLASS
+
+CLASS SHAREDRIDE INHERITS STANDARDRIDE
+    ATTRIBUTES
+	passengers: NUMBER
+
+    CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE, distance: NUMBER, baseKilometer: NUMBER, passengers: NUMBER)
+	SUPER(pickupLocation, dropOffLocation, route, distance, baseKilometer)
+	SET THIS.passengers TO passengers
+    END CONSTRUCTOR
+
+    METHODS
+	 OVERRIDE calculateFare()
+            SET fare TO (distance * baseKilometer) / passengers
+            DISPLAY "The shared ride fare is: " + fare
+        END METHOD
+END CLASS
+
+CLASS PREMIUMRIDE INHERITS RIDE
+    ATTRIBUTES
+	distance: NUMBER
+	premiumRate: NUMBER
+	fixedComfort: NUMBER
+
+    CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE, distance: NUMBER, premiumRate: NUMBER, fixedComfort: NUMBER)
+	SUPER(pickupLocation, dropOffLocation, route)
+	SET THIS.distance TO distance
+	SET THIS.fixedComfort TO fixedComfort
+	SET THIS.premiumRate TO premiumRate  
+    END CONSTRUCTOR
+
+    METHODS
+	OVERRIDE calculateFare()
+		SET fare TO (distance * premiumRate) + fixedComrfot
+		DISPLAY "The premium ride fare is:" + fare
+	END METHOD
+END CLASS
+
+CLASS WAYPOINT
+    ATTRIBUTES
+        waypointName: TEXT
+
+    CONSTRUCTOR(waypointName: TEXT)
+        SET THIS.waypointName TO waypointName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_waypointName()
+            DISPLAY waypointName
+        END METHOD
+END CLASS
+
+
+CLASS ROUTE
+    ATTRIBUTES
+        routeId: NUMBER
+        routeName: TEXT
+        waypoints: LIST OF WAYPOINT
+
+    CONSTRUCTOR(routeName: TEXT)
+        SET THIS.routeName TO routeName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY routeId
+        END METHOD
+
+        GET_routeName()
+            DISPLAY routeName
+        END METHOD
+
+        ADDWAYPOINT(newWaypoint: WAYPOINT)
+            ADD newWaypoint TO waypoints
+        END METHOD
+
+        REMOVEWAYPOINT(waypoint: WAYPOINT)
+            REMOVE waypoint FROM waypoints
+        END METHOD
+
+        DISPLAYWAYPOINTS()
+            DISPLAY waypoints
+        END METHOD
+END CLASS
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT route OF ROUTE("Airport Route")
+        CREATE OBJECT waypoint1 OF WAYPOINT("Airport")
+        CREATE OBJECT waypoint2 OF WAYPOINT("City Center")
+        route.ADDWAYPOINT(waypoint1)
+        route.ADDWAYPOINT(waypoint2)
+        CREATE OBJECT standardRide OF STANDARDRIDE("Airport", "Hotel", route, 25, 0.50)
+        CREATE OBJECT premiumRide OF PREMIUMRIDE("Airport", "Hotel", route, 25, 0.80, 5)
+        CREATE OBJECT sharedRide OF SHAREDRIDE("Airport", "Hotel", route, 25, 0.50, 3)
+        standardRide.calculateFare()
+        premiumRide.calculateFare()
+        sharedRide.calculateFare()
+        route.DISPLAYWAYPOINTS()
+
+    END
+STOP
