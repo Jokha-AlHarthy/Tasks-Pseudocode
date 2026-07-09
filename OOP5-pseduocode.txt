@@ -205,3 +205,174 @@ START
         policy.DISPLAYCLAIMS()
     END
 STOP
+------------------------------------------------------------------------------------------
+Task 309: University Library Loans (Medium)
+
+Blueprint:
+
+CLASS LOANITEM
+	ATTRIBUTES
+		loanId: NUMBER
+		loanTitle: TEXT
+		barcode: TEXT
+		loanDuration: NUMBER
+		conditionReport: CONDITIONREPORT
+
+	CONSTRUCTOR(loanTitle: TEXT, barcode: TEXT, loanDuration: NUMBER, conditionReport: CONDITIONREPORT)
+		SET THIS.loanTitle TO loanTitle
+		SET THIS.barcode TO barcode
+		SET THIS.loanDuration TO loanDuration
+		SET THIS.conditionReport TO conditionReport
+    	END CONSTRUCTOR
+
+    	METHODS
+		GET_id()
+			DISPLAY loanId
+		END METHOD
+
+		GET_loanTitle()
+			DISPLAY loanTitle
+		END METHOD
+
+		GET_barcode()
+			DISPLAY barcode
+		END METHOD
+	
+		GET_loanDuration()
+			DISPLAY loanDuration
+		END METHOD
+
+		calculateLateFee()
+			DISPLAY "The late fee is: "
+		END METHOD
+END CLASS
+
+
+CLASS REFERNCETEXTBOOK INHERITS LOANITEM
+	ATTRIBUTES
+		higherLateFee: NUMBER
+		daysOverDue: NUMBER
+
+	CONSTRUCTOR(loanTitle: TEXT, barcode: TEXT, loanDuration: NUMBER, conditionReport: CONDITIONREPORT, higherLateFee: NUMBER, daysOverDue: NUMBER)
+		SUPER(loanTitle, barcode, loanDuration,conditionReport)
+		SET THIS.higherLateFee TO higherLateFee
+		SET THIS.daysOverDue TO daysOverDue
+    	END CONSTRUCTOR
+
+	METHODS
+		OVERRIDE calculateLateFee()
+			SET lateFee TO daysOverDue * higherLateFee
+			DISPLAY "The late fee is: " + lateFee
+		END METHOD
+    	
+END CLASS
+
+CLASS JOURNALISSUE INHERITS REFERNCETEXTBOOK
+	ATTRIBUTES
+		renewable: BOOLEAN
+
+	CONSTRUCTOR(loanTitle: TEXT, barcode: TEXT, loanDuration: NUMBER,conditionReport: CONDITIONREPORT, higherLateFee: NUMBER, daysOverDue: NUMBER, renewable: BOOLEAN)
+    		SUPER(loanTitle, barcode, loanDuration, conditionReport, higherLateFee, daysOverDue)
+    		SET THIS.renewable TO renewable
+	END CONSTRUCTOR
+	
+	METHODS
+		OVERRIDE calculateLateFee()
+			SET lateFee TO daysOverDue * higherLateFee
+			SET renewable TO FALSE
+			DISPLAY "The late fee is: " + lateFee
+			DISPLAU "The renewable status is: " + renewable
+		END METHOD 
+    	
+END CLASS
+
+CLASS STANDARDBOOK INHERITS LOANITEM
+	ATTRIBUTES
+		smallLateFee: NUMBER
+		daysOverDue: NUMBER
+
+	CONSTRUCTOR(loanTitle: TEXT, barcode: TEXT, loanDuration: NUMBER, conditionReport: CONDITIONREPORT, smallLateFee: NUMBER, daysOverDue: NUMBER)
+		SUPER(loanTitle, barcode, loanDuration,conditionReport)
+		SET THIS.smallLateFee TO smallLateFee
+		SET THIS.daysOverDue TO daysOverDue
+    	END CONSTRUCTOR
+	
+	METHODS
+		OVERRIDE calculateLateFee()
+			SET lateFee TO daysOverDue * smallLateFee
+			DISPLAY "The late fee is: " + lateFee
+		END METHOD
+    	
+END CLASS
+
+CLASS CONDITIONREPORT
+    ATTRIBUTES
+        reportCondition: TEXT
+        damageNotes: TEXT
+
+    CONSTRUCTOR(reportCondition: TEXT, damageNotes: TEXT)
+        SET THIS.reportCondition TO reportCondition
+        SET THIS.damageNotes TO damageNotes
+    END CONSTRUCTOR
+
+    METHODS
+        GET_reportCondition()
+            DISPLAY reportCondition
+        END METHOD
+
+        GET_damageNotes()
+            DISPLAY damageNotes
+        END METHOD
+END CLASS
+
+CLASS STUDENTACCOUNT
+    ATTRIBUTES
+        accountId: NUMBER
+        studentName: TEXT
+        loanItems: LIST OF LOANITEM
+
+    CONSTRUCTOR(studentName: TEXT)
+        SET THIS.studentName TO studentName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY accountId
+        END METHOD
+
+        GET_studentName()
+            DISPLAY studentName
+        END METHOD
+
+        ADDLOANITEM(newLoanItem: LOANITEM)
+            ADD newLoanItem TO loanItems
+        END METHOD
+
+        REMOVELOANITEM(loanItem: LOANITEM)
+            REMOVE loanItem FROM loanItems
+        END METHOD
+
+        DISPLAYLOANITEMS()
+            DISPLAY loanItems
+        END METHOD
+END CLASS
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT conditionReport OF CONDITIONREPORT("Good", "No Damage")
+        CREATE OBJECT studentAccount OF STUDENTACCOUNT("Ahmed")
+        CREATE OBJECT standardBook OF STANDARDBOOK("Java Programming", "BK1001", 14, conditionReport, 0.50, 3)
+        CREATE OBJECT referenceTextbook OF REFERENCETEXTBOOK("Operating Systems", "RF2001", 1, conditionReport, 3.00, 2)
+        CREATE OBJECT journalIssue OF JOURNALISSUE("IEEE Journal", "JR3001", 1, conditionReport, 3.00, 4, TRUE)
+        studentAccount.ADDLOANITEM(standardBook)
+        studentAccount.ADDLOANITEM(referenceTextbook)
+        studentAccount.ADDLOANITEM(journalIssue)
+        standardBook.calculateLateFee()
+        referenceTextbook.calculateLateFee()
+        journalIssue.calculateLateFee()
+        studentAccount.DISPLAYLOANITEMS()
+    END
+STOP
