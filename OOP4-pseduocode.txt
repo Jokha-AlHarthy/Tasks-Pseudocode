@@ -269,3 +269,161 @@ START
         fitnessLog.DISPLAYWORKOUTS()
     END
 STOP
+
+---------------------------------------------------------------------------
+Task 305: Video Game Characters 
+
+Blueprint: 
+
+CLASS CHARACTER
+    ATTRIBUTES
+	charId: NUMBER
+	charName: TEXT
+	healthValue: NUMBER
+	inventory: INVENTORY
+	
+    CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY)
+	SET THIS.charName TO charName
+	SET THIS.healthValue TO healthValue
+	SET THIS.inventory TO inventory
+    END CONSTRUCTOR
+
+    METHODS	
+	GET_id()
+		DISPLAY charId
+	END METHOD
+
+	GET_charName()
+		DISPLAY charName
+	END METHOD
+
+	GET_healthValue()
+		DISPLAY healthValue
+	END METHOD
+
+	ATTACK()
+		DISPLAY "perform attack: "
+	END METHOD
+END CLASS
+
+CLASS WARRIOR INHERITS CHARACTER
+    ATTRIBUTES
+	meleeStrength: NUMBER
+	heavyArmor: BOOLEAN
+	
+    CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, meleeStrength: NUMBER, heavyArmor: BOOLEAN)
+	SUER(charName, healthValue, inventory)
+	SET THIS.meleeStrength TO meleeStrength
+	SET THIS.heavyArmor TO heavyArmor
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE ATTACK()
+		DISPLAY "The warrior attacks using melee strength and wears heavy armor"
+	END METHOD
+END CLASS 
+
+CLASS MAGE INHERITS CHARACTER
+    ATTRIBUTES
+	magicSpells: TEXT
+	manaPool: NUMBER
+	
+    CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, magicSpells: TEXT, manaPool: NUMBER)
+	SUER(charName, healthValue, inventory)
+	SET THIS.manaPool TO manaPool
+	SET THIS.magicSpells TO magicSpells
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE ATTACK()
+		DISPLAY "The mage attacks using magic spells and has a mana pool that depletes with each spell cast"
+	END METHOD
+END CLASS 
+
+
+CLASS ARCHER INHERITS CHARACTER
+    ATTRIBUTES
+	arrows: NUMBER
+	
+    CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, arrows: NUMBER)
+	SUER(charName, healthValue, inventory)
+	SET THIS.arrows TO arrows
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE ATTACK()
+		DISPLAY "The archer attacks using arrows and has a limited arrow supply"
+	END METHOD
+END CLASS
+
+CLASS ITEM
+    ATTRIBUTES
+        itemName: TEXT
+        itemType: TEXT
+
+    CONSTRUCTOR(itemName: TEXT, itemType: TEXT)
+        SET THIS.itemName TO itemName
+        SET THIS.itemType TO itemType
+    END CONSTRUCTOR
+
+    METHODS
+        GET_itemName()
+            DISPLAY itemName
+        END METHOD
+
+        GET_itemType()
+            DISPLAY itemType
+        END METHOD
+END CLASS
+
+CLASS INVENTORY
+    ATTRIBUTES
+	inventoryId: NUMBER
+	inventoryName: TEXT
+	items: LIST OF ITEM
+	
+    CONSTRUCTOR(inventoryName: TEXT)
+	SET THIS.inventoryName TO inventoryName
+    END CONSTRUCTOR
+
+    METHODS	
+	GET_id()
+		DIPSLAY inventoryId
+	END METHOD
+
+	GET_inventoryName()
+		DISPLAY inventoryName
+	END METHOD
+
+	ADDDISPLAYITEM(newItem: ITEM)
+		ADD newItem TO items
+	END METHOD
+
+	REMOVEDISPLAYITEM(item: ITEM)
+		REMOVE item FROM items
+	END METHOD
+
+	DISPLAYITEMS()
+		DISPLAY items
+	END METHOD
+END CLASS  
+
+pseudocode:
+
+
+START
+    BEGIN
+        CREATE OBJECT inventory OF INVENTORY ("LootGoblin")
+        CREATE OBJECT item1 OF ITEM("Sword", "Weapon")
+        CREATE OBJECT item2 OF ITEM("Potion", "Health")
+        inventory.ADDDISPLAYITEM(item1)
+        inventory.ADDDISPLAYITEM(item2)
+        CREATE OBJECT warrior OF WARRIOR("Leon", 100, inventory, TRUE, 90)
+        CREATE OBJECT mage OF MAGE("Ezio", 80, inventory, 100)
+        CREATE OBJECT archer OF ARCHER("Robin", 90, inventory, 25)
+        warrior.ATTACK()
+        mage.ATTACK()
+        archer.ATTACK()
+        inventory.DISPLAYITEMS()
+    END
+STOP
