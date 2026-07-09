@@ -1,0 +1,204 @@
+Task 308: Insurance Claims Processing 
+
+Blueprint:
+
+CLASS CLAIM
+    ATTRIBUTES
+	claimId: NUMBER
+	claimNo: NMUMBER
+	dateFiled: TEXT
+	claimStatus: TEXT
+	documentationFolder: DOCUMENTATIONFOLDER
+
+    CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER)
+	SET THIS.claimNo TO claimNo
+	SET THIS.dateFiled TO dateFiled
+	SET THIS.claimStatus TO claimStatus
+	SET THIS.documentationFolder TO documentationFolder
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DISPLAY claimId
+	END METHOD
+
+	GET_claimNo()
+		DISPLAY claimNo
+	END METHOD
+
+	GET_dateFiled()
+		DIPLSAY dateFiled
+	END METHOD
+
+	GET_claimStatus()
+		DISPLAY claimStatus
+	END METHOD
+	
+	calculatePayout()
+		DISPLAY "The claim payout is: "
+	END METHOD
+	
+END CLASS
+
+CLASS VECHICLECLAIM INHERITS CLAIM
+	ATTRIBUTES
+		repairEstimates: NUMBER
+		fixedExcess : NUMBER
+		
+    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, repairEstimates: NUMBER, fixedExcess : NUMBER)
+		SET THIS.repairEstimates TO repairEstimates
+		SET THIS.fixedExcess TO fixedExcess
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRIDE calculatePayout()
+			SET PAYOUT TO repairEstimates - fixedExcess
+			DISPLAY "The claim payout is: " + PAYOUT
+		END METHOD
+END CLASS
+
+CLASS MEDICALCLAIM INHERITS CLAIM
+	ATTRIBUTES
+		treatmentCosts: NUMBER
+		coverageLimit : NUMBER
+		
+    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, treatmentCosts: NUMBER, coverageLimit : NUMBER)
+		SET THIS.treatmentCosts TO treatmentCosts
+		SET THIS.coverageLimit TO coverageLimit
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRIDE calculatePayout()
+			IF treatmentCosts GREATER THAN coverageLimit THEN
+				SET PAYOUT TO treatmentCosts
+			ELSE 
+				SET PAYOUT TO coverageLimit
+			END IF 
+			DISPLAY "The medical claim payout is: " + PAYOUT
+		END METHOD
+END CLASS
+
+CLASS PROPERTYCLAIM INHERITS CLAIM
+	ATTRIBUTES
+		eastimatedDamage: NUMBER
+		percentage : NUMBER
+		
+    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, eastimatedDamage: NUMBER, percentage : NUMBER)
+		SET THIS.percentage TO percentage 
+		SET THIS.eastimatedDamage TO eastimatedDamage
+    	END CONSTRUCTOR
+
+    	METHODS
+		OVERRIDE calculatePayout()
+            		SET PAYOUT TO eastimatedDamage - (eastimatedDamage * percentage / 100)
+            		DISPLAY "The property claim payout is: " + PAYOUT
+       		END METHOD
+END CLASS
+
+CLASS DOCUMENT
+    ATTRIBUTES
+        documentName: TEXT
+        documentType: TEXT
+
+    CONSTRUCTOR(documentName: TEXT, documentType: TEXT)
+        SET THIS.documentName TO documentName
+        SET THIS.documentType TO documentType
+    END CONSTRUCTOR
+
+    METHODS
+        GET_documentName()
+            DISPLAY documentName
+        END METHOD
+
+        GET_documentType()
+            DISPLAY documentType
+        END METHOD
+END CLASS
+
+CLASS DOCUMENTATIONFOLDER
+    ATTRIBUTES
+        folderId: NUMBER
+        folderName: TEXT
+        documents: LIST OF DOCUMENT
+
+    CONSTRUCTOR(folderName: TEXT)
+        SET THIS.folderName TO folderName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY folderId
+        END METHOD
+
+        GET_folderName()
+            DISPLAY folderName
+        END METHOD
+
+        ADDDOCUMENT(newDocument: DOCUMENT)
+            ADD newDocument TO documents
+        END METHOD
+
+        REMOVEDOCUMENT(document: DOCUMENT)
+            REMOVE document FROM documents
+        END METHOD
+
+        DISPLAYDOCUMENTS()
+            DISPLAY documents
+        END METHOD
+END CLASS
+
+CLASS POLICY
+    ATTRIBUTES
+        policyId: NUMBER
+        policyName: TEXT
+        claims: LIST OF CLAIM
+
+    CONSTRUCTOR(policyName: TEXT)
+        SET THIS.policyName TO policyName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY policyId
+        END METHOD
+
+        GET_policyName()
+            DISPLAY policyName
+        END METHOD
+
+        ADDCLAIM(newClaim: CLAIM)
+            ADD newClaim TO claims
+        END METHOD
+
+        REMOVECLAIM(claim: CLAIM)
+            REMOVE claim FROM claims
+        END METHOD
+
+        DISPLAYCLAIMS()
+            DISPLAY claims
+        END METHOD
+END CLASS
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT documentationFolder OF DOCUMENTATIONFOLDER("Claim Documents")
+        CREATE OBJECT document1 OF DOCUMENT("Repair Invoice", "PDF")
+        CREATE OBJECT document2 OF DOCUMENT("Insurance Form", "Form")
+        documentationFolder.ADDDOCUMENT(document1)
+        documentationFolder.ADDDOCUMENT(document2)
+        CREATE OBJECT policy OF POLICY("Vehicle Policy")
+        CREATE OBJECT vehicleClaim OF VEHICLECLAIM("01-Aug-2026", "Pending", documentationFolder, 5000, 500)
+        CREATE OBJECT medicalClaim OF MEDICALCLAIM("02-Aug-2026", "Approved", documentationFolder, 2500, 2000)
+        CREATE OBJECT propertyClaim OF PROPERTYCLAIM("03-Aug-2026", "Pending", documentationFolder, 10000, 20)
+        policy.ADDCLAIM(vehicleClaim)
+        policy.ADDCLAIM(medicalClaim)
+        policy.ADDCLAIM(propertyClaim)
+        vehicleClaim.calculatePayout()
+        medicalClaim.calculatePayout()
+        propertyClaim.calculatePayout()
+        policy.DISPLAYCLAIMS()
+    END
+STOP
