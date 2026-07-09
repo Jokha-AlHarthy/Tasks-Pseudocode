@@ -1,1 +1,271 @@
-Task 303: Musical Instruments StoreBlueprint:CLASS INSTURMENT    ATTRIBUTES	id: NUMBER	brandInstrument: TEXT	priceInstrument: NUMBER    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER)        SET THIS.brandInstrument TO brandInstrument	SET THIS.priceInstrument TO priceInstrument    END CONSTRUCTOR    METHODS	GET_id()		DISLAY id	END METHOD       	GET_brandInstrument()		DISPLAY brandInstrument	END METHOD	GET_priceInstrument()		DISPLAY priceInstrument	END METHOD	describePlayStyle()		DISPLAY "The description of the instrument is: " + descriptionInstrument	END METHODEND CLASSCLASS GUITAR INHERITS INSTURMENT    ATTRIBUTES	strings: TEXT    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, strings: TEXT) 	SUPER(brandInstrument, priceInstrument)	SET THIS.strings TO strings    END CONSTRUCTOR    METHODS 	OVERRIDE describePlayStyle()		SET descriptionInstrument TO "strummed or plucked"		DISPLAY "The description of the guitar is : " + descriptionInstrument	END METHODEND CLASSCLASS DRUMKIT INHERITS INSTURMENT    ATTRIBUTES	drumPieces: TEXT    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, drumPieces: TEXT) 	SUPER(brandInstrument, priceInstrument)	SET THIS.drumPieces TO drumPieces    END CONSTRUCTOR    METHODS 	OVERRIDE describePlayStyle()		SET descriptionInstrument TO "struck"		DISPLAY "The description of the DrumKit is : " + descriptionInstrument	END METHODEND CLASSCLASS KEYBOARD INHERITS INSTURMENT    ATTRIBUTES	keys: NUMBER    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, keys: NUMBER) 	SUPER(brandInstrument, priceInstrument)	SET THIS.keys TO keys    END CONSTRUCTOR    METHODS 	OVERRIDE describePlayStyle()		SET descriptionInstrument TO "pressed"		DISPLAY "The description of the DrumKit is : " + descriptionInstrument	END METHODEND CLASSCLASS STORE    ATTRIBUTES	storeId: NUMBER	storeName: TEXT	instruments: LIST OF INSTURMENT    CONSTRUCTOR(storeName: TEXT) 	SET THIS.storeName TO storeName    END CONSTRUCTOR    METHODS 	GET_storeId()		DISPLAY storeId	END METHOD	GET_storeName()		DIPLSAY storeName	END METHOD	ADDINSTURMENT(newInstrument : INSTURMENT)		ADD newInstrument TO instruments	END METHOD	REMOVEINSTURMENT(instrument : INSTURMENT)		REMOVE instrument FROM instruments	END METHOD	DISPLAYINSTURMENT()		DISPLAY instruments	END METHODEND CLASSpseudocode:START	BEGIN		CREATE OBJECT store OF STORE		CREATE OBJECT guitar OF GUITAR("Lucille", 350, 6)		CREATE OBJECT durmkit OF DRUMKIT("Bass drum", 1500, 5)		CREATE OBJECT keyboard OF KEYBOARD("Alphanumeric Keys", 450, 61)		store.ADDINSTURMENT(durmkit)		store.ADDINSTURMENT(guitar)		store.ADDINSTURMENT(keyboard)		durmkit.describePlayStyle()		guitar.describePlayStyle()		keyboard.describePlayStyle()		store.DISPLAYINSTURMENT()	ENDSTOP
+Task 303: Musical Instruments Store
+
+Blueprint:
+
+CLASS INSTURMENT
+    ATTRIBUTES
+	id: NUMBER
+	brandInstrument: TEXT
+	priceInstrument: NUMBER
+
+    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER)
+        SET THIS.brandInstrument TO brandInstrument
+	SET THIS.priceInstrument TO priceInstrument
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DISLAY id
+	END METHOD
+
+       	GET_brandInstrument()
+		DISPLAY brandInstrument
+	END METHOD
+
+	GET_priceInstrument()
+		DISPLAY priceInstrument
+	END METHOD
+
+	describePlayStyle()
+		DISPLAY "The description of the instrument is: " + descriptionInstrument
+	END METHOD
+END CLASS
+
+CLASS GUITAR INHERITS INSTURMENT
+    ATTRIBUTES
+	strings: TEXT
+
+    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, strings: TEXT)
+ 	SUPER(brandInstrument, priceInstrument)
+	SET THIS.strings TO strings
+    END CONSTRUCTOR
+
+    METHODS
+ 	OVERRIDE describePlayStyle()
+		SET descriptionInstrument TO "strummed or plucked"
+		DISPLAY "The description of the guitar is : " + descriptionInstrument
+	END METHOD
+END CLASS
+
+CLASS DRUMKIT INHERITS INSTURMENT
+    ATTRIBUTES
+	drumPieces: TEXT
+
+    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, drumPieces: TEXT)
+ 	SUPER(brandInstrument, priceInstrument)
+	SET THIS.drumPieces TO drumPieces
+    END CONSTRUCTOR
+
+    METHODS
+ 	OVERRIDE describePlayStyle()
+		SET descriptionInstrument TO "struck"
+		DISPLAY "The description of the DrumKit is : " + descriptionInstrument
+	END METHOD
+END CLASS
+
+CLASS KEYBOARD INHERITS INSTURMENT
+    ATTRIBUTES
+	keys: NUMBER
+
+    CONSTRUCTOR(brandInstrument: TEXT, priceInstrument: NUMBER, keys: NUMBER)
+ 	SUPER(brandInstrument, priceInstrument)
+	SET THIS.keys TO keys
+    END CONSTRUCTOR
+
+    METHODS
+ 	OVERRIDE describePlayStyle()
+		SET descriptionInstrument TO "pressed"
+		DISPLAY "The description of the DrumKit is : " + descriptionInstrument
+	END METHOD
+END CLASS
+
+CLASS STORE
+    ATTRIBUTES
+	storeId: NUMBER
+	storeName: TEXT
+	instruments: LIST OF INSTURMENT
+
+    CONSTRUCTOR(storeName: TEXT)
+ 	SET THIS.storeName TO storeName
+    END CONSTRUCTOR
+
+    METHODS
+ 	GET_storeId()
+		DISPLAY storeId
+	END METHOD
+
+	GET_storeName()
+		DIPLSAY storeName
+	END METHOD
+
+	ADDINSTURMENT(newInstrument : INSTURMENT)
+		ADD newInstrument TO instruments
+	END METHOD
+
+	REMOVEINSTURMENT(instrument : INSTURMENT)
+		REMOVE instrument FROM instruments
+	END METHOD
+
+	DISPLAYINSTURMENT()
+		DISPLAY instruments
+	END METHOD
+END CLASS
+
+
+pseudocode:
+START
+	BEGIN
+		CREATE OBJECT store OF STORE
+		CREATE OBJECT guitar OF GUITAR("Lucille", 350, 6)
+		CREATE OBJECT durmkit OF DRUMKIT("Bass drum", 1500, 5)
+		CREATE OBJECT keyboard OF KEYBOARD("Alphanumeric Keys", 450, 61)
+		store.ADDINSTURMENT(durmkit)
+		store.ADDINSTURMENT(guitar)
+		store.ADDINSTURMENT(keyboard)
+		durmkit.describePlayStyle()
+		guitar.describePlayStyle()
+		keyboard.describePlayStyle()
+		store.DISPLAYINSTURMENT()
+	END
+STOP
+-------------------------------------------------------------------------------
+Task 304: Fitness App Workouts 
+
+Blueprint:
+
+CLASS WORKOUT
+    ATTRIBUTES
+	workoutId: NUMBER
+	workoutDate: TEXT
+	workoutDuration: NUMBER
+	
+    CONSTRUCTOR(workoutDate: TEXT, workoutDuration: NUMBER)
+        SET THIS.workoutDate TO workoutDate
+	SET THIS.workoutDuration TO workoutDuration
+    END CONSTRUCTOR
+
+    METHODS
+	GET_id()
+		DFISPLAY workoutId
+	END METHOD
+
+	GET_date()
+		DISPLAY workoutDate
+	END METHOD
+
+	Get_duartion()
+		DISPLAY workoutDuration
+	END METHOD
+	
+	calculateCalories()
+		DIPLSAY "The estimated calories burned is: " 
+	END METHOD
+	
+END CLASS
+
+CLASS RUNNINGWORKOUT INHERITS WORKOUT
+    ATTRIBUTES
+	distanceRunning: NUMBER
+	paceRunning: NUMBER
+	
+    CONSTRUCTOR(workoutDate: TEXT, workoutDuration: NUMBER, distanceRunning: NUMBER, paceRunning: NUMBER)
+	SUPER(workoutDate,workoutDuration)
+        SET THIS.distanceRunning TO distanceRunning
+	SET THIS.paceRunning TO paceRunning
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE calculateCalories()
+		SET Calories TO distanceRunning * paceRunning
+		DIPLSAY "The estimated calories burned is: " + Calories
+	END METHOD
+END CLASS
+
+CLASS CYCLINGWORKOUT INHERITS WORKOUT
+    ATTRIBUTES
+	distanceCovered: NUMBER
+	resistanceLevel: NUMBER
+	
+    CONSTRUCTOR(workoutDate: TEXT, workoutDuration: NUMBER, distanceCovered: NUMBER, resistanceLevel: NUMBER)
+	SUPER(workoutDate,workoutDuration)
+        SET THIS.distanceCovered TO distanceCovered
+	SET THIS.resistanceLevel TO resistanceLevel
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE calculateCalories()
+		SET Calories TO distanceCovered * resistanceLevel
+		DIPLSAY "The estimated calories burned is: " + Calories
+	END METHOD
+END CLASS
+
+CLASS WEIGHTTRAININGWORKOUT INHERITS WORKOUT
+    ATTRIBUTES
+	NoOfSets: NUMBER
+	repsCompleted: NUMBER
+	
+    CONSTRUCTOR(workoutDate: TEXT, workoutDuration: NUMBER, NoOfSets: NUMBER, repsCompleted: NUMBER)
+	SUPER(workoutDate,workoutDuration)
+        SET THIS.NoOfSets TO NoOfSets
+	SET THIS.repsCompleted TO repsCompleted
+    END CONSTRUCTOR
+
+    METHODS	
+	OVERRIDE calculateCalories()
+		SET Calories TO NoOfSets * repsCompleted
+		DIPLSAY "The estimated calories burned is: " + Calories
+	END METHOD
+END CLASS
+
+CLASS FITNESSLOG
+    ATTRIBUTES
+	logid: NUMNBER
+	logName: TEXT
+	workouts: LIST OF WORKOUT
+	
+    CONSTRUCTOR(logName: TEXT)
+ 	SET THIS.logName TO logName
+    END CONSTRUCTOR
+
+    METHODS	
+	GET_id()
+		DISPLAY logid
+	END METHOD
+
+	GET_logName()
+		DISPLAY logName
+	END METHOD
+
+	ADDWORKOUT(newWorkout: WORKOUT)
+		ADD newWorkout TO workouts
+	END METHOD
+	
+	REMOVEWORKOUT(workout : WORKOUT)
+		REMOVE workout FROM workouts
+	END METHOD
+
+	DISPLAYWORKOUTS()
+		DISPLAY workouts
+	END METHOD
+	
+END CLASS
+
+
+
+pseudocode:
+START
+    BEGIN
+
+        CREATE OBJECT fitnessLog OF FITNESSLOG ("My Fitness Log")
+        CREATE OBJECT runningWorkout OF RUNNINGWORKOUT("01-Jul-2026", 45, 8, 6)
+        CREATE OBJECT cyclingWorkout OF CYCLINGWORKOUT("02-Jul-2026", 60, 20, 4)
+        CREATE OBJECT weightTrainingWorkout OF WEIGHTTRAININGWORKOUT("03-Jul-2026", 50, 5, 12)
+        fitnessLog.ADDWORKOUT(runningWorkout)
+        fitnessLog.ADDWORKOUT(cyclingWorkout)
+        fitnessLog.ADDWORKOUT(weightTrainingWorkout)
+        runningWorkout.calculateCalories()
+        cyclingWorkout.calculateCalories()
+        weightTrainingWorkout.calculateCalories()
+        fitnessLog.DISPLAYWORKOUTS()
+    END
+STOP
