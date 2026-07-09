@@ -376,3 +376,173 @@ START
         studentAccount.DISPLAYLOANITEMS()
     END
 STOP
+--------------------------------------------------------------------------------
+Task 310: Theme Park Ride Queues (Medium)
+
+CLASS RIDE
+	ATTRIBUTES
+		rideId: NUMBER
+		rideName: TEXT
+		rideLocation: TEXT
+		safetyInspectionLog: SAFETYINSPECTIONLOG
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG)
+		SET THIS.rideName TO rideName
+		SET THIS.rideLocation TO rideLocation
+		SET THIS.safetyInspectionLog TO safetyInspectionLog
+    	END CONSTRUCTOR
+	
+	METHODS
+ 		GET_id()
+			DISPLAY rideId
+		END METHOD
+
+		GET_rideName()
+			DISPLAY rideName
+		END METHOD
+
+		GET_rideLocation()
+			DISPLAY rideLocation
+		END METHOD
+	
+		calculateWaitTime()
+			DISPLAY "The estimated wait time is: "	
+		END METHOD
+END CLASS
+
+CLASS ROLLERCOASTOR INHERITS RIDE
+	ATTRIBUTES
+		NoPeople: NUMBER
+		TrainCar: NUMBER
+		CycleTime: NUMBER
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER)
+		SUPER(rideName, rideLocation, safetyInspectionLog)
+		SET THIS.NoPeople TO NoPeople
+		SET THIS.TrainCar TO TrainCar
+		SET THIS.CycleTime TO CycleTime
+    	END CONSTRUCTOR
+	
+	METHODS
+		
+ 		OVERRIDE calculateWaitTime()
+			SET waitTime TO (NoPeople / TrainCar) * CycleTime
+			DISPLAY "The estimated wait time is: "	+ waitTime
+		END METHOD
+END CLASS
+
+CLASS VIPACCESSRIDE INHERITS ROLLERCOASTOR  
+	ATTRIBUTES
+		vipGuest: NUMBER
+		standardGuest: NUMBER
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER, vipGuest: NUMBER, standardGuest: NUMBER)
+		SUPER(rideName, rideLocation, safetyInspectionLog, NoPeople, TrainCar, CycleTime)
+		SET THIS.vipGuest TO vipGuest
+		SET THIS.standardGuest TO standardGuest
+
+    	END CONSTRUCTOR
+	
+	METHODS
+		
+ 		OVERRIDE calculateWaitTime()
+			SET vipWaitTime TO (vipGuest / TrainCar) * CycleTime
+			SET vipStandardGuest TO (standardGuest / TrainCar) * CycleTime
+			DISPLAY "The estimated wait time for VIP guest is: "	+ vipWaitTime
+			DISPLAY "The estimated wait time for standard guest is: "	+ vipStandardGuest
+		END METHOD
+END CLASS
+
+
+CLASS WATERRIDE INHERITS RIDE
+	ATTRIBUTES
+		NoPeople: NUMBER
+		boatCapcity: NUMBER
+		CycleTime: NUMBER
+		loadingTime: NUMBER
+
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER,  boatCapcity: NUMBER, loadingTime:NUMBER, CycleTime: NUMBER)
+		SUPER(rideName, rideLocation, safetyInspectionLog)
+		SET THIS.NoPeople TO NoPeople
+		SET THIS.boatCapcity TO boatCapcity
+		SET THIS.loadingTime TO loadingTime
+		SET THIS.CycleTime TO CycleTime
+    	END CONSTRUCTOR
+	
+	METHODS
+		
+ 		OVERRIDE calculateWaitTime()
+			SET waitTime TO ((NoPeople / boatCapcity) * CycleTime) + loadingTime
+			DISPLAY "The estimated wait time is: "	+ waitTime
+		END METHOD
+END CLASS
+
+
+
+CLASS SAFETYINSPECTIONLOG
+    ATTRIBUTES
+        inspectionDate: TEXT
+        inspectionResult: TEXT
+
+    CONSTRUCTOR(inspectionDate: TEXT, inspectionResult: TEXT)
+        SET THIS.inspectionDate TO inspectionDate
+        SET THIS.inspectionResult TO inspectionResult
+    END CONSTRUCTOR
+
+    METHODS
+        GET_inspectionDate()
+            DISPLAY inspectionDate
+        END METHOD
+
+        GET_inspectionResult()
+            DISPLAY inspectionResult
+        END METHOD
+END CLASS
+
+CLASS PARK
+    ATTRIBUTES
+        parkId: NUMBER
+        parkName: TEXT
+        rides: LIST OF RIDE
+
+    CONSTRUCTOR(parkName: TEXT)
+        SET THIS.parkName TO parkName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY parkId
+        END METHOD
+
+        GET_parkName()
+            DISPLAY parkName
+        END METHOD
+
+        ADDRIDE(newRide: RIDE)
+            ADD newRide TO rides
+        END METHOD
+
+        REMOVERIDE(ride: RIDE)
+            REMOVE ride FROM rides
+        END METHOD
+
+        DISPLAYRIDES()
+            DISPLAY rides
+        END METHOD
+END CLASS
+
+
+pseudocode:
+START
+    BEGIN
+        CREATE OBJECT inspectionLog OF SAFETYINSPECTIONLOG("05-Aug-2026", "Passed")
+        CREATE OBJECT park OF PARK("Adventure Park")
+        CREATE OBJECT rollerCoaster OF ROLLERCOASTER("Thunder Loop", "Zone A", inspectionLog, 120, 20, 5)
+        CREATE OBJECT waterRide OF WATERRIDE("Splash River", "Zone B", inspectionLog, 80, 10, 6, 2)
+        CREATE OBJECT vipRide OF VIPACCESSRIDE("VIP Thunder Loop", "Zone A", inspectionLog, 120, 20, 5, 15, 105)
+        park.ADDRIDE(rollerCoaster)
+        park.ADDRIDE(waterRide)
+        park.ADDRIDE(vipRide)
+        rollerCoaster.calculateWaitTime()
+        waterRide.calculateWaitTime()
+        vipRide.calculateWaitTime()
+        park.DISPLAYRIDES()
+    END
+STOP
