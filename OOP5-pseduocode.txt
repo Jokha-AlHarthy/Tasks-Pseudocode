@@ -728,3 +728,178 @@ START
 
     END
 STOP
+
+---------------------------------------------------------------------------------------------
+Task 312: Data Center Server Management (Medium)
+
+Blueprint:
+CLASS SERVER
+    ATTRIBUTES
+        serverId: NUMBER
+        serialNumber: TEXT
+        uptimeValue: NUMBER
+        hardwareSpecification: HARDWARESPECIFICATION
+
+    CONSTRUCTOR(serialNumber: TEXT, uptime: NUMBER, hardwareSpecification: HARDWARESPECIFICATION)
+        SET THIS.serialNumber TO serialNumber
+        SET THIS.uptimeValue TO uptimeValue
+        SET THIS.hardwareSpecification TO hardwareSpecification
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY serverId
+        END METHOD
+
+        GET_serialNumber()
+            DISPLAY serialNumber
+        END METHOD
+
+        GET_uptimeValue()
+            DISPLAY uptimeValue
+        END METHOD
+
+        calculateLoad()
+            DISPLAY "The current load percentage is: "
+        END METHOD
+END CLASS
+
+
+CLASS WEBSERVER INHERITS SERVER
+    ATTRIBUTES
+        activeConnections: NUMBER
+        maxConnections: NUMBER
+
+    CONSTRUCTOR(serialNumber: TEXT, uptime: NUMBER, hardwareSpecification: HARDWARESPECIFICATION, activeConnections: NUMBER, maxConnections: NUMBER)
+        SUPER(serialNumber, uptime, hardwareSpecification)
+        SET THIS.activeConnections TO activeConnections
+        SET THIS.maxConnections TO maxConnections
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE calculateLoad()
+            SET load TO (activeConnections / maxConnections) * 100
+            DISPLAY "The web server load is: " + load
+        END METHOD
+END CLASS
+
+
+CLASS DATABASESERVER INHERITS SERVER
+    ATTRIBUTES
+        queryThroughput: NUMBER
+        maxQueries: NUMBER
+
+    CONSTRUCTOR(serialNumber: TEXT, uptime: NUMBER, hardwareSpecification: HARDWARESPECIFICATION, queryThroughput: NUMBER, maxQueries: NUMBER)
+        SUPER(serialNumber, uptime, hardwareSpecification)
+        SET THIS.queryThroughput TO queryThroughput
+        SET THIS.maxQueries TO maxQueries
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE calculateLoad()
+            SET load TO (queryThroughput / maxQueries) * 100
+
+            IF queryThroughput GREATER THAN OR EQUAL TO maxQueries THEN
+                DISPLAY "Server is at full capacity. No new connections accepted."
+            END IF
+
+            DISPLAY "The database server load is: " + load
+        END METHOD
+END CLASS
+
+
+CLASS CACHESERVER INHERITS DATABASESERVER
+    ATTRIBUTES
+        cacheHitRatio: NUMBER
+
+    CONSTRUCTOR(serialNumber: TEXT, uptime: NUMBER, hardwareSpecification: HARDWARESPECIFICATION, queryThroughput: NUMBER, maxQueries: NUMBER, cacheHitRatio: NUMBER)
+        SUPER(serialNumber, uptime, hardwareSpecification, queryThroughput, maxQueries)
+        SET THIS.cacheHitRatio TO cacheHitRatio
+    END CONSTRUCTOR
+
+    METHODS
+        OVERRIDE calculateLoad()
+            SET load TO (queryThroughput / maxQueries) * 100
+            SET effectiveLoad TO load - (load * cacheHitRatio / 100)
+            DISPLAY "The cache server effective load is: " + effectiveLoad
+        END METHOD
+END CLASS
+
+
+CLASS HARDWARESPECIFICATION
+    ATTRIBUTES
+        CPU: TEXT
+        RAM: TEXT
+        storage: TEXT
+
+    CONSTRUCTOR(CPU: TEXT, RAM: TEXT, storage: TEXT)
+        SET THIS.CPU TO CPU
+        SET THIS.RAM TO RAM
+        SET THIS.storage TO storage
+    END CONSTRUCTOR
+
+    METHODS
+        GET_CPU()
+            DISPLAY CPU
+        END METHOD
+
+        GET_RAM()
+            DISPLAY RAM
+        END METHOD
+
+        GET_storage()
+            DISPLAY storage
+        END METHOD
+END CLASS
+
+
+CLASS RACK
+    ATTRIBUTES
+        rackId: NUMBER
+        rackName: TEXT
+        servers: LIST OF SERVER
+
+    CONSTRUCTOR(rackName: TEXT)
+        SET THIS.rackName TO rackName
+    END CONSTRUCTOR
+
+    METHODS
+        GET_id()
+            DISPLAY rackId
+        END METHOD
+
+        GET_rackName()
+            DISPLAY rackName
+        END METHOD
+
+        ADDSERVER(newServer: SERVER)
+            ADD newServer TO servers
+        END METHOD
+
+        REMOVESERVER(server: SERVER)
+            REMOVE server FROM servers
+        END METHOD
+
+        DISPLAYSERVERS()
+            DISPLAY servers
+        END METHOD
+END CLASS
+
+pseudocode:
+START
+    BEGIN
+        CREATE OBJECT hardwareSpecification OF HARDWARESPECIFICATION("Intel Xeon", "64GB", "2TB SSD")
+
+        CREATE OBJECT rack OF RACK("Rack A")
+        CREATE OBJECT webServer OF WEBSERVER("WEB001", 1500, hardwareSpecification, 350, 500)
+        CREATE OBJECT databaseServer OF DATABASESERVER("DB001", 2200, hardwareSpecification, 900, 1000)
+        CREATE OBJECT cacheServer OF CACHESERVER("CACHE001", 1800, hardwareSpecification, 700, 1000, 80)
+        rack.ADDSERVER(webServer)
+        rack.ADDSERVER(databaseServer)
+        rack.ADDSERVER(cacheServer)
+        webServer.calculateLoad()
+        databaseServer.calculateLoad()
+        cacheServer.calculateLoad()
+        rack.DISPLAYSERVERS()
+    END
+STOP
