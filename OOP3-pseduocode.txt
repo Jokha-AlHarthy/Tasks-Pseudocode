@@ -589,15 +589,19 @@ CLASS SUBSCRIPTION
         END METHOD
 
         IS_ACTIVE()
-            DISPLAY "Check if subscription is active or not"
-        END METHOD
+    		IF startDate LESS THAN OR EQUALS TO current date
+        		DISPLAY "Subscription is active"
+    		ELSE
+        		DISPLAY "Subscription is not active"
+    		END IF
+		END METHOD
 
         GET_STREAMINGQUALITY()
-            DISPLAY "IS the streaming quality good or not?"
+            ABSTRACT METHOD
         END METHOD
 
         GET_DEVICELIMIT()
-            DISPLAY "The device limit is"
+           ABSTRACT METHOD
         END METHOD
 END CLASS
 
@@ -657,7 +661,8 @@ END CLASS
 
 CLASS PREMIUMPLAN INHERITS SUBSCRIPTION
 	ATTRIBUTES
-			
+		downloadEnabled: BOOLEAN
+
 	CONSTRUCTOR(startDate: TEXT,monthlyPrice: NUMBER, downloadEnabled: BOOLEAN)
 		SUPER(startDate,monthlyPrice)
 		SET THIS.downloadEnabled TO downloadEnabled 
@@ -673,7 +678,7 @@ CLASS PREMIUMPLAN INHERITS SUBSCRIPTION
        	 	END METHOD
 		
 		GET_DOWNLOADS()
-			DISLPAY downloadEnabled 
+			DISPLAY downloadEnabled 
 		END METHOD
 END CLASS
 
@@ -686,6 +691,7 @@ CLASS USERACCOUNT
 
 	CONSTRUCTOR(subscription : SUBSCRIPTION)
 		SET THIS.subscription TO subscription 
+		SET THIS.watchHistory TO EMPTY LIST
 	END CONSTRUCTOR
 		
 	METHODS
@@ -697,7 +703,7 @@ CLASS USERACCOUNT
             		DISPLAY subscription
         	END METHOD
 
-        	WATCHHISTORY()
+        	GET_WATCHHISTORY()
            		 DISPLAY watchHistory
         	END METHOD
 END CLASS
@@ -705,10 +711,9 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		CREATE userAccount OF USERACCOUNT
 		CREATE OBJECT subscription OF PREMIUMPLAN("01-Jan-2025", 15, TRUE)
 		CREATE OBJECT userAccount OF USERACCOUNT(subscription)
-		CREATE OBEJECT watchRecord1 OF WATCHRECORD("The Avengers", "05-Jul-2026")	
+		CREATE OBJECT watchRecord1 OF WATCHRECORD("The Avengers", "05-Jul-2026")	
 		CREATE OBJECT watchRecord2 OF WATCHRECORD("Inception", "06-Jul-2026")
 		userAccount.ADDWATCHRECORD(watchRecord1)
 		userAccount.ADDWATCHRECORD(watchRecord2)
@@ -716,7 +721,7 @@ START
 		subscription.GET_STREAMINGQUALITY()
 		subscription.GET_DEVICELIMIT()
 		subscription.GET_DOWNLOADS()
-		userAccount.WATCHHISTORY()
+		userAccount.GET_WATCHHISTORY()
 	END
 STOP
 ------------------------------------------------------------------------------------------
