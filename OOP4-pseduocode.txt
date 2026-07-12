@@ -311,7 +311,7 @@ CLASS CHARACTER
 	END METHOD
 
 	ATTACK()
-		DISPLAY "perform attack: "
+		ABSTRACT METHOD
 	END METHOD
 END CLASS
 
@@ -321,7 +321,7 @@ CLASS WARRIOR INHERITS CHARACTER
 	heavyArmor: BOOLEAN
 	
     CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, meleeStrength: NUMBER, heavyArmor: BOOLEAN)
-	SUER(charName, healthValue, inventory)
+	SUPER(charName, healthValue, inventory)
 	SET THIS.meleeStrength TO meleeStrength
 	SET THIS.heavyArmor TO heavyArmor
     END CONSTRUCTOR
@@ -338,7 +338,7 @@ CLASS MAGE INHERITS CHARACTER
 	manaPool: NUMBER
 	
     CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, magicSpells: TEXT, manaPool: NUMBER)
-	SUER(charName, healthValue, inventory)
+	SUPER(charName, healthValue, inventory)
 	SET THIS.manaPool TO manaPool
 	SET THIS.magicSpells TO magicSpells
     END CONSTRUCTOR
@@ -355,7 +355,7 @@ CLASS ARCHER INHERITS CHARACTER
 	arrows: NUMBER
 	
     CONSTRUCTOR(charName: TEXT, healthValue: NUMBER, inventory: INVENTORY, arrows: NUMBER)
-	SUER(charName, healthValue, inventory)
+	SUPER(charName, healthValue, inventory)
 	SET THIS.arrows TO arrows
     END CONSTRUCTOR
 
@@ -393,27 +393,31 @@ CLASS INVENTORY
 	
     CONSTRUCTOR(inventoryName: TEXT)
 	SET THIS.inventoryName TO inventoryName
+	SET THIS.items TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS	
 	GET_id()
-		DIPSLAY inventoryId
+		DISPLAY inventoryId
 	END METHOD
 
 	GET_inventoryName()
 		DISPLAY inventoryName
 	END METHOD
 
-	ADDDISPLAYITEM(newItem: ITEM)
+	ADDITEM(newItem: ITEM)
 		ADD newItem TO items
 	END METHOD
 
-	REMOVEDISPLAYITEM(item: ITEM)
+	REMOVEITEM(item: ITEM)
 		REMOVE item FROM items
 	END METHOD
 
 	DISPLAYITEMS()
-		DISPLAY items
+		FOR EACH item IN items
+    		DISPLAY item.GET_itemName()
+   			DISPLAY item.GET_itemType()
+		END FOR
 	END METHOD
 END CLASS  
 
@@ -425,10 +429,10 @@ START
         CREATE OBJECT inventory OF INVENTORY ("LootGoblin")
         CREATE OBJECT item1 OF ITEM("Sword", "Weapon")
         CREATE OBJECT item2 OF ITEM("Potion", "Health")
-        inventory.ADDDISPLAYITEM(item1)
-        inventory.ADDDISPLAYITEM(item2)
-        CREATE OBJECT warrior OF WARRIOR("Leon", 100, inventory, TRUE, 90)
-        CREATE OBJECT mage OF MAGE("Ezio", 80, inventory, 100)
+        inventory.ADDITEM(item1)
+        inventory.ADDITEM(item2)
+        CREATE OBJECT warrior OF WARRIOR("Leon", 100, inventory, 90, TRUE)
+        CREATE OBJECT mage OF MAGE("Ezio", 80, inventory, "Fireball", 100)
         CREATE OBJECT archer OF ARCHER("Robin", 90, inventory, 25)
         warrior.ATTACK()
         mage.ATTACK()
