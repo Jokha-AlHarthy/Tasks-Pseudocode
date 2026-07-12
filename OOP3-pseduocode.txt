@@ -899,18 +899,18 @@ START
  		route.DISPLAYSTOPS()
 	END
 STOP
--------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
 Task 299: Bank Cards
 
 Blueprint:
 CLASS CARD
     ATTRIBUTES
-        cardNumber: NUMBER
+    cardNumber: TEXT
 	expiryDate: TEXT
 	status: TEXT
 	chip : CHIP
 
-    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP)
+    CONSTRUCTOR(cardNumber: TEXT, expiryDate: TEXT, status: TEXT, chip : CHIP)
 	SET THIS.cardNumber TO cardNumber
 	SET THIS.expiryDate TO expiryDate
         SET THIS.status TO status
@@ -923,7 +923,7 @@ CLASS CARD
 	END METHOD
 
 	GET_EXPIRYDATE()
-		DISLAY expiryDate
+		DISPLAY expiryDate
 	END METHOD
 
 	GET_STATUS()
@@ -931,7 +931,17 @@ CLASS CARD
 	END METHOD
 
 	AUTHORIZEPURCHASE()
-		DISPLAY "Authorizing the purchase.."
+		ABSTRACT METHOD
+	END METHOD
+
+	BLOCK_CARD()
+    	SET THIS.status TO "Blocked"
+    	DISPLAY status
+	END METHOD
+
+	UNBLOCK_CARD()
+    	SET THIS.status TO "Active"
+    	DISPLAY status
 	END METHOD
 END CLASS
 
@@ -939,14 +949,14 @@ CLASS DEBITCARD INHERITS CARD
     ATTRIBUTES
        availableBalance: NUMBER
 
-    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP, availableBalance: NUMBER)
+    CONSTRUCTOR(cardNumber: TEXT, expiryDate: TEXT, status: TEXT, chip: CHIP, availableBalance: NUMBER)
         SUPER(cardNumber, expiryDate, status, chip)
         SET THIS.availableBalance TO availableBalance
     END CONSTRUCTOR
 
     METHODS
         OVERRIDE AUTHORIZEPURCHASE(newAmount: NUMBER)
-		IF availableBalance GREATER THAN newAmount THEN
+		IF availableBalance GREATER THAN OR EQUAL TOnewAmount THEN
 			DISPLAY "Purchase approved"
 		ELSE
 			DISPLAY "Not enough balance"
@@ -959,7 +969,7 @@ CLASS CREDITCARD INHERITS CARD
        creditLimit: NUMBER
 	outstandingBalance: NUMBER
 
-    CONSTRUCTOR(cardNumber: NUMBER, expiryDate: TEXT, status: TEXT, chip : CHIP, outstandingBalance: NUMBER, creditLimit: NUMBER)
+    CONSTRUCTOR(cardNumber: TEXT, expiryDate: TEXT, status: TEXT, chip: CHIP, outstandingBalance: NUMBER, creditLimit: NUMBER)
         SUPER(cardNumber, expiryDate, status, chip)
 	SET THIS.outstandingBalance TO outstandingBalance
         SET THIS.creditLimit TO creditLimit
@@ -978,6 +988,12 @@ CLASS CREDITCARD INHERITS CARD
 	GET_OUTSTANDINGBALANCE()
             DISPLAY outstandingBalance
         END METHOD
+
+	MAKE_PAYMENT(paymentAmount: NUMBER)
+    	SET outstandingBalance TO outstandingBalance - paymentAmount
+    DISPLAY "Payment completed"
+
+END METHOD
 
 END CLASS
 
@@ -1001,9 +1017,9 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		CREATE OBEJCT chip OF CHIP("A1B2C3D4E5")
-		CREATE OBEJCT debitCard OF DEBITCARD("1234567890123456", "12/28", "Active", chip, 1000)
-		CREATE OBEJCT creditCard OF CREDITCARD("9876543210987654", "10/29", "Active", chip, 5000)
+		CREATE OBJECT chip OF CHIP("A1B2C3D4E5")
+		CREATE OBJECT debitCard OF DEBITCARD("1234567890123456", "12/28", "Active", chip, 1000)
+		CREATE OBJECT creditCard OF CREDITCARD("9876543210987654", "10/29", "Active", chip, 5000)
 		debitCard.AUTHORIZEPURCHASE(250)
 		creditCard.AUTHORIZEPURCHASE(800)
 		creditCard.GET_OUTSTANDINGBALANCE()
