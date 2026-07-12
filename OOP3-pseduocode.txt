@@ -274,34 +274,29 @@ Blueprint:
 
 CLASS ANIMAL
 	ATTRIBUTES
-		animalId: NUMBER
 		animalName: TEXT
 		animalAge: NUMBER
 		dietType: TEXT
 	
 
 	CONSTRUCTOR(animalName: TEXT, animalAge: NUMBER, dietType: TEXT)
-        	SET THIS.animalName TO animalName
+        SET THIS.animalName TO animalName
 		SET THIS.animalAge TO animalAge
 		SET THIS.dietType TO dietType
     	END CONSTRUCTOR
 
 	
 	METHODS
-		GET_id()
-			DISPALY id
-		END METHOD
-
 		GET_animalName()
 			DISPLAY animalName
 		END METHOD
 
 		GET_SOUND()
-			DISPLAY "The animal sound is: "
+			ABSTRACT METHOD
 		END METHOD
 	
 		GET_MOVEMENT()
-			DISPLAY "The animal movements are: "
+			ABSTRACT METHOD
 		END METHOD
 END CLASS
 
@@ -340,7 +335,7 @@ CLASS FISH INHERITS ANIMAL
 	
 	METHODS
 		OVERRIDE GET_SOUND()
-			DISPLAY "The sound of bird is blub"
+			DISPLAY "The sound of fish is blub"
 		END METHOD
 
 		OVERRIDE GET_MOVEMENT()
@@ -365,7 +360,7 @@ CLASS MAMMAL INHERITS ANIMAL
 	
 	METHODS
 		OVERRIDE GET_SOUND()
-			DISPLAY "The sound of bird is Mammal sound"
+			DISPLAY "The sound of mammal is vocalization"
 		END METHOD
 
 		OVERRIDE GET_MOVEMENT()
@@ -376,7 +371,6 @@ END CLASS
 
 CLASS ENCLOSURE
     ATTRIBUTES
-        id: NUMBER
         temperature: NUMBER
         animals: LIST OF ANIMAL
 
@@ -395,17 +389,19 @@ CLASS ENCLOSURE
         END METHOD
 
         DISPLAYANIMALS()
-            DISPLAY animals
-        END METHOD
+    		FOR EACH animal IN animals
+        		DISPLAY animal attributes
+    		END FOR
+		END METHOD
 END CLASS
 
 Pseudocode:
 START
 	BEGIN
 		CREATE OBJECT enclosures OF ENCLOSURE
-		CREATE OBJECT animal1 OF BIRD("Bird 1", 2, "Seed-Eaters", YES, YES)
-		CREATE OBJECT animal2 OF FISH("Fish1", 3, "carnivorous", YES, YES)
-		CREATE OBJECT animal3 OF MAMMAL("Mamal 1", 1, "herbivorous", No, YES)
+		CREATE OBJECT animal1 OF BIRD("Bird 1", 2, "Seed-Eaters", TRUE,TRUE)
+		CREATE OBJECT animal2 OF FISH("Fish1", 3, "carnivorous", TRUE, TRUE)
+		CREATE OBJECT animal3 OF MAMMAL("Mammal 1", 1, "herbivorous", FALSE, TRUE)
 		enclosures.ADDANIMAL(animal1)
 		enclosures.ADDANIMAL(animal2)
 		enclosures.ADDANIMAL(animal3)
