@@ -415,8 +415,7 @@ Blueprint:
 
 CLASS PAYMENTMETHOD
     ATTRIBUTES
-	id: NUMBER
-        amountPayment: NUMBER
+    amountPayment: NUMBER
 	status: TEXT
 	
     CONSTRUCTOR(amountPayment: NUMBER, status: TEXT)
@@ -425,10 +424,6 @@ CLASS PAYMENTMETHOD
     END CONSTRUCTOR
 
     METHODS
-	GET_id()
-		DISPLAY id
-	END METHOD
-
 	GET_Amount()
 		DISPLAY amountPayment
 	END METHOD
@@ -438,7 +433,7 @@ CLASS PAYMENTMETHOD
 	END METHOD
 
 	PROCESS_PAYMENT()
-		DISPLAY "The payment is being process"
+		ABSTRACT METHOD
 	END METHOD
         
 END CLASS
@@ -467,8 +462,7 @@ END CLASS
 
 CLASS BANKTRANSFERPAYMENT INHERITS PAYMENTMETHOD
     ATTRIBUTES
-	id: NUMBER
-        accountNo: TEXT
+    accountNo: TEXT
 	
     CONSTRUCTOR(amountPayment: NUMBER, status: TEXT, accountNo : TEXT)
 	SUPER(amountPayment, status)
@@ -479,8 +473,8 @@ CLASS BANKTRANSFERPAYMENT INHERITS PAYMENTMETHOD
 	OVERRIDE PROCESS_PAYMENT()
 		DISPLAY "Validate account number...."
 		DISPLAY "Transfer is in the progress.."
-		SET status TO "completed"
-		DISPLAY status
+		SET THIS.status TO "completed"
+		DISPLAY THIS.status
 	END METHOD
 
         
@@ -497,10 +491,10 @@ CLASS WALLETPAYMENT INHERITS PAYMENTMETHOD
 
     METHODS
 	OVERRIDE PROCESS_PAYMENT()
-		IF digitalWallet GREATER THAN amountPayment
+		IF digitalWallet GREATER THAN OR EQUAL TO amountPayment
 			DISPLAY "Enough balance"
-			SET status TO "completed"
-			DISPLAY status
+			SET THIS.status TO "completed"
+			DISPLAY THIS.status
 		ELSE 
 			DISPLAY "Not enough balance"
 		END IF
@@ -511,7 +505,7 @@ CLASS ITEM
 	ATTRIBUTES
 		id: NUMBER
 		name: TEXT
-		price: TEXT
+		price: NUMBER
 	CONSTRUCTOR(name: TEXT, price: NUMBER)
         	SET THIS.name TO name
         	SET THIS.price TO price
@@ -531,6 +525,10 @@ CLASS ORDER
 		items: LIST OF ITEM
 	
 	METHODS
+
+	CONSTRUCTOR()
+    	SET THIS.items TO EMPTY LIST
+	END CONSTRUCTOR
 		
 	ADDITEM(newItem: ITEM)
             ADD newItem TO items
@@ -541,10 +539,13 @@ CLASS ORDER
         END METHOD
 
         CHECKOUT()
-            payment.PROCESS_PAYMENT()
-        END METHOD
-
-
+    		SET total TO 0
+    		FOR EACH item IN items
+        		SET total TO total + item.price
+    		END FOR
+    		SET payment.amountPayment TO total
+    		payment.PROCESS_PAYMENT()
+		END METHOD
 END CLASS 
 
 Pseudocode:
