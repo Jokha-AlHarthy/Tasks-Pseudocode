@@ -615,6 +615,7 @@ CLASS RIDE
 	rideId: NUMBER
 	pickupLocation: TEXT
 	dropOffLocation: TEXT
+	distance: NUMBER
 	route: ROUTE
 
     CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE)
@@ -637,13 +638,12 @@ CLASS RIDE
 	END METHOD
 
 	calculateFare()
-		DISPLAY "The ride fare is:"
+		ABSTRACT METHOD
 	END METHOD
 END CLASS
 
 CLASS STANDARDRIDE INHERITS RIDE
     ATTRIBUTES
-	distance: NUMBER
 	baseKilometer: NUMBER
 
     CONSTRUCTOR(pickupLocation: TEXT, dropOffLocation: TEXT, route: ROUTE, distance: NUMBER, baseKilometer: NUMBER)
@@ -677,7 +677,6 @@ END CLASS
 
 CLASS PREMIUMRIDE INHERITS RIDE
     ATTRIBUTES
-	distance: NUMBER
 	premiumRate: NUMBER
 	fixedComfort: NUMBER
 
@@ -690,7 +689,7 @@ CLASS PREMIUMRIDE INHERITS RIDE
 
     METHODS
 	OVERRIDE calculateFare()
-		SET fare TO (distance * premiumRate) + fixedComrfot
+		SET fare TO (distance * premiumRate) + fixedComfort
 		DISPLAY "The premium ride fare is:" + fare
 	END METHOD
 END CLASS
@@ -698,9 +697,11 @@ END CLASS
 CLASS WAYPOINT
     ATTRIBUTES
         waypointName: TEXT
+		orderNumber: NUMBER
 
-    CONSTRUCTOR(waypointName: TEXT)
+    CONSTRUCTOR(waypointName: TEXT, orderNumber: NUMBER)
         SET THIS.waypointName TO waypointName
+		SET THIS.orderNumber TO orderNumber
     END CONSTRUCTOR
 
     METHODS
@@ -718,6 +719,7 @@ CLASS ROUTE
 
     CONSTRUCTOR(routeName: TEXT)
         SET THIS.routeName TO routeName
+		SET THIS.waypoints TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS
@@ -738,7 +740,9 @@ CLASS ROUTE
         END METHOD
 
         DISPLAYWAYPOINTS()
-            DISPLAY waypoints
+          	FOR EACH waypoint IN waypoints
+    			waypoint.GET_waypointName()
+			END FOR
         END METHOD
 END CLASS
 
