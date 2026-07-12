@@ -5,32 +5,25 @@ Blueprint:
 
 CLASS SHAPE
 	ATTRIBUTES
-        id: NUMBER
 		color: TEXT
 		position_x: NUMBER
 		position_y: NUMBER
 		
     	CONSTRUCTOR(color: TEXT, position_x: NUMBER, position_y: NUMBER)
 		SET THIS.color TO color
-		SET THIS.position_x TO NUMBER
-		SET THIS.position_y TO NUMBER
+		SET THIS.position_x TO position_x
+		SET THIS.position_y TO position_y
     	END CONSTRUCTOR
 
     	METHODS
-		GET_id()
-			DISPLAY id
-		END METHOD
-
 		GET_color()
 			DISPLAY color
 		END METHOD
 
 		GET_AREA()
-			DISPLAY "Find the area: "
 		END METHOD
 			
 		GET_PERIMETER()
-			DISPLAY "Find the perimeter: "
 		END METHOD
 END CLASS 
 
@@ -122,7 +115,7 @@ CLASS CANVAS
 			REMOVE removeShape FROM shapes
 		END METHOD
 
-		DIPLSAYSHAPES()
+		DISPLAYSHAPES()
 			DISPLAY shapes
 		END METHOD
 END CLASS
@@ -133,8 +126,8 @@ START
 	BEGIN
 		CREATE OBJECT canvas OF CANVAS
 		CREATE OBJECT shape1 OF RECTANGLE("Purple", 40, 10, 5, 8)
-		CREATE OBJECT shape2 OF TRIANGLE("Blue", 15, 25, 4)
-		CREATE OBJECT shape3 OF CIRCLE("Green", 5, 10, 6, 4, 5,5, 6)
+		CREATE OBJECT shape2 OF TRIANGLE("Blue", 15, 25, 4,5,5,5,6)
+		CREATE OBJECT shape3 OF CIRCLE("Green", 5, 10, 6)
 		canvas.ADDSHAPE(shape1)
 		canvas.ADDSHAPE(shape2)
 		canvas.ADDSHAPE(shape3)
@@ -144,7 +137,7 @@ START
 		shape2.GET_PERIMETER()
 		shape3.GET_AREA()
 		shape3.GET_PERIMETER()
-		canvas.DIPLSAYSHAPES()
+		canvas.DISPLAYSHAPES()
 		
 	END
 STOP
