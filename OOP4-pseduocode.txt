@@ -15,7 +15,7 @@ CLASS INSTURMENT
 
     METHODS
 	GET_id()
-		DISLAY id
+		DISPLAY id
 	END METHOD
 
        	GET_brandInstrument()
@@ -27,7 +27,7 @@ CLASS INSTURMENT
 	END METHOD
 
 	describePlayStyle()
-		DISPLAY "The description of the instrument is: " + descriptionInstrument
+		ABSTRACT METHOD
 	END METHOD
 END CLASS
 
@@ -87,6 +87,7 @@ CLASS STORE
 
     CONSTRUCTOR(storeName: TEXT)
  	SET THIS.storeName TO storeName
+	SET THIS.instruments TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS
@@ -95,7 +96,7 @@ CLASS STORE
 	END METHOD
 
 	GET_storeName()
-		DIPLSAY storeName
+		DISPLAY storeName
 	END METHOD
 
 	ADDINSTURMENT(newInstrument : INSTURMENT)
@@ -107,7 +108,11 @@ CLASS STORE
 	END METHOD
 
 	DISPLAYINSTURMENT()
-		DISPLAY instruments
+    	FOR EACH instrument IN instruments
+	        instrument.GET_brandInstrument()
+        	instrument.GET_priceInstrument()
+        	instrument.describePlayStyle()
+    	END FOR
 	END METHOD
 END CLASS
 
@@ -117,7 +122,7 @@ START
 	BEGIN
 		CREATE OBJECT store OF STORE
 		CREATE OBJECT guitar OF GUITAR("Lucille", 350, 6)
-		CREATE OBJECT durmkit OF DRUMKIT("Bass drum", 1500, 5)
+		CREATE OBJECT drumkit OF DRUMKIT("Bass drum", 1500, 5)
 		CREATE OBJECT keyboard OF KEYBOARD("Alphanumeric Keys", 450, 61)
 		store.ADDINSTURMENT(durmkit)
 		store.ADDINSTURMENT(guitar)
