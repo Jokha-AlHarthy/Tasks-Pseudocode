@@ -448,7 +448,7 @@ CLASS BILL
 	dueDate: TEXT
 	metterReading: METERREADING
 
-    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING)
+    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading: METERREADING)
 	SET THIS.billingPeriod TO billingPeriod
 	SET THIS.dueDate TO dueDate
 	SET THIS.metterReading TO metterReading
@@ -464,66 +464,60 @@ CLASS BILL
 	END METHOD
 
 	GET_dueDate()
-		DISPALY dueDate
+		DISPLAY dueDate
 	END METHOD
 
 	calculateAmountOwed()
-		DISPLAY "The amount owned is: "
+		ABSTRACT METHOD
 	END METHOD
 END CLASS
 
 
 CLASS ELECTRICITYBILL INHERITS BILL
     ATTRIBUTES
-	powerConsumed: NUMBER
 	rate: NUMBER
 	
-    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING, powerConsumed: NUMBER, rate: NUMBER)
+    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING, rate: NUMBER)
 	SUPER(billingPeriod, dueDate, metterReading)
-	SET THIS.powerConsumed TO powerConsumed
 	SET THIS.rate TO rate
     END CONSTRUCTOR
 
     METHODS	
 	OVERRIDE calculateAmountOwed()
-		SET AMOUNTOWED TO powerConsumed * rate
-		DISPLAY "The amount owned is: " + AMOUNTOWED
+		SET AMOUNTOWED TO metterReading.GET_CONSUMPTION() * rate
+		DISPLAY "The amount owed is: " + AMOUNTOWED
 	END METHOD
 
 END CLASS
 
 CLASS WATERBILL INHERITS BILL
     ATTRIBUTES
-	litersComsumed: NUMBER
 	flatRate: NUMBER
 
-    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING, litersComsumed: NUMBER,flatRate: NUMBER)
+    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING,flatRate: NUMBER)
 	SUPER(billingPeriod, dueDate, metterReading)
-	SET THIS.litersComsumed TO litersComsumed
 	SET THIS.flatRate TO flatRate
     END CONSTRUCTOR
 
     METHODS
 	OVERRIDE calculateAmountOwed()
-		SET AMOUNTOWED TO litersComsumed * flatRate
-		DISPLAY "The amount owned is: " + AMOUNTOWED
+		SET AMOUNTOWED TO metterReading.GET_CONSUMPTION() * flatRate
+		DISPLAY "The amount owed is: " + AMOUNTOWED
 	END METHOD
 END CLASS
 
 CLASS GASBILL INHERITS BILL
     ATTRIBUTES
-	unitConsumed: NUMBER
 	gasRate: NUMBER
-    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING, unitConsumed: NUMBER, gasRate: NUMBER)
+    CONSTRUCTOR(billingPeriod: TEXT, dueDate: TEXT, metterReading:METERREADING, gasRate: NUMBER)
 	SUPER(billingPeriod, dueDate, metterReading)
-	SET THIS.unitConsumed TO unitConsumed
 	SET THIS.gasRate TO gasRate
     END CONSTRUCTOR
 
     METHODS
 	OVERRIDE calculateAmountOwed()
-		SET AMOUNTOWED TO unitConsumed * gasRate
-		DISPLAY "The amount owned is: " + AMOUNTOWED
+		SET AMOUNTOWED TO metterReading.GET_CONSUMPTION() * gasRate
+		DISPLAY "The amount owed is: " + AMOUNTOWED
 	END METHOD
 END CLASS
 
@@ -546,6 +540,10 @@ CLASS METERREADING
         GET_endReading()
             DISPLAY endReading
         END METHOD
+
+		GET_CONSUMPTION()
+    		RETURN endReading - startReading
+		END METHOD
 END CLASS
 
 
@@ -557,6 +555,7 @@ CLASS CUSTOMERACCOUNT
 
     CONSTRUCTOR(accountName: TEXT)
         SET THIS.accountName TO accountName
+		SET THIS.bills TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS
@@ -577,7 +576,10 @@ CLASS CUSTOMERACCOUNT
         END METHOD
 
         DISPLAYBILLS()
-            DISPLAY bills
+            FOR EACH bill IN bills
+    			bill.GET_BILLINGPERIOD()
+    			bill.CALCULATEAMOUNTOWED()
+			END FOR
         END METHOD
 END CLASS
 
@@ -587,9 +589,9 @@ START
 
         CREATE OBJECT meterReading OF METERREADING(1200, 1450)
         CREATE OBJECT customerAccount OF CUSTOMERACCOUNT("Khalfan")
-        CREATE OBJECT electricityBill OF ELECTRICITYBILL("July 2026", "31-Jul-2026", meterReading, 250, 0.15)
-        CREATE OBJECT waterBill OF WATERBILL("July 2026", "31-Jul-2026", meterReading, 5000, 0.02, 5)
-        CREATE OBJECT gasBill OF GASBILL("July 2026", "31-Jul-2026", meterReading, 150, 0.10, 8)
+        CREATE OBJECT electricityBill OF ELECTRICITYBILL("July 2026", "31-Jul-2026", meterReading, 0.15)
+        CREATE OBJECT waterBill OF WATERBILL("July 2026", "31-Jul-2026", meterReading, 0.02)
+        CREATE OBJECT gasBill OF GASBILL("July 2026", "31-Jul-2026", meterReading, 0.10)
         customerAccount.ADDBILL(electricityBill)
         customerAccount.ADDBILL(waterBill)
         customerAccount.ADDBILL(gasBill)
