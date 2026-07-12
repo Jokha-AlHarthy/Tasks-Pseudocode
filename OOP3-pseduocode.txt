@@ -752,7 +752,7 @@ CLASS VEHICLE
         END METHOD
 
         CALCULATE_DELIVERYTIME(distance: NUMBER)
-            DISPLAY "Calculate delivery time.."
+             ABSTRACT METHOD
         END METHOD
 END CLASS 
 
@@ -768,23 +768,23 @@ CLASS VAN INHERITS VEHICLE
     METHODS
         OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
 	    SET DeliveryTime TO distance / 100
-            DISPLAY DeliveryTime
+            RETURN DeliveryTime
         END METHOD
 END CLASS 
 
-CLASS MOTORBICK INHERITS VEHICLE
+CLASS MOTORBIKE INHERITS VEHICLE
     ATTRIBUTES
-       smallPackage: NUMBER
+       smallPackageLimit: NUMBER
 
-    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE,  smallPackage: NUMBER)
+    CONSTRUCTOR(licencePlate: TEXT, fuelLevel: NUMBER, engine: ENGINE,  smallPackageLimit: NUMBER)
         SUPER(licencePlate, fuelLevel, engine)
-        SET THIS.smallPackage TO  smallPackage
+        SET THIS.smallPackageLimit TO smallPackageLimit
     END CONSTRUCTOR
 
     METHODS
         OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
 	    SET DeliveryTime TO distance / 70
-            DISPLAY DeliveryTime
+            RETURN DeliveryTime
         END METHOD
 END CLASS 
 
@@ -800,7 +800,7 @@ CLASS TRUCK INHERITS VEHICLE
     METHODS
         OVERRIDE CALCULATE_DELIVERYTIME(distance: NUMBER)
 	    SET DeliveryTime TO distance / 80
-            DISPLAY DeliveryTime
+            RETURN DeliveryTime
         END METHOD
 END CLASS 
 
