@@ -151,19 +151,19 @@ CLASS WORKOUT
 
     METHODS
 	GET_id()
-		DFISPLAY workoutId
+    	DISPLAY workoutId
 	END METHOD
 
 	GET_date()
 		DISPLAY workoutDate
 	END METHOD
 
-	Get_duartion()
+	GET_DURATION()
 		DISPLAY workoutDuration
 	END METHOD
 	
 	calculateCalories()
-		DIPLSAY "The estimated calories burned is: " 
+		 ABSTRACT METHOD
 	END METHOD
 	
 END CLASS
@@ -182,7 +182,7 @@ CLASS RUNNINGWORKOUT INHERITS WORKOUT
     METHODS	
 	OVERRIDE calculateCalories()
 		SET Calories TO distanceRunning * paceRunning
-		DIPLSAY "The estimated calories burned is: " + Calories
+		DISPLAY "The estimated calories burned is: " + Calories
 	END METHOD
 END CLASS
 
@@ -200,7 +200,7 @@ CLASS CYCLINGWORKOUT INHERITS WORKOUT
     METHODS	
 	OVERRIDE calculateCalories()
 		SET Calories TO distanceCovered * resistanceLevel
-		DIPLSAY "The estimated calories burned is: " + Calories
+		DISPLAY "The estimated calories burned is: " + Calories
 	END METHOD
 END CLASS
 
@@ -218,7 +218,7 @@ CLASS WEIGHTTRAININGWORKOUT INHERITS WORKOUT
     METHODS	
 	OVERRIDE calculateCalories()
 		SET Calories TO NoOfSets * repsCompleted
-		DIPLSAY "The estimated calories burned is: " + Calories
+		DISPLAY "The estimated calories burned is: " + Calories
 	END METHOD
 END CLASS
 
@@ -230,6 +230,7 @@ CLASS FITNESSLOG
 	
     CONSTRUCTOR(logName: TEXT)
  	SET THIS.logName TO logName
+	SET THIS.workouts TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS	
@@ -250,7 +251,10 @@ CLASS FITNESSLOG
 	END METHOD
 
 	DISPLAYWORKOUTS()
-		DISPLAY workouts
+    	FOR EACH workout IN workouts
+        	workout.GET_date()
+        	workout.calculateCalories()
+    	END FOR
 	END METHOD
 	
 END CLASS
