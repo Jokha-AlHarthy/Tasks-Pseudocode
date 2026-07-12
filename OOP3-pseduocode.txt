@@ -1203,7 +1203,7 @@ CLASS PUBLICATION
         END METHOD
 
         GET_PROGRESS()
-            DISPLAY "Reading Progress.."
+           ABSTRACT METHOD
         END METHOD
 END CLASS
 
@@ -1219,7 +1219,7 @@ CLASS NOVEL INHERITS PUBLICATION
     METHODS
 	
        	OVERRIDE GET_PROGRESS()
-	    SET Prgress TO (currentPage / totalPage) * 100
+	    SET Progress TO (currentPage / totalPage) * 100
             DISPLAY "The progress is: " + Prgress
         END METHOD
 END CLASS
@@ -1237,7 +1237,7 @@ CLASS MAGAZINE INHERITS PUBLICATION
 
     METHODS
        	OVERRIDE GET_PROGRESS()
-	    SET Prgress TO (opendArticals / totalAritcals) * 100
+	    SET Progress TO (opendArticals / totalAritcals) * 100
             DISPLAY "The progress is: " + Prgress
         END METHOD
 END CLASS
@@ -1255,7 +1255,7 @@ CLASS AUDIOBOOK INHERITS PUBLICATION
 
     METHODS
        	OVERRIDE GET_PROGRESS()
-	    SET Prgress TO (ListenedTime / totalListeningTime) * 100
+	    SET Progress TO (ListenedTime / totalListeningTime) * 100
             DISPLAY "The progress is: " + Prgress
         END METHOD
 END CLASS
@@ -1291,8 +1291,10 @@ CLASS LIBRARY
 		END METHOD
 
 		DISPLAYPUBLICATION()
-			DISPLAY publications
-		END MEHTOD
+    		FOR EACH publication IN publications
+        		DISPLAY publication
+    		END FOR
+		END METHOD
 END CLASS
 
 
@@ -1300,7 +1302,7 @@ END CLASS
 Pseudocode:
 START
 	BEGIN
-		CREATRE OBJECT coverImage OF COVERIMAGE("cover.jpg", 600, 800)
+		CREATE OBJECT coverImage OF COVERIMAGE("cover.jpg", 600, 800)
 		CREATE OBJECT novel OF NOVEL("The Alchemist", "Paulo Coelho", 200, coverImage, 120)
 		CREATE OBJECT magazine OF MAGAZINE("Tech Monthly", "John Smith", 80, coverImage, 10, 7)
 		CREATE OBJECT audiobook OF AUDIOBOOK("Atomic Habits", "James Clear", 0, coverImage, 600, 240)
