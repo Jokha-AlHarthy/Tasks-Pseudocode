@@ -1033,10 +1033,12 @@ CLASS STAFFMEMBER
     ATTRIBUTES
 	EmpId: NUMBER
 	staffName: TEXT
+	assignedShifts: LIST OF SHIFT
 	
     CONSTRUCTOR(staffName: TEXT, EmpId: NUMBER)
 	SET THIS.EmpId TO EmpId
 	SET THIS.staffName TO staffName
+	SET THIS.assignedShifts TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS
@@ -1045,11 +1047,11 @@ CLASS STAFFMEMBER
 	END METHOD
 
 	GET_NAME()
-		DISPALY staffName
+		DISPLAY staffName
 	END METHOD
 
-	ASSIGNSHFIT(addShift : SHIFT)
-		DISPLAY "The shift is assigned.."
+	ASSIGNSHIFT(addShift : SHIFT)
+		ADD addShift TO assignedShifts
 	END METHOD
 END CLASS
 
@@ -1065,7 +1067,7 @@ CLASS DOCTOR INHERITS STAFFMEMBER
 		DISPLAY "The treatment is approved.."
 	END METHOD
 
-	MAKEDIAGONSIS()
+	MAKEDIAGNOSIS()
 		DISPLAY "The diagnosis is completed.."
 	END METHOD
 END CLASS
@@ -1093,7 +1095,7 @@ CLASS NURSE INHERITS STAFFMEMBER
     END CONSTRUCTOR
 
     METHODS
-	SET_MEDICTION()
+	SET_MEDICATION()
 		DISPLAY "Get medication for patient"
 	END METHOD
 
@@ -1136,6 +1138,7 @@ CLASS WARD
 
     CONSTRUCTOR(wardName: TEXT)
 	SET THIS.wardName TO wardName
+	SET THIS.shifts TO EMPTY LIST
     END CONSTRUCTOR
 
     METHODS
@@ -1143,7 +1146,7 @@ CLASS WARD
 		ADD newShift TO shifts
 	END METHOD
 
-	REMOVE(shift: SHIFT)
+	REMOVESHIFT(shift: SHIFT)
 		REMOVE shift FROM shifts	
 	END METHOD
 
