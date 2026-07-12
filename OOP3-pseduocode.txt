@@ -21,9 +21,11 @@ CLASS SHAPE
 		END METHOD
 
 		GET_AREA()
+			ABSTRACT METHOD
 		END METHOD
 			
 		GET_PERIMETER()
+			ABSTRACT METHOD
 		END METHOD
 END CLASS 
 
@@ -147,7 +149,6 @@ Task 294: Employee Payroll
 
 CLASS EMPLOYEE
 	ATTRIBUTES
-		EmpId: NUMBER
 		EmpName: TEXT
 		Emp_HireDate: TEXT
 		
@@ -157,15 +158,11 @@ CLASS EMPLOYEE
     	END CONSTRUCTOR
 
 	METHODS	
-		GET_id()
-			DIPLSAY EmpId
-		END METHOD
-
 		GET_name()
 			DISPLAY EmpName
 		END METHOD
 		calculatePay()
-			DISPLAY "The payment of the employee is: "
+			ABSTRACT METHOD
 		END METHOD
 END CLASS
 
@@ -181,7 +178,7 @@ CLASS SalariedEmployee INHERITS EMPLOYEE
 
 		
 	METHODS	
-		OVERRID calculatePay()
+		OVERRIDE calculatePay()
 			DISPLAY "The payment of the employee is: " + monthlyAmount
 		END METHOD
 END CLASS
@@ -196,12 +193,14 @@ CLASS HourlyEmployee INHERITS EMPLOYEE
 		SET THIS.hourlyRate TO hourlyRate
 
     	END CONSTRUCTOR
-		OVERRID calculatePay()
-			SET monthlyAmount TO hourWorked * hourlyRate
-			DISPLAY "The payment of the employee is: " + monthlyAmount
+
+		METHODS	
+		OVERRIDE calculatePay()
+			SET payment TO hourWorked * hourlyRate
+			DISPLAY "The payment of the employee is: " + payment 
 		END METHOD
 		
-	METHODS	
+	
 END CLASS
 
 CLASS CommissionEmployee INHERITS EMPLOYEE
@@ -219,9 +218,9 @@ CLASS CommissionEmployee INHERITS EMPLOYEE
 
 		
 	METHODS	
-		OVERRID calculatePay()
-			SET monthlyAmount TO basePay + (percentageSales*commissionRate)
-			DISPLAY "The payment of the employee is: " + monthlyAmount
+		OVERRIDE calculatePay()
+			SET payment TO basePay + (percentageSales * commissionRate)
+			DISPLAY "The payment of the employee is: " + payment
 		END METHOD
 END CLASS
 
@@ -245,7 +244,9 @@ CLASS PAYROLL
 		END METHOD
 
 		DISPLAYEMPLOYEE()
-			DISPLAY employees
+			FOR EACH employee IN employees
+    				DISPLAY employee
+			END FOR
 		END METHOD
 END CLASS
 
@@ -264,7 +265,7 @@ START
 		Payrolls.ADDEMPLOYEE(salEmployee)
 		Payrolls.ADDEMPLOYEE(comEmployee)
 		Payrolls.DISPLAYEMPLOYEE()	
-	eND
+	END
 STOP
 ----------------------------------------------------------------------------------
 Task 295: Zoo Animal Enclosures
