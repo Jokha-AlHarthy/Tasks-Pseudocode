@@ -604,7 +604,7 @@ CLASS HOURLYINVOICE INHERITS INVOICE
 		
 	METHODS
  		OVERRIDE calculateTotalAmount()
-			IF approved EQUALS TO TURE THEN
+			IF approved EQUALS TO TRUE THEN
 				SET TOTAL TO loggedHours * hourlyRate
 				DISPLAY "The total amount due is: " + TOTAL
 			ELSE 
@@ -616,7 +616,7 @@ CLASS HOURLYINVOICE INHERITS INVOICE
 END CLASS
 
 
-CLASS RETRAINERINVOICE INHERITS FIXEDPRICEINVOICE
+CLASS RETAINERINVOICE INHERITS FIXEDPRICEINVOICE
 	ATTRIBUTES
 		charges: NUMBER
 		hourAllowance: NUMBER
@@ -631,13 +631,14 @@ CLASS RETRAINERINVOICE INHERITS FIXEDPRICEINVOICE
 		
 	METHODS
  		OVERRIDE calculateTotalAmount()
-			SET TOTAL TO hourAllowance + (charges * hourStyle)
-            		DISPLAY "The total amount due is: " + total 
+			SET extraHours TO charges - hourAllowance
+			IF extraHours LESS THAN 0 THEN
+    			SET extraHours TO 0
+			END IF
+			SET TOTAL TO singleProject + (extraHours * hourStyle)
+			DISPLAY "The total amount due is: " + TOTAL
 		END METHOD
-
 END CLASS
-
-
 
 CLASS PAYMENTTERMS
     ATTRIBUTES
@@ -700,16 +701,14 @@ START
         CREATE OBJECT paymentTerms OF PAYMENTTERMS("31-Aug-2026", 5)
         CREATE OBJECT freelancerAccount OF FREELANCERACCOUNT("Ali")
         CREATE OBJECT fixedPriceInvoice OF FIXEDPRICEINVOICE(1001, "01-Aug-2026", "ABC Company", paymentTerms, 2500)
-
-        CREATE OBJECT hourlyInvoice OF HOURLYINVOICE(1002, "02-Aug-2026", "XYZ Company", paymentTerms, 20, 30)
+        CREATE OBJECT hourlyInvoice OF HOURLYINVOICE(1002, "02-Aug-2026", "XYZ Company", paymentTerms, 20, 30, TRUE)
         CREATE OBJECT retainerInvoice OF RETAINERINVOICE(1003, "03-Aug-2026", "Tech Solutions", paymentTerms, 3000, 40, 10, 35)
-
         freelancerAccount.ADDINVOICE(fixedPriceInvoice)
         freelancerAccount.ADDINVOICE(hourlyInvoice)
         freelancerAccount.ADDINVOICE(retainerInvoice)
-        fixedPriceInvoice.calculateTotal()
-        hourlyInvoice.calculateTotal()
-        retainerInvoice.calculateTotal()
+        fixedPriceInvoice.calculateTotalAmount()()
+        hourlyInvoice.calculateTotalAmount()()
+        retainerInvoice.calculateTotalAmount()()
         freelancerAccount.DISPLAYINVOICES()
 
     END
