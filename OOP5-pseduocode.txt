@@ -35,12 +35,12 @@ CLASS CLAIM
 	
 END CLASS
 
-CLASS VECHICLECLAIM INHERITS CLAIM
+CLASS VEHICLECLAIM INHERITS CLAIM
 	ATTRIBUTES
 		repairEstimates: NUMBER
 		fixedExcess : NUMBER
 		
-    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, repairEstimates: NUMBER, fixedExcess : NUMBER)
+    	CONSTRUCTOR(claimNo: NUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, repairEstimates: NUMBER, fixedExcess : NUMBER)
 		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.repairEstimates TO repairEstimates
 		SET THIS.fixedExcess TO fixedExcess
@@ -58,7 +58,7 @@ CLASS MEDICALCLAIM INHERITS CLAIM
 		treatmentCosts: NUMBER
 		coverageLimit : NUMBER
 		
-    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, treatmentCosts: NUMBER, coverageLimit : NUMBER)
+    	CONSTRUCTOR(claimNo: NUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, treatmentCosts: NUMBER, coverageLimit : NUMBER)
 		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.treatmentCosts TO treatmentCosts
 		SET THIS.coverageLimit TO coverageLimit
@@ -80,7 +80,7 @@ CLASS PROPERTYCLAIM INHERITS CLAIM
 		estimatedDamage: NUMBER
 		percentage : NUMBER
 		
-    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, estimatedDamage: NUMBER, percentage : NUMBER)
+    	CONSTRUCTOR(claimNo: NUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, estimatedDamage: NUMBER, percentage : NUMBER)
 		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.percentage TO percentage 
 		SET THIS.estimatedDamage TO estimatedDamage
@@ -265,7 +265,6 @@ CLASS JOURNALISSUE INHERITS REFERENCETEXTBOOK
 		OVERRIDE calculateLateFee()
 			SUPER.calculateLateFee()
 			SET renewable TO FALSE
-			DISPLAY "The late fee is: " + lateFee
 			DISPLAY "The renewable status is: " + renewable
 		END METHOD 
     	
@@ -417,20 +416,20 @@ END CLASS
 
 CLASS VIPACCESSRIDE INHERITS ROLLERCOASTER  
 	ATTRIBUTES
-		vipStandardGuest: NUMBER
-		standardWaitTime: NUMBER
-	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER, vipStandardGuest: NUMBER, standardWaitTime: NUMBER)
+		vipGuest: NUMBER
+		standardGuest: NUMBER
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER, vipGuest: NUMBER, standardGuest: NUMBER)
 		SUPER(rideName, rideLocation, safetyInspectionLog, NoPeople, TrainCar, CycleTime)
-		SET THIS.vipStandardGuest TO vipStandardGuest
-		SET THIS.standardWaitTime TO standardWaitTime
+		SET THIS.vipGuest TO vipGuest
+		SET THIS.standardGuest TO standardGuest
 
     	END CONSTRUCTOR
 	
 	METHODS
 		
  		OVERRIDE calculateWaitTime()
-			SET vipWaitTime TO (vipStandardGuest / TrainCar) * CycleTime
-			SET vipStandardGuest TO (standardWaitTime / TrainCar) * CycleTime
+			SET vipWaitTime TO (vipGuest / TrainCar) * CycleTime
+			SET vipStandardGuest TO (standardGuest / TrainCar) * CycleTime
 			DISPLAY "The estimated wait time for VIP guest is: "	+ vipWaitTime
 			DISPLAY "The estimated wait time for standard guest is: "	+ vipStandardGuest
 		END METHOD
@@ -706,9 +705,9 @@ START
         freelancerAccount.ADDINVOICE(fixedPriceInvoice)
         freelancerAccount.ADDINVOICE(hourlyInvoice)
         freelancerAccount.ADDINVOICE(retainerInvoice)
-        fixedPriceInvoice.calculateTotalAmount()()
-        hourlyInvoice.calculateTotalAmount()()
-        retainerInvoice.calculateTotalAmount()()
+        fixedPriceInvoice.calculateTotalAmount()
+        hourlyInvoice.calculateTotalAmount()
+        retainerInvoice.calculateTotalAmount()
         freelancerAccount.DISPLAYINVOICES()
 
     END
@@ -725,7 +724,7 @@ CLASS SERVER
         uptimeValue: NUMBER
         hardwareSpecification: HARDWARESPECIFICATION
 
-    CONSTRUCTOR(serialNumber: TEXT, uptime: NUMBER, hardwareSpecification: HARDWARESPECIFICATION)
+    CONSTRUCTOR(serialNumber: TEXT, uptimeValue: NUMBER, hardwareSpecification: HARDWARESPECIFICATION)
         SET THIS.serialNumber TO serialNumber
         SET THIS.uptimeValue TO uptimeValue
         SET THIS.hardwareSpecification TO hardwareSpecification
