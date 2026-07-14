@@ -4,13 +4,12 @@ Blueprint:
 
 CLASS CLAIM
     ATTRIBUTES
-	claimId: NUMBER
-	claimNo: NMUMBER
+	claimNo: NUMBER
 	dateFiled: TEXT
 	claimStatus: TEXT
 	documentationFolder: DOCUMENTATIONFOLDER
 
-    CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER)
+    CONSTRUCTOR(claimNo: NUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER)
 	SET THIS.claimNo TO claimNo
 	SET THIS.dateFiled TO dateFiled
 	SET THIS.claimStatus TO claimStatus
@@ -18,16 +17,12 @@ CLASS CLAIM
     END CONSTRUCTOR
 
     METHODS
-	GET_id()
-		DISPLAY claimId
-	END METHOD
-
 	GET_claimNo()
 		DISPLAY claimNo
 	END METHOD
 
 	GET_dateFiled()
-		DIPLSAY dateFiled
+		DISPLAY dateFiled
 	END METHOD
 
 	GET_claimStatus()
@@ -82,18 +77,18 @@ END CLASS
 
 CLASS PROPERTYCLAIM INHERITS CLAIM
 	ATTRIBUTES
-		eastimatedDamage: NUMBER
+		estimatedDamage: NUMBER
 		percentage : NUMBER
 		
-    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, eastimatedDamage: NUMBER, percentage : NUMBER)
+    	CONSTRUCTOR(claimNo: NMUMBER, dateFiled: TEXT, claimStatus: TEXT, documentationFolder: DOCUMENTATIONFOLDER, estimatedDamage: NUMBER, percentage : NUMBER)
 		SUPER(claimNo, dateFiled, claimStatus, documentationFolder)
 		SET THIS.percentage TO percentage 
-		SET THIS.eastimatedDamage TO eastimatedDamage
+		SET THIS.estimatedDamage TO estimatedDamage
     	END CONSTRUCTOR
 
     	METHODS
 		OVERRIDE calculatePayout()
-            		SET PAYOUT TO eastimatedDamage - (eastimatedDamage * percentage / 100)
+            		SET PAYOUT TO estimatedDamage - (estimatedDamage * percentage / 100)
             		DISPLAY "The property claim payout is: " + PAYOUT
        		END METHOD
 END CLASS
@@ -120,7 +115,6 @@ END CLASS
 
 CLASS DOCUMENTATIONFOLDER
     ATTRIBUTES
-        folderId: NUMBER
         folderName: TEXT
         documents: LIST OF DOCUMENT
 
@@ -129,10 +123,6 @@ CLASS DOCUMENTATIONFOLDER
     END CONSTRUCTOR
 
     METHODS
-        GET_id()
-            DISPLAY folderId
-        END METHOD
-
         GET_folderName()
             DISPLAY folderName
         END METHOD
@@ -152,7 +142,6 @@ END CLASS
 
 CLASS POLICY
     ATTRIBUTES
-        policyId: NUMBER
         policyName: TEXT
         claims: LIST OF CLAIM
 
@@ -161,10 +150,6 @@ CLASS POLICY
     END CONSTRUCTOR
 
     METHODS
-        GET_id()
-            DISPLAY policyId
-        END METHOD
-
         GET_policyName()
             DISPLAY policyName
         END METHOD
