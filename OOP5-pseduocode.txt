@@ -417,20 +417,20 @@ END CLASS
 
 CLASS VIPACCESSRIDE INHERITS ROLLERCOASTER  
 	ATTRIBUTES
-		vipGuest: NUMBER
-		standardGuest: NUMBER
-	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER, vipGuest: NUMBER, standardGuest: NUMBER)
+		vipStandardGuest: NUMBER
+		standardWaitTime: NUMBER
+	CONSTRUCTOR(rideName: TEXT, rideLocation: TEXT, safetyInspectionLog: SAFETYINSPECTIONLOG, NoPeople: NUMBER, TrainCar: NUMBER, CycleTime: NUMBER, vipStandardGuest: NUMBER, standardWaitTime: NUMBER)
 		SUPER(rideName, rideLocation, safetyInspectionLog, NoPeople, TrainCar, CycleTime)
-		SET THIS.vipGuest TO vipGuest
-		SET THIS.standardGuest TO standardGuest
+		SET THIS.vipStandardGuest TO vipStandardGuest
+		SET THIS.standardWaitTime TO standardWaitTime
 
     	END CONSTRUCTOR
 	
 	METHODS
 		
  		OVERRIDE calculateWaitTime()
-			SET vipWaitTime TO (vipGuest / TrainCar) * CycleTime
-			SET vipStandardGuest TO (standardGuest / TrainCar) * CycleTime
+			SET vipWaitTime TO (vipStandardGuest / TrainCar) * CycleTime
+			SET vipStandardGuest TO (standardWaitTime / TrainCar) * CycleTime
 			DISPLAY "The estimated wait time for VIP guest is: "	+ vipWaitTime
 			DISPLAY "The estimated wait time for standard guest is: "	+ vipStandardGuest
 		END METHOD
